@@ -1,0 +1,79 @@
+export const groupA: Record<string, string> = {
+  "hdfc-biz-black":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/bizblack-metal-edition?fmt=webp-alpha",
+  "hdfc-diners-club-black-metal":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/diners-club-black?fmt=webp-alpha",
+  "hdfc-diners-club-privilege":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/diners-club-privilege?fmt=webp-alpha",
+  "hdfc-freedom":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/freedom-credit-card?fmt=webp-alpha",
+  "hdfc-indianoil": "https://s7ap1.scene7.com/is/image/hdfcbankPWS/iocl?fmt=webp-alpha",
+  "hdfc-infinia-metal":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/infinia-credit-card?fmt=webp-alpha",
+  "hdfc-irctc": "https://s7ap1.scene7.com/is/image/hdfcbankPWS/Card-Facia-IRCTC?fmt=webp-alpha",
+  "hdfc-marriott-bonvoy":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/Card-Facia-Marriott-Bonvoy?fmt=webp-alpha",
+  "hdfc-millennia":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/millennia-credit-card?fmt=webp-alpha",
+  "hdfc-moneyback-plus":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/moneyback-plus-credit-card?fmt=webp-alpha",
+  "hdfc-pixel-play": "https://s7ap1.scene7.com/is/image/hdfcbankPWS/pixel-play-b?fmt=webp-alpha",
+  "hdfc-regalia-first":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/regalia-first-credit-card?fmt=webp-alpha",
+  "hdfc-regalia-gold":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/regalia-gold-credit-card?fmt=webp-alpha",
+  "hdfc-shoppers-stop-black":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/Card-Facia-Shoppers-Stop-Blue?fmt=webp-alpha",
+  "hdfc-swiggy":
+    "https://s7ap1.scene7.com/is/image/hdfcbankPWS/facia-swiggy-blck-cc?fmt=webp-alpha",
+  "hdfc-tata-neu-plus": "https://s7ap1.scene7.com/is/image/hdfcbankPWS/tata-neu-p?fmt=webp-alpha",
+  "hdfc-upi-rupay-lite": "https://s7ap1.scene7.com/is/image/hdfcbankPWS/upi-rupay?fmt=webp-alpha",
+  "sbi-air-india-platinum":
+    "https://www.sbicard.com/static-resources/img/card-face/front/horizontal/air-india-platinum.png",
+  "sbi-air-india-signature":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/horizontal/air-india-signature.png",
+  "sbi-aurum":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/aurum-card/for-website/horizontal/aurum-card.png",
+  "sbi-bpcl":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/horizontal/bpcl-sbi-card.png",
+  "sbi-bpcl-octane":
+    "https://www.sbicard.com/static-resources/img/card-face/front/horizontal/bpcl-octane-sbi-card.png",
+  "sbi-cashback":
+    "https://www.sbicard.com/static-resources/img/card-face/front/vertical/cashback-card-face-min.png",
+  "sbi-club-vistara-prime":
+    "https://www.sbicard.com/static-resources/img/card-face/front/horizontal/vistara-prime-sbi-card.png",
+  "sbi-club-vistara-signature":
+    "https://www.sbicard.com/static-resources/img/card-face/front/horizontal/vistara-sbi-card.png",
+  "sbi-doctors":
+    "https://www.sbicard.com/static-resources/img/card-face/front/horizontal/doctor-sbi-card.png",
+  "sbi-elite":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/horizontal/elite-sbi-card.png",
+  "sbi-irctc-platinum":
+    "https://www.sbicard.com/static-resources/img/card-face/front/horizontal/irctc-platinum.png",
+  "sbi-miles":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/vertical/miles-new-card-face-min.png",
+  "sbi-miles-elite":
+    "https://www.sbicard.com/static-resources/img/card-face/front/vertical/miles-elite-card-face-min.png",
+  "sbi-miles-prime":
+    "https://www.sbicard.com/static-resources/img/card-face/front/vertical/miles-prime-card-face-min.png",
+  "sbi-prime":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/horizontal/prime-sbi-card.png",
+  "sbi-pulse":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/horizontal/pulse-sbi-card.png",
+  "sbi-reliance":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/vertical/reliance-base-card-face-min.png",
+  "sbi-shaurya":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/horizontal/Shaurya-New-01-min.png",
+  "sbi-shaurya-select":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/horizontal/shaurya-select.png",
+  "sbi-simplyclick":
+    "https://www.sbicard.com/static-resources/img/card-face/front/vertical/simply-click-card-face-min.png",
+  "sbi-simplysave":
+    "https://www.sbicard.com/static-resources/img/card-face/front/vertical/simply-save-card-face-min.png",
+  "sbi-tata-neu":
+    "https://www.sbicard.com/static-resources/img/card-face/front/vertical/tata-neu-card-face-min.png",
+  "sbi-titan":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/for-website/front/horizontal/titan-sbi-card.png",
+  "sbi-unnati":
+    "https://www.sbicard.com/static-resources/img/card/card-face-assets/unnati-card/unnati-card/for-website-optimized/horizontal/unnati-front.png",
+};
