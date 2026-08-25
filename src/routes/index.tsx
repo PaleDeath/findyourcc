@@ -167,9 +167,7 @@ function Home() {
 
             <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem]">
               The transparent index of{" "}
-              <span className="text-primary underline decoration-primary/30 decoration-wavy underline-offset-4">
-                Indian credit cards.
-              </span>
+              <span className="text-foreground">Indian credit cards.</span>
             </h1>
 
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -183,10 +181,10 @@ function Home() {
               <button
                 type="button"
                 onClick={openCommandPalette}
-                className="btn-tactile flex w-full max-w-lg items-center justify-between rounded-2xl border border-border/80 bg-surface/70 px-4 py-3 text-left text-sm text-muted-foreground shadow-xs backdrop-blur-md hover:border-primary/40 hover:bg-surface focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
+                className="btn-tactile flex w-full max-w-lg items-center justify-between rounded-2xl border border-border/80 bg-surface/60 px-4 py-3 text-left text-sm text-muted-foreground shadow-xs backdrop-blur-md transition-colors hover:border-foreground/40 hover:bg-surface focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
               >
                 <span className="flex items-center gap-2.5">
-                  <Search className="size-4 text-primary" aria-hidden="true" />
+                  <Search className="size-4 text-foreground/70" aria-hidden="true" />
                   <span className="text-foreground font-medium">Search by card, bank, perk or acronym…</span>
                 </span>
                 <kbd className="rounded-lg border border-border bg-background px-2 py-0.5 font-mono text-[11px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.08]">
@@ -202,7 +200,7 @@ function Home() {
                     key={prompt}
                     to="/explore"
                     search={{ query: prompt }}
-                    className="rounded-lg border border-border/60 bg-background/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground dark:border-white/10 dark:bg-white/[0.03]"
+                    className="rounded-lg border border-border/70 bg-surface/40 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground dark:border-white/10 dark:bg-white/[0.03]"
                   >
                     {prompt}
                   </Link>
@@ -220,7 +218,7 @@ function Home() {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="card-bevel rounded-xl border border-border/70 bg-card p-3 dark:border-white/[0.08]"
+                  className="card-bevel rounded-xl border border-border/80 bg-card p-3 dark:border-white/[0.08]"
                 >
                   <dt className="text-[11px] font-medium text-muted-foreground">{item.label}</dt>
                   <dd className="font-mono text-2xl font-bold tabular-nums text-foreground">
@@ -234,7 +232,7 @@ function Home() {
           {/* --- HERO RIGHT: 3D CARD SPOTLIGHT SHOWCASE -------------------- */}
           <div className="relative flex flex-col items-center justify-center">
             {/* Card Spotlight Selector Tabs */}
-            <div className="mb-4 flex w-full max-w-sm flex-wrap items-center justify-center gap-1 rounded-xl border border-border/70 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
+            <div className="mb-4 flex w-full max-w-sm flex-wrap items-center justify-center gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
               {SPOTLIGHT_CARDS.map((item, idx) => (
                 <button
                   key={item.id}
@@ -242,7 +240,7 @@ function Home() {
                   onClick={() => setSpotlightIdx(idx)}
                   className={`btn-tactile rounded-lg px-2.5 py-1 text-[11px] font-semibold transition-all ${
                     spotlightIdx === idx
-                      ? "bg-background text-foreground shadow-xs dark:bg-white/15 dark:text-white"
+                      ? "bg-foreground text-background shadow-xs dark:bg-white dark:text-black"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -267,7 +265,7 @@ function Home() {
                       <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         {spotlightCard.issuer}
                       </span>
-                      <Badge variant="secondary" className="font-mono text-[10px] font-bold text-primary">
+                      <Badge variant="outline" className="font-mono text-[10px] font-bold text-foreground">
                         {computeEffectiveRate(spotlightCard).toFixed(2)}% Base Earn
                       </Badge>
                     </div>
@@ -302,14 +300,14 @@ function Home() {
 
       {/* --- LIVE 5-SECOND SPEND ROI SIMULATOR ------------------------------ */}
       <section className="container-page py-12" aria-labelledby="simulator-title">
-        <div className="card-bevel relative overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-b from-card to-surface/80 p-6 sm:p-8 dark:border-white/[0.08] dark:from-card dark:to-surface/40">
+        <div className="card-bevel relative overflow-hidden rounded-3xl border border-border/80 bg-card p-6 sm:p-8 dark:border-white/[0.08]">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                <Calculator className="size-3.5" aria-hidden="true" />
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-surface px-3 py-1 text-xs font-semibold text-foreground dark:border-white/10">
+                <Calculator className="size-3.5 text-foreground/70" aria-hidden="true" />
                 <span>Live Spend ROI Engine</span>
               </div>
-              <h2 id="simulator-title" className="mt-3 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+              <h2 id="simulator-title" className="mt-3 font-display text-2xl font-bold tracking-tight sm:text-3xl text-foreground">
                 What is your spend actually worth?
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -317,7 +315,7 @@ function Home() {
               </p>
 
               {/* Monthly Spend Slider */}
-              <div className="mt-6 space-y-4 rounded-2xl border border-border/60 bg-background/80 p-4 dark:border-white/[0.06]">
+              <div className="mt-6 space-y-4 rounded-2xl border border-border/60 bg-surface/50 p-4 dark:border-white/[0.06] dark:bg-white/[0.02]">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     Monthly Spends
@@ -353,14 +351,14 @@ function Home() {
                     key={card.id}
                     to="/card/$id"
                     params={{ id: card.id }}
-                    className="card-bevel-hover group flex items-center justify-between rounded-xl border border-border/70 bg-background/90 p-3 text-left transition-all dark:border-white/10 dark:bg-black/30"
+                    className="card-bevel-hover group flex items-center justify-between rounded-xl border border-border/80 bg-card p-3 text-left transition-all dark:border-white/10 dark:bg-white/[0.02]"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-surface font-mono text-xs font-bold text-muted-foreground dark:bg-white/10">
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-surface font-mono text-xs font-bold text-foreground dark:bg-white/10">
                         #{rank + 1}
                       </span>
                       <div className="min-w-0">
-                        <span className="block truncate text-sm font-semibold text-foreground group-hover:text-primary">
+                        <span className="block truncate text-sm font-semibold text-foreground group-hover:underline">
                           {card.name}
                         </span>
                         <span className="block text-[11px] text-muted-foreground">
@@ -403,7 +401,7 @@ function Home() {
           </div>
           <Link
             to="/explore"
-            className="text-xs font-semibold text-primary hover:underline"
+            className="text-xs font-semibold text-foreground hover:underline"
           >
             Explore all 149+ cards →
           </Link>
@@ -417,7 +415,6 @@ function Home() {
               desc: "1:1 partner transfer to airline programs like Singapore KrisFlyer, Qatar Avios, and Accor.",
               badge: "Up to 33% Return",
               category: "Travel" as Category,
-              color: "text-blue-500",
             },
             {
               title: "5% Direct Cashback",
@@ -425,7 +422,6 @@ function Home() {
               desc: "Statement credit deposited directly into your bill. No loyalty catalogue markup.",
               badge: "Pure Liquid Cash",
               category: "Cashback" as Category,
-              color: "text-emerald-500",
             },
             {
               title: "Lifetime Free Daily Drivers",
@@ -433,7 +429,6 @@ function Home() {
               desc: "Zero annual fees, zero renewal conditions, with complimentary lounge & movie tickets.",
               badge: "₹0 Annual Fee",
               category: "Secured (FD)" as Category,
-              color: "text-amber-500",
             },
             {
               title: "RuPay UPI Power Tier",
@@ -441,7 +436,6 @@ function Home() {
               desc: "Link to Google Pay, PhonePe, and Paytm to earn accelerated rewards on local QR codes.",
               badge: "Scan & Pay",
               category: "Shopping" as Category,
-              color: "text-purple-500",
             },
           ].map((item) => (
             <Link
@@ -452,21 +446,21 @@ function Home() {
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className={`p-2 rounded-xl bg-surface dark:bg-white/[0.05] ${item.color}`}>
-                    <item.icon className="size-5" aria-hidden="true" />
+                  <span className="flex size-9 items-center justify-center rounded-xl border border-border/70 bg-surface/80 text-foreground dark:border-white/10 dark:bg-white/[0.05]">
+                    <item.icon className="size-4.5" aria-hidden="true" />
                   </span>
-                  <Badge variant="secondary" className="text-[10px] font-semibold">
+                  <Badge variant="outline" className="text-[10px] font-semibold text-muted-foreground dark:border-white/10">
                     {item.badge}
                   </Badge>
                 </div>
-                <h3 className="mt-4 font-display text-base font-bold text-foreground group-hover:text-primary">
+                <h3 className="mt-4 font-display text-base font-bold text-foreground group-hover:underline">
                   {item.title}
                 </h3>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                   {item.desc}
                 </p>
               </div>
-              <span className="mt-5 inline-flex items-center text-xs font-semibold text-primary">
+              <span className="mt-5 inline-flex items-center text-xs font-semibold text-foreground">
                 View stack <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
               </span>
             </Link>
@@ -500,7 +494,7 @@ function Home() {
                 onClick={() => setActiveTab(tab.id as never)}
                 className={`btn-tactile rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                   activeTab === tab.id
-                    ? "bg-background text-foreground shadow-xs dark:bg-white/15 dark:text-white"
+                    ? "bg-foreground text-background shadow-xs dark:bg-white dark:text-black"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -527,7 +521,7 @@ function Home() {
 
       {/* --- TRANSPARENCY & TRUST FOOTER BANNER ----------------------------- */}
       <section className="container-page py-12">
-        <div className="card-bevel grid gap-6 rounded-3xl border border-border/80 bg-surface p-6 sm:grid-cols-3 sm:p-8 dark:border-white/[0.08] dark:bg-white/[0.02]">
+        <div className="card-bevel grid gap-6 rounded-3xl border border-border/80 bg-surface/50 p-6 sm:grid-cols-3 sm:p-8 dark:border-white/[0.08] dark:bg-white/[0.02]">
           {[
             {
               Icon: ShieldCheck,
@@ -545,9 +539,9 @@ function Home() {
               body: "Every card features timestamped verification and verified issuer fee schedule mappings.",
             },
           ].map((item) => (
-            <div key={item.title} className="space-y-2">
-              <span className="inline-flex rounded-xl bg-primary/10 p-2.5 text-primary">
-                <item.Icon className="size-5" aria-hidden="true" />
+            <div key={item.title} className="space-y-2.5">
+              <span className="inline-flex size-9 items-center justify-center rounded-xl border border-border/70 bg-surface text-foreground dark:border-white/10 dark:bg-white/[0.04]">
+                <item.Icon className="size-4.5" aria-hidden="true" />
               </span>
               <h3 className="font-display text-sm font-bold text-foreground">{item.title}</h3>
               <p className="text-xs leading-relaxed text-muted-foreground">{item.body}</p>

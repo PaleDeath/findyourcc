@@ -300,7 +300,7 @@ function ExplorePage() {
                   key={chip.label}
                   type="button"
                   onClick={() => patch(chip.clear)}
-                  className="btn-tactile inline-flex items-center gap-1.5 rounded-lg border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary transition-colors hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
+                  className="btn-tactile inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-surface/80 px-2.5 py-1 text-[11px] font-medium text-foreground transition-colors hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive dark:border-white/10 dark:bg-white/[0.04]"
                 >
                   {chip.label}
                   <X className="size-3" aria-hidden="true" />
@@ -318,7 +318,7 @@ function ExplorePage() {
               <button
                 type="button"
                 onClick={reset}
-                className="btn-tactile inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                className="btn-tactile inline-flex items-center gap-1 text-xs font-semibold text-foreground/80 hover:text-foreground hover:underline"
               >
                 <X className="size-3" aria-hidden="true" /> Reset filters
               </button>

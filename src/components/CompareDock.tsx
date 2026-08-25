@@ -33,7 +33,7 @@ export function CompareDock() {
       <div
         role="region"
         aria-label="Comparison tray"
-        className="flex w-full max-w-xl items-center gap-3 rounded-2xl border border-border bg-card/95 p-2.5 shadow-xl backdrop-blur-md"
+        className="card-bevel flex w-full max-w-xl items-center gap-3 rounded-2xl border border-border/80 bg-card/90 p-2.5 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-black/80"
       >
         <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
           {cards.map((card) => (

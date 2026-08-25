@@ -271,18 +271,18 @@ function CardDetail() {
 
           <section
             aria-labelledby="your-value"
-            className="card-bevel rounded-2xl border border-primary/30 bg-primary/[0.04] p-5 sm:p-6 dark:border-primary/20 dark:bg-primary/[0.02]"
+            className="card-bevel rounded-2xl border border-border/80 bg-card p-5 sm:p-6 dark:border-white/[0.08]"
           >
             <h2
               id="your-value"
               className="flex items-center gap-2 font-display text-lg font-bold text-foreground"
             >
-              <Sparkles className="size-4 text-primary" aria-hidden="true" /> What it&rsquo;s worth
+              <Sparkles className="size-4 text-foreground/70" aria-hidden="true" /> What it&rsquo;s worth
               to you
             </h2>
             <p className="mt-1 text-xs text-muted-foreground">
               Calculated on your monthly spend profile of <span className="font-mono font-semibold text-foreground">{formatINR(monthlyTotal(spend))}</span>.{" "}
-              <Link to="/calculator" className="font-semibold text-primary hover:underline">
+              <Link to="/calculator" className="font-semibold text-foreground hover:underline">
                 Tune your spends →
               </Link>
             </p>

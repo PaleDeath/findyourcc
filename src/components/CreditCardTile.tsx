@@ -81,20 +81,20 @@ function CreditCardTileImpl({
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div className="space-y-1">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/90">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
               {card.issuer}
             </p>
             {card.upi.rupayUpiLinkable && (
-              <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+              <span className="inline-flex items-center gap-1 rounded-md border border-border/70 bg-surface/80 px-1.5 py-0.5 text-[10px] font-medium text-foreground dark:border-white/10 dark:bg-white/[0.04]">
                 <Smartphone className="size-2.5" aria-hidden="true" /> RuPay UPI
               </span>
             )}
           </div>
-          <h3 className="font-display text-base font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary">
+          <h3 className="font-display text-base font-bold leading-snug tracking-tight text-foreground transition-colors">
             <Link
               to="/card/$id"
               params={{ id: card.id }}
-              className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
+              className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none hover:underline"
             >
               {card.name}
             </Link>
@@ -103,16 +103,16 @@ function CreditCardTileImpl({
 
         <div className="flex flex-wrap items-center gap-1.5">
           <Badge
-            variant="secondary"
+            variant="outline"
             className={cn(
-              "text-[10px] font-medium tracking-wide",
-              premium && "border border-gold/30 bg-gold/10 text-gold-foreground font-semibold dark:text-gold",
+              "border-border/80 text-[10px] font-medium tracking-wide text-foreground dark:border-white/10",
+              premium && "font-semibold bg-surface/60 dark:bg-white/[0.04]",
             )}
           >
             {card.segment}
           </Badge>
           {card.categories.slice(0, 2).map((category) => (
-            <Badge key={category} variant="outline" className="border-border/80 text-[10px] font-normal text-muted-foreground dark:border-white/10">
+            <Badge key={category} variant="outline" className="border-border/60 text-[10px] font-normal text-muted-foreground dark:border-white/10">
               {category}
             </Badge>
           ))}
@@ -123,12 +123,12 @@ function CreditCardTileImpl({
           )}
         </div>
 
-        <dl className="mt-auto grid grid-cols-2 gap-2 rounded-xl border border-border/60 bg-surface/50 p-2.5 text-xs dark:border-white/[0.06] dark:bg-white/[0.02]">
+        <dl className="mt-auto grid grid-cols-2 gap-2 rounded-xl border border-border/70 bg-surface/40 p-2.5 text-xs dark:border-white/[0.06] dark:bg-white/[0.02]">
           <div>
             <dt className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Annual fee</dt>
             <dd className="mt-0.5 font-mono text-xs font-semibold tabular-nums text-foreground">
               {card.fees.lifetimeFree ? (
-                <span className="text-emerald-600 font-sans font-semibold dark:text-emerald-400">Lifetime Free</span>
+                <span className="font-sans font-semibold text-foreground">Lifetime Free</span>
               ) : (
                 formatFee(card.fees.annualFee)
               )}
@@ -136,7 +136,7 @@ function CreditCardTileImpl({
           </div>
           <div>
             <dt className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Base earn</dt>
-            <dd className="mt-0.5 font-mono text-xs font-bold tabular-nums text-primary">
+            <dd className="mt-0.5 font-mono text-xs font-bold tabular-nums text-foreground">
               {computeEffectiveRate(card).toFixed(2)}%
             </dd>
           </div>
@@ -150,7 +150,7 @@ function CreditCardTileImpl({
           )}
           {card.bestFor[0] && (
             <li className="inline-flex min-w-0 max-w-full items-center gap-1">
-              <Sparkles className="size-3 shrink-0 text-gold/80" aria-hidden="true" />
+              <Sparkles className="size-3 shrink-0 text-muted-foreground/70" aria-hidden="true" />
               <span className="truncate">{card.bestFor[0]}</span>
             </li>
           )}
