@@ -85,11 +85,14 @@ export interface CreditCard {
       visitsPerYear?: number;
       program?: string;
       spendCondition?: string;
+      guestVisits?: number;
       unlimited?: boolean;
     };
     loungeInternational?: {
+      visitsPerQuarter?: number;
       visitsPerYear?: number;
       program?: "Priority Pass" | "DreamFolks" | "Other" | string;
+      spendCondition?: string;
       guestVisits?: number;
       unlimited?: boolean;
     };

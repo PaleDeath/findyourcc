@@ -26,7 +26,7 @@ import { CardArt } from "@/components/CardArt";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
-import { computeEffectiveRate, listIssuers, searchCards } from "@/data/cards";
+import { computeEffectiveRate, listIssuers, popularityScore, searchCards } from "@/data/cards";
 import type { Category, CreditCard } from "@/data/types";
 import { useCompareTray, useDataset, useFavourites } from "@/lib/card-store";
 import { formatFee, formatINR } from "@/lib/format";
@@ -101,8 +101,8 @@ function Home() {
   const [activeTab, setActiveTab] = useState<"rates" | "popular" | "ltf" | "rupay">("rates");
 
   const spotlightCard = useMemo(() => {
-    const config = SPOTLIGHT_CARDS[spotlightIdx];
-    return cards.find((c) => c.id === config.id) || cards[0];
+    const config = SPOTLIGHT_CARDS[spotlightIdx] ?? SPOTLIGHT_CARDS[0];
+    return cards.find((c) => c.id === config?.id) ?? cards[0];
   }, [cards, spotlightIdx]);
 
   const stats = useMemo(() => {
@@ -136,7 +136,7 @@ function Home() {
     const active = cards.filter((c) => c.status === "Active");
     switch (activeTab) {
       case "popular":
-        return [...active].sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0)).slice(0, 6);
+        return [...active].sort((a, b) => popularityScore(b) - popularityScore(a)).slice(0, 6);
       case "ltf":
         return active.filter((c) => c.fees.lifetimeFree).slice(0, 6);
       case "rupay":
@@ -199,7 +199,7 @@ function Home() {
                   <Link
                     key={prompt}
                     to="/explore"
-                    search={{ query: prompt }}
+                    search={{ q: prompt }}
                     className="rounded-lg border border-border/70 bg-surface/40 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground dark:border-white/10 dark:bg-white/[0.03]"
                   >
                     {prompt}
@@ -273,7 +273,7 @@ function Home() {
                       {spotlightCard.name}
                     </h3>
                     <p className="h-10 text-xs leading-relaxed text-muted-foreground line-clamp-2">
-                      {SPOTLIGHT_CARDS[spotlightIdx].desc}
+                      {SPOTLIGHT_CARDS[spotlightIdx]?.desc ?? ""}
                     </p>
                     <div className="pt-2 flex items-center gap-2">
                       <Button asChild size="sm" className="w-full">
@@ -329,7 +329,7 @@ function Home() {
                   min={10000}
                   max={250000}
                   step={5000}
-                  onValueChange={(val) => setMonthlySpend(val[0])}
+                  onValueChange={(val) => setMonthlySpend(val[0] ?? 50000)}
                   className="py-2"
                 />
                 <div className="flex justify-between font-mono text-[10px] text-muted-foreground">

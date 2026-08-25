@@ -128,12 +128,12 @@ export type EmploymentType = "Salaried" | "Self-employed" | "Student" | "NRI";
 
 export type ScoreBand = "750+" | "700-749" | "650-699" | "<650" | "unknown";
 
-export const SCORE_BANDS: { value: ScoreBand; label: string; approx: number }[] = [
-  { value: "750+", label: "750 or above", approx: 780 },
-  { value: "700-749", label: "700 – 749", approx: 720 },
-  { value: "650-699", label: "650 – 699", approx: 670 },
-  { value: "<650", label: "Below 650", approx: 620 },
-  { value: "unknown", label: "I don't know", approx: 730 },
+export const SCORE_BANDS: { value: ScoreBand; label: string; approx: number; hint: string }[] = [
+  { value: "750+", label: "750 or above", approx: 780, hint: "Excellent — clears all prime cards" },
+  { value: "700-749", label: "700 – 749", approx: 720, hint: "Good — clears most mainstream cards" },
+  { value: "650-699", label: "650 – 699", approx: 670, hint: "Fair — entry-level & co-branded cards" },
+  { value: "<650", label: "Below 650", approx: 620, hint: "Needs improvement — secured/FD-backed" },
+  { value: "unknown", label: "I don't know", approx: 730, hint: "Assumes average CIBIL score" },
 ];
 
 export interface MatchAnswers {

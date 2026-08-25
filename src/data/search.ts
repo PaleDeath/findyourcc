@@ -47,23 +47,34 @@ function levenshtein(a: string, b: string): number {
   if (a === b) return 0;
   if (a.length === 0) return b.length;
   if (b.length === 0) return a.length;
-  const matrix: number[][] = [];
-  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  const matrix: number[][] = Array.from({ length: b.length + 1 }, () =>
+    Array(a.length + 1).fill(0),
+  );
+  for (let i = 0; i <= b.length; i++) {
+    const row = matrix[i];
+    if (row) row[0] = i;
+  }
+  const firstRow = matrix[0];
+  if (firstRow) {
+    for (let j = 0; j <= a.length; j++) firstRow[j] = j;
+  }
   for (let i = 1; i <= b.length; i++) {
+    const prevRow = matrix[i - 1];
+    const currRow = matrix[i];
+    if (!prevRow || !currRow) continue;
     for (let j = 1; j <= a.length; j++) {
       if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
+        currRow[j] = prevRow[j - 1] ?? 0;
       } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j] + 1,
+        currRow[j] = Math.min(
+          (prevRow[j - 1] ?? 0) + 1,
+          (currRow[j - 1] ?? 0) + 1,
+          (prevRow[j] ?? 0) + 1,
         );
       }
     }
   }
-  return matrix[b.length][a.length];
+  return matrix[b.length]?.[a.length] ?? 0;
 }
 
 function isFuzzyMatch(word: string, token: string): boolean {
@@ -211,9 +222,10 @@ export function computeCardScore(card: CreditCard, query: string, qTokens: strin
     return 0;
   }
 
-  // Active status bonus & popularity bonus as tiebreaker
+  // Active status bonus & segment bonus as tiebreaker
   if (card.status === "Active") score += 5;
-  score += Math.min(card.popularity ?? 50, 100) / 20;
+  const segmentBonus = { Entry: 2, Mid: 3, Premium: 4, "Super Premium": 3, "Invite Only": 1 }[card.segment] ?? 2;
+  score += segmentBonus;
   score -= Math.min(info.nameTokens.length, 10) / 40;
 
   return score;
