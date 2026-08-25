@@ -242,69 +242,20 @@ function haystackFor(card: CreditCard): string {
     .toLowerCase();
 }
 
-/** Tiny fuzzy matcher: token appears as a subsequence (typo tolerance). */
-function fuzzyToken(haystack: string, token: string): boolean {
-  if (token.length < 4) return false;
-  let i = 0;
-  for (const ch of haystack) {
-    if (ch === token[i]) i += 1;
-    if (i === token.length) return true;
-  }
-  return false;
-}
-
-function exactMatch(card: CreditCard, tokens: string[]): boolean {
-  const haystack = haystackFor(card);
-  return tokens.every((token) => haystack.includes(token));
-}
+import { searchCreditCards, computeCardScore } from "@/lib/searchEngine";
 
 export function matchesQuery(card: CreditCard, query: string): boolean {
-  const q = query.trim().toLowerCase();
-  if (!q) return true;
-  return exactMatch(card, q.split(/\s+/));
+  if (!query.trim()) return true;
+  const qTokens = query.trim().toLowerCase().split(/\s+/);
+  return computeCardScore(card, query, qTokens) > 0;
 }
 
-/**
- * Single search entry point used by Explore and the command palette. Substring
- * matches win; the loose subsequence pass only runs when nothing matched, so a
- * precise query never drowns in near-misses.
- */
-/** Higher score = better match. Name hits beat issuer/category/benefit hits. */
 export function relevanceScore(card: CreditCard, tokens: string[]): number {
-  const name = card.name.toLowerCase();
-  const issuer = card.issuer.toLowerCase();
-  const words = name.split(/[^a-z0-9]+/).filter(Boolean);
-  let score = 0;
-  for (const token of tokens) {
-    if (name === token) score += 100;
-    else if (words.includes(token)) score += 60;
-    else if (words.some((w) => w.startsWith(token))) score += 40;
-    else if (name.includes(token)) score += 25;
-    else if (issuer.includes(token)) score += 10;
-    else if (haystackFor(card).includes(token)) score += 4;
-  }
-  // Prefer live, popular, shorter (less noisy) names on ties.
-  if (card.status === "Active") score += 3;
-  score += Math.min(popularityScore(card), 100) / 12;
-  score -= Math.min(words.length, 10) / 40;
-  return score;
+  return computeCardScore(card, tokens.join(" "), tokens);
 }
 
 export function searchCards(cards: CreditCard[], query: string): CreditCard[] {
-  const q = query.trim().toLowerCase();
-  if (!q) return cards;
-  const tokens = q.split(/\s+/);
-  let matched = cards.filter((card) => exactMatch(card, tokens));
-  if (matched.length === 0) {
-    matched = cards.filter((card) => {
-      const haystack = haystackFor(card);
-      return tokens.every((token) => haystack.includes(token) || fuzzyToken(haystack, token));
-    });
-  }
-  return matched
-    .map((card) => ({ card, score: relevanceScore(card, tokens) }))
-    .sort((a, b) => b.score - a.score)
-    .map((entry) => entry.card);
+  return searchCreditCards(cards, query);
 }
 
 export function cardMonthlyIncomeRequirement(

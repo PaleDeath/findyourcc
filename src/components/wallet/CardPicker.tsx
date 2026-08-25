@@ -25,13 +25,13 @@ function useDebounced<T>(value: T, delay = 200): T {
 export function CardPicker({ cards, ownedIds, onAdd }: CardPickerProps) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const debouncedQuery = useDebounced(query, 200);
+  const debouncedQuery = useDebounced(query, 100);
 
   const results = useMemo(() => {
     if (!debouncedQuery.trim()) return [];
     return filterCards(cards, { ...DEFAULT_FILTERS, query: debouncedQuery })
       .filter((c) => !ownedIds.includes(c.id))
-      .slice(0, 8);
+      .slice(0, 24);
   }, [cards, debouncedQuery, ownedIds]);
 
   return (

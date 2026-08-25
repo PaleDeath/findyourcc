@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import {
   Command,
@@ -11,6 +11,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { searchCards } from "@/data/cards";
 import type { CreditCard } from "@/data/types";
 import { cn } from "@/lib/utils";
 import { MAX_COMPARE } from "@/lib/card-store";
@@ -23,6 +24,13 @@ interface CardSelectorProps {
 
 export function CardSelector({ cards, selectedIds, onChange }: CardSelectorProps) {
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const filteredCards = useMemo(() => {
+    if (!search.trim()) return cards;
+    return searchCards(cards, search);
+  }, [cards, search]);
+
   const selected = selectedIds
     .map((id) => cards.find((c) => c.id === id))
     .filter((c): c is CreditCard => Boolean(c));
@@ -82,17 +90,21 @@ export function CardSelector({ cards, selectedIds, onChange }: CardSelectorProps
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[min(24rem,90vw)] p-0" align="start">
-          <Command>
-            <CommandInput placeholder="Search cards by name or issuer…" />
+          <Command shouldFilter={false}>
+            <CommandInput
+              value={search}
+              onValueChange={setSearch}
+              placeholder="Search cards by name, bank, acronym (e.g. DCB, MRCC)…"
+            />
             <CommandList>
-              <CommandEmpty>No cards found.</CommandEmpty>
+              {filteredCards.length === 0 && <CommandEmpty>No cards found.</CommandEmpty>}
               <CommandGroup>
-                {cards.map((card) => {
+                {filteredCards.slice(0, 30).map((card) => {
                   const isSelected = selectedIds.includes(card.id);
                   return (
                     <CommandItem
                       key={card.id}
-                      value={`${card.name} ${card.issuer}`}
+                      value={card.id}
                       onSelect={() => {
                         toggle(card.id);
                       }}
