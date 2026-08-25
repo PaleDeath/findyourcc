@@ -1,4 +1,4 @@
-import { CATEGORIES, NETWORKS, SEGMENTS } from "@/data/cards";
+import { CATEGORIES, NETWORKS, REDEMPTION_MODES, SEGMENTS, type RedemptionMode } from "@/data/cards";
 import type { Category, Network, Segment } from "@/data/types";
 
 /** URL search-param coercion helpers. Kept out of route files so automatic
@@ -40,4 +40,8 @@ export function csvCategories(value: unknown): Category[] {
 
 export function csvNetworks(value: unknown): Network[] {
   return only(csv(value), NETWORKS);
+}
+
+export function csvRedemptions(value: unknown): RedemptionMode[] {
+  return only(csv(value), REDEMPTION_MODES);
 }

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
   DEFAULT_FILTERS,
+  REDEMPTION_LABELS,
   SORT_OPTIONS,
   filterCards,
   loosenSuggestions,
@@ -16,7 +17,16 @@ import {
   type SortKey,
 } from "@/data/cards";
 import { formatCompactINR } from "@/lib/format";
-import { bool, csv, csvCategories, csvNetworks, csvSegments, num, str } from "@/lib/search-params";
+import {
+  bool,
+  csv,
+  csvCategories,
+  csvNetworks,
+  csvRedemptions,
+  csvSegments,
+  num,
+  str,
+} from "@/lib/search-params";
 import { useCompareTray, useDataset, useFavourites } from "@/lib/card-store";
 
 interface ExploreSearch {
@@ -25,14 +35,20 @@ interface ExploreSearch {
   segment?: string | undefined;
   category?: string | undefined;
   network?: string | undefined;
+  redemption?: string | undefined;
   cobrand?: string | undefined;
   maxFee?: number | undefined;
   income?: number | undefined;
   score?: number | undefined;
   ltf?: boolean | undefined;
   lounge?: boolean | undefined;
+  intlLounge?: boolean | undefined;
   upi?: boolean | undefined;
+  zeroForex?: boolean | undefined;
   forex?: boolean | undefined;
+  golf?: boolean | undefined;
+  movie?: boolean | undefined;
+  dining?: boolean | undefined;
   self?: boolean | undefined;
   fd?: boolean | undefined;
   archived?: boolean | undefined;
@@ -53,6 +69,8 @@ export const Route = createFileRoute("/explore")({
     if (category) out.category = category;
     const network = str(search["network"]);
     if (network) out.network = network;
+    const redemption = str(search["redemption"]);
+    if (redemption) out.redemption = redemption;
     const cobrand = str(search["cobrand"]);
     if (cobrand) out.cobrand = cobrand;
     const maxFee = num(search["maxFee"]);
@@ -63,8 +81,13 @@ export const Route = createFileRoute("/explore")({
     if (score !== undefined) out.score = score;
     if (bool(search["ltf"])) out.ltf = true;
     if (bool(search["lounge"])) out.lounge = true;
+    if (bool(search["intlLounge"])) out.intlLounge = true;
     if (bool(search["upi"])) out.upi = true;
+    if (bool(search["zeroForex"])) out.zeroForex = true;
     if (bool(search["forex"])) out.forex = true;
+    if (bool(search["golf"])) out.golf = true;
+    if (bool(search["movie"])) out.movie = true;
+    if (bool(search["dining"])) out.dining = true;
     if (bool(search["self"])) out.self = true;
     if (bool(search["fd"])) out.fd = true;
     if (bool(search["archived"])) out.archived = true;
@@ -131,14 +154,20 @@ function ExplorePage() {
       segments: csvSegments(search.segment),
       categories: csvCategories(search.category),
       networks: csvNetworks(search.network),
+      redemptions: csvRedemptions(search.redemption),
       coBrandPartners: csv(search.cobrand),
       maxAnnualFee: search.maxFee ?? null,
       monthlyIncome: search.income ?? null,
       creditScore: search.score ?? null,
       lifetimeFreeOnly: Boolean(search.ltf),
       loungeOnly: Boolean(search.lounge),
+      internationalLoungeOnly: Boolean(search.intlLounge),
       rupayUpiOnly: Boolean(search.upi),
+      zeroForexOnly: Boolean(search.zeroForex),
       lowForexOnly: Boolean(search.forex),
+      golfOnly: Boolean(search.golf),
+      movieOffersOnly: Boolean(search.movie),
+      diningOffersOnly: Boolean(search.dining),
       selfEmployedOnly: Boolean(search.self),
       fdBackedOnly: Boolean(search.fd),
       includeArchived: Boolean(search.archived),
@@ -160,14 +189,20 @@ function ExplorePage() {
     if (merged.segments.length) params.segment = merged.segments.join(",");
     if (merged.categories.length) params.category = merged.categories.join(",");
     if (merged.networks.length) params.network = merged.networks.join(",");
+    if (merged.redemptions.length) params.redemption = merged.redemptions.join(",");
     if (merged.coBrandPartners.length) params.cobrand = merged.coBrandPartners.join(",");
     if (merged.maxAnnualFee !== null) params.maxFee = merged.maxAnnualFee;
     if (merged.monthlyIncome !== null) params.income = merged.monthlyIncome;
     if (merged.creditScore !== null) params.score = merged.creditScore;
     if (merged.lifetimeFreeOnly) params.ltf = true;
     if (merged.loungeOnly) params.lounge = true;
+    if (merged.internationalLoungeOnly) params.intlLounge = true;
     if (merged.rupayUpiOnly) params.upi = true;
+    if (merged.zeroForexOnly) params.zeroForex = true;
     if (merged.lowForexOnly) params.forex = true;
+    if (merged.golfOnly) params.golf = true;
+    if (merged.movieOffersOnly) params.movie = true;
+    if (merged.diningOffersOnly) params.dining = true;
     if (merged.selfEmployedOnly) params.self = true;
     if (merged.fdBackedOnly) params.fd = true;
     if (merged.includeArchived) params.archived = true;
@@ -182,6 +217,10 @@ function ExplorePage() {
   const reset = () => void navigate({ to: ".", search: {}, replace: true });
 
   const activeChips: { label: string; clear: Partial<CardFilters> }[] = [
+    ...filters.redemptions.map((r) => ({
+      label: REDEMPTION_LABELS[r].label,
+      clear: { redemptions: filters.redemptions.filter((x) => x !== r) },
+    })),
     ...filters.issuerIds.map((id) => ({
       label: cards.find((c) => c.issuerId === id)?.issuer ?? id,
       clear: { issuerIds: filters.issuerIds.filter((x) => x !== id) },
@@ -224,9 +263,16 @@ function ExplorePage() {
     ...(filters.lifetimeFreeOnly
       ? [{ label: "Lifetime free", clear: { lifetimeFreeOnly: false } }]
       : []),
-    ...(filters.loungeOnly ? [{ label: "Lounge access", clear: { loungeOnly: false } }] : []),
-    ...(filters.rupayUpiOnly ? [{ label: "RuPay UPI", clear: { rupayUpiOnly: false } }] : []),
+    ...(filters.loungeOnly ? [{ label: "Domestic lounge", clear: { loungeOnly: false } }] : []),
+    ...(filters.internationalLoungeOnly
+      ? [{ label: "Int'l lounge", clear: { internationalLoungeOnly: false } }]
+      : []),
+    ...(filters.zeroForexOnly ? [{ label: "0% Zero forex", clear: { zeroForexOnly: false } }] : []),
     ...(filters.lowForexOnly ? [{ label: "Low forex", clear: { lowForexOnly: false } }] : []),
+    ...(filters.rupayUpiOnly ? [{ label: "RuPay UPI", clear: { rupayUpiOnly: false } }] : []),
+    ...(filters.golfOnly ? [{ label: "Golf games", clear: { golfOnly: false } }] : []),
+    ...(filters.movieOffersOnly ? [{ label: "Movie offers", clear: { movieOffersOnly: false } }] : []),
+    ...(filters.diningOffersOnly ? [{ label: "Dining perks", clear: { diningOffersOnly: false } }] : []),
     ...(filters.selfEmployedOnly
       ? [{ label: "Self-employed", clear: { selfEmployedOnly: false } }]
       : []),

@@ -183,17 +183,167 @@ export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: "segment", label: "Segment" },
 ];
 
+export const REDEMPTION_MODES = [
+  "vouchers",
+  "statement-credit",
+  "airmiles",
+  "hotels",
+  "flights-hotels",
+] as const;
+
+export type RedemptionMode = (typeof REDEMPTION_MODES)[number];
+
+export const REDEMPTION_LABELS: Record<RedemptionMode, { label: string; description: string }> = {
+  vouchers: {
+    label: "Gift cards & Vouchers",
+    description: "Amazon, Flipkart, brand vouchers & catalogue",
+  },
+  "statement-credit": {
+    label: "Cashback & Statement Credit",
+    description: "Direct rupee credit on your card bill",
+  },
+  airmiles: {
+    label: "Air miles & Airline transfers",
+    description: "Air India, KrisFlyer, InterMiles, IndiGo 6E",
+  },
+  hotels: {
+    label: "Hotel loyalty points",
+    description: "Marriott Bonvoy, Accor, Taj & ITC transfers",
+  },
+  "flights-hotels": {
+    label: "Flight & Hotel booking portals",
+    description: "SmartBuy, Travel Edge, EaseMyTrip, Scapia",
+  },
+};
+
+export function cardMatchesRedemption(card: CreditCard, mode: RedemptionMode): boolean {
+  const modesLower = card.rewards.redemptionModes.map((m) => m.toLowerCase());
+  const partnersLower = (card.rewards.transferPartners ?? []).map((p) => p.toLowerCase());
+  const milestonesLower = card.rewards.milestones.map((m) =>
+    (m.benefit + " " + m.period).toLowerCase(),
+  );
+
+  switch (mode) {
+    case "vouchers":
+      return (
+        modesLower.some(
+          (m) =>
+            m.includes("voucher") ||
+            m.includes("catalogue") ||
+            m.includes("gift") ||
+            m.includes("amazon") ||
+            m.includes("flipkart") ||
+            m.includes("myntra") ||
+            m.includes("reliance") ||
+            m.includes("shoppers stop") ||
+            m.includes("titan") ||
+            m.includes("tanishq") ||
+            m.includes("ishop") ||
+            m.includes("app rewards") ||
+            m.includes("white pass"),
+        ) || milestonesLower.some((m) => m.includes("voucher") || m.includes("gift"))
+      );
+
+    case "statement-credit":
+      return (
+        card.categories.includes("Cashback") ||
+        modesLower.some(
+          (m) =>
+            m.includes("statement credit") ||
+            m.includes("cashback") ||
+            m.includes("cash credit") ||
+            m.includes("app wallet") ||
+            m.includes("swiggy money") ||
+            m.includes("freecharge"),
+        )
+      );
+
+    case "airmiles":
+      return (
+        partnersLower.some(
+          (p) =>
+            p.includes("air") ||
+            p.includes("airline") ||
+            p.includes("krisflyer") ||
+            p.includes("miles") ||
+            p.includes("indigo") ||
+            p.includes("vistara") ||
+            p.includes("british") ||
+            p.includes("singapore") ||
+            p.includes("qatar") ||
+            p.includes("cathay") ||
+            p.includes("etihad") ||
+            p.includes("emirates") ||
+            p.includes("flying blue"),
+        ) ||
+        modesLower.some(
+          (m) =>
+            m.includes("mile") ||
+            m.includes("air") ||
+            m.includes("airline") ||
+            m.includes("indigo") ||
+            m.includes("vistara") ||
+            m.includes("krisflyer") ||
+            m.includes("intermiles") ||
+            m.includes("edge miles") ||
+            m.includes("cv points"),
+        )
+      );
+
+    case "hotels":
+      return (
+        partnersLower.some(
+          (p) =>
+            p.includes("marriott") ||
+            p.includes("accor") ||
+            p.includes("itc") ||
+            p.includes("taj") ||
+            p.includes("hotel") ||
+            p.includes("wyndham") ||
+            p.includes("hyatt") ||
+            p.includes("ihg"),
+        ) ||
+        modesLower.some(
+          (m) => m.includes("marriott") || m.includes("hotel") || m.includes("club marriott"),
+        )
+      );
+
+    case "flights-hotels":
+      return modesLower.some(
+        (m) =>
+          m.includes("smartbuy") ||
+          m.includes("travel edge") ||
+          m.includes("flight") ||
+          m.includes("hotel") ||
+          m.includes("easemytrip") ||
+          m.includes("yatra") ||
+          m.includes("ixigo") ||
+          m.includes("scapia") ||
+          m.includes("travel booking"),
+      );
+
+    default:
+      return false;
+  }
+}
+
 export interface CardFilters {
   query: string;
   issuerIds: string[];
   segments: Segment[];
   categories: Category[];
   networks: Network[];
+  redemptions: RedemptionMode[];
   maxAnnualFee: number | null;
   lifetimeFreeOnly: boolean;
   loungeOnly: boolean;
+  internationalLoungeOnly: boolean;
   rupayUpiOnly: boolean;
+  zeroForexOnly: boolean;
   lowForexOnly: boolean;
+  golfOnly: boolean;
+  movieOffersOnly: boolean;
+  diningOffersOnly: boolean;
   selfEmployedOnly: boolean;
   fdBackedOnly: boolean;
   /** The user's own monthly income — keeps cards they can actually qualify for. */
@@ -214,11 +364,17 @@ export const DEFAULT_FILTERS: CardFilters = {
   segments: [],
   categories: [],
   networks: [],
+  redemptions: [],
   maxAnnualFee: null,
   lifetimeFreeOnly: false,
   loungeOnly: false,
+  internationalLoungeOnly: false,
   rupayUpiOnly: false,
+  zeroForexOnly: false,
   lowForexOnly: false,
+  golfOnly: false,
+  movieOffersOnly: false,
+  diningOffersOnly: false,
   selfEmployedOnly: false,
   fdBackedOnly: false,
   monthlyIncome: null,
@@ -296,11 +452,25 @@ export function filterCards(cards: CreditCard[], filters: CardFilters): CreditCa
       return false;
     if (filters.networks.length && !filters.networks.some((n) => card.networks.includes(n)))
       return false;
+    if (
+      filters.redemptions.length &&
+      !filters.redemptions.some((r) => cardMatchesRedemption(card, r))
+    )
+      return false;
     if (filters.maxAnnualFee !== null && card.fees.annualFee > filters.maxAnnualFee) return false;
     if (filters.lifetimeFreeOnly && !card.fees.lifetimeFree) return false;
     if (filters.loungeOnly && !hasLounge(card)) return false;
+    if (filters.internationalLoungeOnly && !card.benefits.loungeInternational) return false;
     if (filters.rupayUpiOnly && !card.upi.rupayUpiLinkable) return false;
+    if (filters.zeroForexOnly && card.fees.forexMarkupPct !== 0) return false;
     if (filters.lowForexOnly && card.fees.forexMarkupPct > LOW_FOREX_THRESHOLD) return false;
+    if (filters.golfOnly && !card.benefits.golf) return false;
+    if (filters.movieOffersOnly && !card.benefits.movieOffers) return false;
+    if (
+      filters.diningOffersOnly &&
+      !Boolean(card.benefits.diningPrograms?.length || card.categories.includes("Dining"))
+    )
+      return false;
     if (filters.selfEmployedOnly && !card.eligibility.employmentTypes.includes("Self-employed"))
       return false;
     if (filters.fdBackedOnly && !card.eligibility.fdBacked) return false;
@@ -370,9 +540,15 @@ export function loosenSuggestions(
   };
   if (filters.maxAnnualFee !== null) add("Allow any annual fee", { maxAnnualFee: null });
   if (filters.lifetimeFreeOnly) add("Include cards with a fee", { lifetimeFreeOnly: false });
+  if (filters.redemptions.length) add("Drop redemption filter", { redemptions: [] });
   if (filters.loungeOnly) add("Drop the lounge requirement", { loungeOnly: false });
+  if (filters.internationalLoungeOnly) add("Drop int'l lounge requirement", { internationalLoungeOnly: false });
   if (filters.rupayUpiOnly) add("Drop RuPay UPI", { rupayUpiOnly: false });
+  if (filters.zeroForexOnly) add("Allow standard forex", { zeroForexOnly: false });
   if (filters.lowForexOnly) add("Allow normal forex markup", { lowForexOnly: false });
+  if (filters.golfOnly) add("Drop golf requirement", { golfOnly: false });
+  if (filters.movieOffersOnly) add("Drop movie perks requirement", { movieOffersOnly: false });
+  if (filters.diningOffersOnly) add("Drop dining perks requirement", { diningOffersOnly: false });
   if (filters.fdBackedOnly) add("Include unsecured cards", { fdBackedOnly: false });
   if (filters.selfEmployedOnly) add("Drop self-employed filter", { selfEmployedOnly: false });
   if (filters.monthlyIncome !== null) add("Ignore income requirement", { monthlyIncome: null });

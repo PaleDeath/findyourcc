@@ -92,6 +92,9 @@ interface CardTokenInfo {
   coBrandTokens: string[];
   categoryTokens: string[];
   networkTokens: string[];
+  redemptionTokens: string[];
+  transferPartnerTokens: string[];
+  brandTokens: string[];
   featureTokens: string[];
   bestForTokens: string[];
 }
@@ -103,17 +106,40 @@ function extractCardTokens(card: CreditCard): CardTokenInfo {
   const normCategories = card.categories.map(normalize);
   const normNetworks = card.networks.map(normalize);
   const normBestFor = card.bestFor.map(normalize);
+  const normRedemptions = card.rewards.redemptionModes.map(normalize);
+  const normPartners = (card.rewards.transferPartners ?? []).map(normalize);
+  const normBrands = card.rewards.acceleratedEarn.flatMap((a) => [
+    normalize(a.label),
+    ...(a.brands ?? []).map(normalize),
+  ]);
 
   const features: string[] = [];
   if (card.fees.lifetimeFree) features.push("lifetime free", "ltf", "zero fee", "no annual fee");
   if (card.upi.rupayUpiLinkable) features.push("upi", "rupay upi", "bhim upi");
   if (card.benefits.loungeDomestic || card.benefits.loungeInternational)
-    features.push("lounge", "airport lounge", "domestic lounge", "international lounge");
-  if (card.fees.forexMarkupPct <= 1.99)
-    features.push("forex", "zero forex", "low forex", "no forex");
+    features.push("lounge", "airport lounge", "domestic lounge", "international lounge", "priority pass", "dreamfolks");
+  if (card.benefits.loungeInternational) features.push("international lounge", "priority pass");
+  if (card.fees.forexMarkupPct === 0) features.push("zero forex", "0 forex", "no forex");
+  else if (card.fees.forexMarkupPct <= 1.99) features.push("low forex", "forex");
   if (card.categories.includes("Fuel") || card.benefits.fuelSurchargeWaiver)
-    features.push("fuel", "petrol", "diesel");
-  if (card.benefits.movieOffers) features.push("movie", "bms", "bookmyshow", "cinema");
+    features.push("fuel", "petrol", "diesel", "fuel surcharge waiver");
+  if (card.benefits.movieOffers) features.push("movie", "movies", "bms", "bookmyshow", "cinema", "bogo");
+  if (card.benefits.golf) features.push("golf", "golf game", "golf lesson");
+  if (card.benefits.diningPrograms?.length || card.categories.includes("Dining"))
+    features.push("dining", "eazydiner", "swiggy dineout", "culinary");
+  if (
+    normRedemptions.some(
+      (m) =>
+        m.includes("voucher") ||
+        m.includes("gift") ||
+        m.includes("catalogue") ||
+        m.includes("amazon") ||
+        m.includes("flipkart") ||
+        m.includes("myntra"),
+    )
+  ) {
+    features.push("gift card", "gift cards", "gift voucher", "gift vouchers", "vouchers", "voucher", "brand vouchers");
+  }
 
   return {
     id: card.id,
@@ -124,6 +150,9 @@ function extractCardTokens(card: CreditCard): CardTokenInfo {
     coBrandTokens: normCobrand ? normCobrand.split(" ").filter(Boolean) : [],
     categoryTokens: normCategories,
     networkTokens: normNetworks,
+    redemptionTokens: normRedemptions,
+    transferPartnerTokens: normPartners,
+    brandTokens: normBrands,
     featureTokens: features,
     bestForTokens: normBestFor,
   };
@@ -191,24 +220,39 @@ export function computeCardScore(card: CreditCard, query: string, qTokens: strin
       tokenScore += 40;
     }
 
+    // Check Redemption Modes (e.g. vouchers, gift cards, airmiles)
+    if (info.redemptionTokens.some((r) => r.includes(token))) {
+      tokenScore += 45;
+    }
+
+    // Check Transfer Partners (e.g. Marriott, KrisFlyer, Air India)
+    if (info.transferPartnerTokens.some((p) => p.includes(token))) {
+      tokenScore += 50;
+    }
+
+    // Check Accelerated Brand Tokens (e.g. Swiggy, Zomato, Amazon, Tata Neu)
+    if (info.brandTokens.some((b) => b.includes(token))) {
+      tokenScore += 45;
+    }
+
     // Check Network
     if (info.networkTokens.some((n) => n.includes(token))) {
       tokenScore += 30;
     }
 
-    // Check Features (LTF, UPI, Lounge, Forex, Fuel, Movie)
+    // Check Features (LTF, UPI, Lounge, Forex, Fuel, Movie, Golf, Vouchers)
     if (info.featureTokens.some((f) => f.includes(token))) {
-      tokenScore += 35;
+      tokenScore += 40;
     }
 
     // Check Category
     if (info.categoryTokens.some((c) => c.includes(token))) {
-      tokenScore += 20;
+      tokenScore += 25;
     }
 
-    // Check bestFor (Demoted so it never drowns out cards with the word in their name)
+    // Check bestFor
     if (info.bestForTokens.some((b) => b.includes(token))) {
-      tokenScore += 2;
+      tokenScore += 10;
     }
 
     if (tokenScore > 0) {

@@ -3,8 +3,11 @@ import {
   CATEGORIES,
   MAX_FEE_SLIDER,
   NETWORKS,
+  REDEMPTION_MODES,
+  REDEMPTION_LABELS,
   SEGMENTS,
   type CardFilters,
+  type RedemptionMode,
   listCoBrandPartners,
   listIssuers,
 } from "@/data/cards";
@@ -41,21 +44,36 @@ interface FilterPanelProps {
   onReset: () => void;
 }
 
-function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function Chip({
+  label,
+  active,
+  onClick,
+  count,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  count?: number;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors duration-150",
+        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all duration-150",
         active
-          ? "border-primary bg-primary text-primary-foreground"
+          ? "border-primary bg-primary text-primary-foreground shadow-2xs font-semibold"
           : "border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground",
       )}
     >
       {active && <Check className="size-3" aria-hidden="true" />}
-      {label}
+      <span>{label}</span>
+      {count !== undefined && (
+        <span className={cn("text-[10px] tabular-nums opacity-70", active ? "text-primary-foreground" : "text-muted-foreground")}>
+          {count}
+        </span>
+      )}
     </button>
   );
 }
@@ -95,6 +113,22 @@ export function FilterPanel({ cards, filters, onChange, onReset }: FilterPanelPr
           Reset all
         </button>
       </div>
+
+      <Section title="Reward Redemption">
+        <div className="flex flex-wrap gap-1.5">
+          {REDEMPTION_MODES.map((mode) => (
+            <Chip
+              key={mode}
+              label={REDEMPTION_LABELS[mode].label}
+              active={filters.redemptions.includes(mode)}
+              onClick={() => onChange({ redemptions: toggle(filters.redemptions, mode) })}
+            />
+          ))}
+        </div>
+        <p className="pt-0.5 text-[11px] text-muted-foreground">
+          Find cards offering gift vouchers, direct cashback, or transfer miles.
+        </p>
+      </Section>
 
       <Section title="Segment">
         <div className="flex flex-wrap gap-1.5">
@@ -238,6 +272,38 @@ export function FilterPanel({ cards, filters, onChange, onReset }: FilterPanelPr
         </div>
       </Section>
 
+      <Section title="Perks & Privileges">
+        <div className="space-y-3">
+          {[
+            { id: "ltf", label: "Lifetime free (₹0 fee)", key: "lifetimeFreeOnly" as const },
+            { id: "lounge", label: "Domestic lounge access", key: "loungeOnly" as const },
+            { id: "intl-lounge", label: "International lounge access", key: "internationalLoungeOnly" as const },
+            { id: "zero-forex", label: "0% Zero forex markup", key: "zeroForexOnly" as const },
+            { id: "forex", label: "Low forex markup (≤2%)", key: "lowForexOnly" as const },
+            { id: "upi", label: "RuPay · UPI linkable", key: "rupayUpiOnly" as const },
+            { id: "golf", label: "Complimentary golf games", key: "golfOnly" as const },
+            { id: "movie", label: "Movie offers (BookMyShow / BOGO)", key: "movieOffersOnly" as const },
+            { id: "dining", label: "Dining programs & discounts", key: "diningOffersOnly" as const },
+            { id: "self", label: "Self-employed eligible", key: "selfEmployedOnly" as const },
+            { id: "fd", label: "Secured / FD-backed", key: "fdBackedOnly" as const },
+            { id: "archived", label: "Include discontinued", key: "includeArchived" as const },
+          ].map((row) => (
+            <div key={row.id} className="flex items-center justify-between gap-3">
+              <Label htmlFor={row.id} className="text-sm font-normal text-foreground">
+                {row.label}
+              </Label>
+              <Switch
+                id={row.id}
+                checked={filters[row.key]}
+                onCheckedChange={(checked) =>
+                  onChange({ [row.key]: checked } as Partial<CardFilters>)
+                }
+              />
+            </div>
+          ))}
+        </div>
+      </Section>
+
       {partners.length > 0 && (
         <Section title="Co-brand partner">
           <div className="flex max-h-40 flex-wrap gap-1.5 overflow-y-auto pr-1">
@@ -273,33 +339,6 @@ export function FilterPanel({ cards, filters, onChange, onReset }: FilterPanelPr
               </span>
               <span className="text-xs text-muted-foreground tabular-nums">{issuer.count}</span>
             </label>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Quick toggles">
-        <div className="space-y-3">
-          {[
-            { id: "ltf", label: "Lifetime free only", key: "lifetimeFreeOnly" as const },
-            { id: "lounge", label: "Airport lounge access", key: "loungeOnly" as const },
-            { id: "upi", label: "RuPay · UPI linkable", key: "rupayUpiOnly" as const },
-            { id: "forex", label: "Low forex markup (≤2%)", key: "lowForexOnly" as const },
-            { id: "self", label: "Self-employed eligible", key: "selfEmployedOnly" as const },
-            { id: "fd", label: "Secured / FD-backed", key: "fdBackedOnly" as const },
-            { id: "archived", label: "Include discontinued", key: "includeArchived" as const },
-          ].map((row) => (
-            <div key={row.id} className="flex items-center justify-between gap-3">
-              <Label htmlFor={row.id} className="text-sm font-normal">
-                {row.label}
-              </Label>
-              <Switch
-                id={row.id}
-                checked={filters[row.key]}
-                onCheckedChange={(checked) =>
-                  onChange({ [row.key]: checked } as Partial<CardFilters>)
-                }
-              />
-            </div>
           ))}
         </div>
       </Section>
