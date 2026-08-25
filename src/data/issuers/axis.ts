@@ -101,7 +101,7 @@ export const axisCards: CreditCard[] = [
     eligibility: {
       minAge: 21,
       maxAge: 65,
-      minCreditScore: 780,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Pan-India",
       documents: ["PAN Card", "Aadhaar Card", "Income Proof (Salary Slips/ITR)"],
@@ -199,7 +199,7 @@ export const axisCards: CreditCard[] = [
     eligibility: {
       minAge: 21,
       maxAge: 65,
-      minCreditScore: 800,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Select cities",
       documents: ["Invite from Axis Burgundy Private Banking"],
@@ -291,7 +291,7 @@ export const axisCards: CreditCard[] = [
     eligibility: {
       minAge: 21,
       maxAge: 65,
-      minCreditScore: 800,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Pan-India",
       documents: ["PAN Card", "Aadhaar Card", "Income Proof (Salary Slips/ITR)"],
@@ -471,7 +471,7 @@ export const axisCards: CreditCard[] = [
     eligibility: {
       minAge: 21,
       maxAge: 65,
-      minCreditScore: 800,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Select cities",
       documents: ["By invitation only"],
@@ -1227,7 +1227,7 @@ export const axisCards: CreditCard[] = [
     eligibility: {
       minAge: 21,
       maxAge: 65,
-      minCreditScore: 760,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Pan-India",
       documents: ["PAN Card", "Aadhaar Card", "Income Proof (Salary Slips/ITR)"],
@@ -1530,7 +1530,7 @@ export const axisCards: CreditCard[] = [
     eligibility: {
       minAge: 21,
       maxAge: 65,
-      minCreditScore: 760,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Pan-India",
       documents: ["PAN Card", "Aadhaar Card", "Income Proof (Salary Slips/ITR)"],
@@ -1881,7 +1881,7 @@ export const axisCards: CreditCard[] = [
     eligibility: {
       minAge: 21,
       maxAge: 65,
-      minCreditScore: 800,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Select cities",
       documents: [

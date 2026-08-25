@@ -51,7 +51,7 @@ export const dbsCards: CreditCard[] = [
       minAge: 21,
       maxAge: 65,
       minAnnualIncomeSalaried: 1800000,
-      minCreditScore: 770,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Select cities",
       documents: ["PAN", "Aadhaar", "Income proof", "Bank statements"],

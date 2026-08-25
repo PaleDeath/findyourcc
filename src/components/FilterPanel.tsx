@@ -20,11 +20,10 @@ import { cn } from "@/lib/utils";
 
 const SCORE_BANDS: { label: string; value: number | null }[] = [
   { label: "Any", value: null },
-  { label: "600+", value: 600 },
   { label: "650+", value: 650 },
   { label: "700+", value: 700 },
-  { label: "750+", value: 750 },
-  { label: "800+", value: 800 },
+  { label: "720+", value: 720 },
+  { label: "750+ (Prime)", value: 750 },
 ];
 
 const INCOME_BANDS: { label: string; value: number | null }[] = [
@@ -270,6 +269,37 @@ export function FilterPanel({ cards, filters, onChange, onReset }: FilterPanelPr
             />
           ))}
         </div>
+        <div className="mt-2 flex items-center gap-1.5">
+          <div className="flex flex-1 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1 text-xs shadow-2xs focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
+            <span className="font-semibold text-muted-foreground">CIBIL</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="e.g. 750"
+              value={filters.creditScore ? filters.creditScore.toString() : ""}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/[^0-9]/g, "");
+                onChange({ creditScore: raw ? Math.min(900, parseInt(raw, 10)) : null });
+              }}
+              className="w-full bg-transparent font-medium text-foreground focus:outline-none"
+              aria-label="Enter exact CIBIL score"
+            />
+          </div>
+          {filters.creditScore !== null && (
+            <button
+              type="button"
+              onClick={() => onChange({ creditScore: null })}
+              className="rounded-lg border border-border bg-card p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              title="Clear credit score filter"
+              aria-label="Clear credit score filter"
+            >
+              <X className="size-3.5" aria-hidden="true" />
+            </button>
+          )}
+        </div>
+        <p className="pt-0.5 text-[11px] text-muted-foreground">
+          In India, a 750+ CIBIL score is prime and qualifies for all premium &amp; super-premium cards.
+        </p>
       </Section>
 
       <Section title="Perks & Privileges">

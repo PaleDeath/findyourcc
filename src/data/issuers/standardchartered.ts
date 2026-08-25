@@ -343,7 +343,7 @@ export const standardcharteredCards: CreditCard[] = [
       minAge: 21,
       maxAge: 70,
       minAnnualIncomeSalaried: 6000000,
-      minCreditScore: 780,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Select cities",
       documents: ["Priority Banking relationship", "PAN", "Aadhaar"],

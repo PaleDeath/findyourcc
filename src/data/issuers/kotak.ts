@@ -355,7 +355,7 @@ export const kotakCards: CreditCard[] = [
       minAge: 25,
       maxAge: 65,
       minAnnualIncomeSalaried: 3000000,
-      minCreditScore: 780,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Pan-India",
       documents: ["PAN", "Aadhaar", "Income proof"],

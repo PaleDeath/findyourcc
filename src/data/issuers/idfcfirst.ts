@@ -267,7 +267,7 @@ export const idfcfirstCards: CreditCard[] = [
       minAge: 25,
       maxAge: 65,
       minAnnualIncomeSalaried: 6000000,
-      minCreditScore: 800,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Select cities",
       documents: ["PAN", "Aadhaar", "Income proof", "Bank invitation"],

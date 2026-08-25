@@ -99,7 +99,7 @@ export const idbiCards: CreditCard[] = [
       minAge: 25,
       maxAge: 65,
       minAnnualIncomeSalaried: 1200000,
-      minCreditScore: 760,
+      minCreditScore: 750,
       employmentTypes: ["Salaried", "Self-employed"],
       cityAvailability: "Pan-India",
       documents: ["PAN", "Aadhaar", "Income proof", "Bank statements"],
