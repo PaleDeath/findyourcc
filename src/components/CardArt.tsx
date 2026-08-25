@@ -24,6 +24,7 @@ interface CardArtProps {
 
 function usePointerTilt(enabled: boolean) {
   const ref = useRef<HTMLDivElement | null>(null);
+  const glareRef = useRef<HTMLDivElement | null>(null);
   const [interactive, setInteractive] = useState(false);
   const reducedMotion = useReducedMotion();
 
@@ -40,18 +41,25 @@ function usePointerTilt(enabled: boolean) {
     (event: React.PointerEvent<HTMLDivElement>) => {
       if (!interactive || !ref.current) return;
       const rect = ref.current.getBoundingClientRect();
-      const px = (event.clientX - rect.left) / rect.width - 0.5;
-      const py = (event.clientY - rect.top) / rect.height - 0.5;
-      ref.current.style.transform = `perspective(900px) rotateY(${px * 9}deg) rotateX(${-py * 9}deg) translateZ(0)`;
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const px = x / rect.width - 0.5;
+      const py = y / rect.height - 0.5;
+      ref.current.style.transform = `perspective(800px) rotateY(${px * 10}deg) rotateX(${-py * 10}deg) translateZ(0)`;
+      if (glareRef.current) {
+        glareRef.current.style.opacity = "1";
+        glareRef.current.style.background = `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 35%, transparent 65%)`;
+      }
     },
     [interactive],
   );
 
   const reset = useCallback(() => {
     if (ref.current) ref.current.style.transform = "";
+    if (glareRef.current) glareRef.current.style.opacity = "0";
   }, []);
 
-  return { ref, interactive, onPointerMove, reset };
+  return { ref, glareRef, interactive, onPointerMove, reset };
 }
 
 export function CardArt({
@@ -63,7 +71,7 @@ export function CardArt({
   dimmed = false,
   className,
 }: CardArtProps) {
-  const { ref, interactive, onPointerMove, reset } = usePointerTilt(true);
+  const { ref, glareRef, interactive, onPointerMove, reset } = usePointerTilt(true);
   const [imageFailed, setImageFailed] = useState(false);
   const [imageRatio, setImageRatio] = useState<number | null>(null);
   const titleId = useId();
@@ -93,18 +101,22 @@ export function CardArt({
   const textScale = size === "sm" ? "text-[0.55rem]" : size === "lg" ? "text-sm" : "text-[0.7rem]";
 
   if (art.officialImageUrl && !imageFailed) {
-    // Official artwork varies in orientation/ratio; derive the frame from the
-    // image itself so nothing sits in a half-empty box.
     const ratio = imageRatio ?? (isVertical ? 1 / 1.586 : 1.586);
     const framedRatio = Math.min(Math.max(ratio, 1 / 1.7), 1.8);
     return (
       <div
+        ref={ref}
+        onPointerMove={onPointerMove}
+        onPointerLeave={reset}
         className={cn(
-          "relative overflow-hidden rounded-xl bg-muted/40 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.55)]",
+          "group/card-art relative isolate overflow-hidden rounded-[0.875rem] border border-black/5 bg-surface/50 shadow-[0_6px_16px_-4px_rgba(0,0,0,0.18),0_16px_32px_-8px_rgba(0,0,0,0.12)] transition-transform duration-200 ease-out will-change-transform dark:border-white/10 dark:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]",
           dimmed && "opacity-60 saturate-50",
           className,
         )}
-        style={{ aspectRatio: `${framedRatio}` }}
+        style={{
+          aspectRatio: `${framedRatio}`,
+          transformStyle: interactive ? "preserve-3d" : undefined,
+        }}
       >
         <img
           src={art.officialImageUrl}
@@ -118,7 +130,18 @@ export function CardArt({
             }
           }}
           onError={() => setImageFailed(true)}
-          className="absolute inset-0 h-full w-full object-contain p-[3%]"
+          className="absolute inset-0 h-full w-full object-contain p-[2.5%]"
+        />
+        {/* Dynamic cursor light glare */}
+        <div
+          ref={glareRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 ease-out"
+        />
+        {/* Subtle physical card edge highlight */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-[0.875rem] ring-1 ring-inset ring-white/20 dark:ring-white/10"
         />
       </div>
     );
@@ -132,7 +155,7 @@ export function CardArt({
       role="img"
       aria-labelledby={titleId}
       className={cn(
-        "group/art relative isolate w-full overflow-hidden rounded-xl shadow-[0_10px_30px_-12px_rgba(0,0,0,0.55)] transition-transform duration-200 ease-out will-change-transform",
+        "group/art relative isolate w-full overflow-hidden rounded-[0.875rem] border border-black/10 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.35),0_18px_36px_-12px_rgba(0,0,0,0.25)] transition-transform duration-200 ease-out will-change-transform dark:border-white/10",
         dimmed && "opacity-60 saturate-50",
         className,
       )}
@@ -142,6 +165,12 @@ export function CardArt({
         transformStyle: interactive ? "preserve-3d" : undefined,
       }}
     >
+      {/* Dynamic cursor light glare */}
+      <div
+        ref={glareRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 ease-out"
+      />
       <span id={titleId} className="sr-only">
         {artDescription}
       </span>

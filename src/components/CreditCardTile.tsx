@@ -30,7 +30,7 @@ function CreditCardTileImpl({
 
   return (
     <article
-      className="cc-rise cv-auto group relative flex h-full min-w-0 max-w-full flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card p-4 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg focus-within:border-primary/50"
+      className="cc-rise cv-auto card-bevel card-bevel-hover group relative flex h-full min-w-0 max-w-full flex-col gap-4 overflow-hidden rounded-2xl border border-border/80 bg-card p-4 transition-all duration-200 dark:border-white/[0.08]"
       style={{ animationDelay: `${Math.min(index, 11) * 35}ms` }}
     >
       <div className="relative">
@@ -41,7 +41,7 @@ function CreditCardTileImpl({
           network={card.networks[0]}
           dimmed={archived}
         />
-        <div className="absolute right-2 top-2 flex gap-1.5">
+        <div className="absolute right-2.5 top-2.5 flex gap-1.5">
           {onToggleFavourite && (
             <button
               type="button"
@@ -52,9 +52,9 @@ function CreditCardTileImpl({
                   ? `Remove ${card.name} from favourites`
                   : `Save ${card.name} to favourites`
               }
-              className="tap-target-44 relative z-10 grid size-8 place-items-center rounded-full border border-border/60 bg-background/85 text-foreground backdrop-blur transition-colors hover:bg-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="btn-tactile relative z-10 grid size-8 place-items-center rounded-full border border-border/70 bg-background/90 text-foreground shadow-xs backdrop-blur-md transition-colors hover:bg-background dark:border-white/15 dark:bg-black/60"
             >
-              <Heart className={cn("size-4", isFavourite && "fill-destructive text-destructive")} />
+              <Heart className={cn("size-3.5 transition-transform group-active:scale-90", isFavourite && "fill-destructive text-destructive")} />
             </button>
           )}
           {onToggleCompare && (
@@ -68,11 +68,11 @@ function CreditCardTileImpl({
                   : `Add ${card.name} to comparison`
               }
               className={cn(
-                "tap-target-44 relative z-10 grid size-8 place-items-center rounded-full border border-border/60 bg-background/85 text-foreground backdrop-blur transition-colors hover:bg-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                isComparing && "bg-primary text-primary-foreground",
+                "btn-tactile relative z-10 grid size-8 place-items-center rounded-full border border-border/70 bg-background/90 text-foreground shadow-xs backdrop-blur-md transition-colors hover:bg-background dark:border-white/15 dark:bg-black/60",
+                isComparing && "bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground",
               )}
             >
-              <Scale className="size-4" />
+              <Scale className="size-3.5" />
             </button>
           )}
         </div>
@@ -80,66 +80,77 @@ function CreditCardTileImpl({
 
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div className="space-y-1">
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            {card.issuer}
-          </p>
-          <h3 className="text-base font-semibold leading-snug">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/90">
+              {card.issuer}
+            </p>
+            {card.upi.rupayUpiLinkable && (
+              <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                <Smartphone className="size-2.5" aria-hidden="true" /> RuPay UPI
+              </span>
+            )}
+          </div>
+          <h3 className="font-display text-base font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary">
             <Link
               to="/card/$id"
               params={{ id: card.id }}
-              className="after:absolute after:inset-0 after:content-[''] hover:text-primary focus-visible:outline-none focus-visible:text-primary"
+              className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
             >
               {card.name}
             </Link>
           </h3>
         </div>
 
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           <Badge
-            variant={premium ? "default" : "secondary"}
-            className={cn(premium && "bg-gold text-gold-foreground")}
+            variant="secondary"
+            className={cn(
+              "text-[10px] font-medium tracking-wide",
+              premium && "border border-gold/30 bg-gold/10 text-gold-foreground font-semibold dark:text-gold",
+            )}
           >
             {card.segment}
           </Badge>
           {card.categories.slice(0, 2).map((category) => (
-            <Badge key={category} variant="outline">
+            <Badge key={category} variant="outline" className="border-border/80 text-[10px] font-normal text-muted-foreground dark:border-white/10">
               {category}
             </Badge>
           ))}
           {archived && (
-            <Badge variant="outline" className="border-destructive/50 text-destructive">
+            <Badge variant="outline" className="border-destructive/40 bg-destructive/10 text-[10px] text-destructive">
               Archived
             </Badge>
           )}
         </div>
 
-        <dl className="mt-auto grid grid-cols-2 gap-x-3 gap-y-2 border-t border-border pt-3 text-sm">
+        <dl className="mt-auto grid grid-cols-2 gap-2 rounded-xl border border-border/60 bg-surface/50 p-2.5 text-xs dark:border-white/[0.06] dark:bg-white/[0.02]">
           <div>
-            <dt className="text-xs text-muted-foreground">Annual fee</dt>
-            <dd className="font-semibold">
-              {card.fees.lifetimeFree ? "Lifetime free" : formatFee(card.fees.annualFee)}
+            <dt className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Annual fee</dt>
+            <dd className="mt-0.5 font-mono text-xs font-semibold tabular-nums text-foreground">
+              {card.fees.lifetimeFree ? (
+                <span className="text-emerald-600 font-sans font-semibold dark:text-emerald-400">Lifetime Free</span>
+              ) : (
+                formatFee(card.fees.annualFee)
+              )}
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Base earn</dt>
-            <dd className="font-semibold text-primary">{computeEffectiveRate(card).toFixed(2)}%</dd>
+            <dt className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Base earn</dt>
+            <dd className="mt-0.5 font-mono text-xs font-bold tabular-nums text-primary">
+              {computeEffectiveRate(card).toFixed(2)}%
+            </dd>
           </div>
         </dl>
 
-        <ul className="flex min-w-0 max-w-full flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+        <ul className="flex min-w-0 max-w-full flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
           {hasLounge(card) && (
             <li className="inline-flex items-center gap-1">
-              <Plane className="size-3.5" aria-hidden="true" /> Lounge
-            </li>
-          )}
-          {card.upi.rupayUpiLinkable && (
-            <li className="inline-flex items-center gap-1">
-              <Smartphone className="size-3.5" aria-hidden="true" /> UPI
+              <Plane className="size-3 text-muted-foreground/70" aria-hidden="true" /> Lounge access
             </li>
           )}
           {card.bestFor[0] && (
             <li className="inline-flex min-w-0 max-w-full items-center gap-1">
-              <Sparkles className="size-3.5 shrink-0" aria-hidden="true" />
+              <Sparkles className="size-3 shrink-0 text-gold/80" aria-hidden="true" />
               <span className="truncate">{card.bestFor[0]}</span>
             </li>
           )}

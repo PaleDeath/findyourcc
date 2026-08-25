@@ -250,16 +250,16 @@ function ExplorePage() {
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search
-            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden="true"
           />
           <Input
             type="search"
             value={queryInput}
             onChange={(event) => setQueryInput(event.target.value)}
-            placeholder="Search card, issuer or benefit…"
+            placeholder="Search by card name, bank, perk (e.g. Lounge, LTF, UPI)…"
             aria-label="Search cards"
-            className="pl-9"
+            className="h-10 rounded-xl border-border/80 bg-surface/60 pl-10 text-xs font-medium backdrop-blur-xs focus-visible:ring-primary/40 dark:border-white/10 dark:bg-white/[0.03]"
           />
         </div>
 
@@ -270,16 +270,16 @@ function ExplorePage() {
           id="sort"
           value={filters.sort}
           onChange={(event) => patch({ sort: event.target.value as SortKey })}
-          className="h-9 rounded-md border border-input bg-background px-3 text-sm"
+          className="h-10 rounded-xl border border-border/80 bg-surface/60 px-3 text-xs font-medium text-foreground backdrop-blur-xs transition-colors hover:border-primary/40 dark:border-white/10 dark:bg-white/[0.04]"
         >
           {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option key={option.value} value={option.value} className="bg-popover text-foreground">
               {option.label}
             </option>
           ))}
         </select>
 
-        <Button variant="outline" className="lg:hidden" onClick={() => setSheetOpen(true)}>
+        <Button variant="outline" className="btn-tactile h-10 rounded-xl lg:hidden" onClick={() => setSheetOpen(true)}>
           <SlidersHorizontal className="size-4" aria-hidden="true" />
           Filters{activeCount > 0 ? ` (${activeCount})` : ""}
         </Button>
@@ -287,7 +287,7 @@ function ExplorePage() {
 
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
         <aside className="hidden lg:block">
-          <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-2xl border border-border bg-card p-5">
+          <div className="card-bevel sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-2xl border border-border/80 bg-card p-5 dark:border-white/[0.08]">
             <FilterPanel cards={cards} filters={filters} onChange={patch} onReset={reset} />
           </div>
         </aside>
@@ -300,7 +300,7 @@ function ExplorePage() {
                   key={chip.label}
                   type="button"
                   onClick={() => patch(chip.clear)}
-                  className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium hover:border-primary/50"
+                  className="btn-tactile inline-flex items-center gap-1.5 rounded-lg border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary transition-colors hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
                 >
                   {chip.label}
                   <X className="size-3" aria-hidden="true" />
@@ -311,16 +311,16 @@ function ExplorePage() {
           )}
 
           <div className="mb-4 flex items-center justify-between gap-3">
-            <p className="text-sm text-muted-foreground" aria-live="polite">
-              {results.length} card{results.length === 1 ? "" : "s"}
+            <p className="font-mono text-xs font-semibold tabular-nums text-muted-foreground" aria-live="polite">
+              Showing {results.length} of {cards.length} cards
             </p>
             {activeCount > 0 && (
               <button
                 type="button"
                 onClick={reset}
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                className="btn-tactile inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
               >
-                <X className="size-3" aria-hidden="true" /> Clear filters
+                <X className="size-3" aria-hidden="true" /> Reset filters
               </button>
             )}
           </div>

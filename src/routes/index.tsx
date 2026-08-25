@@ -1,51 +1,94 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { canonical } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   BadgeCheck,
+  Calculator,
+  Compass,
+  CreditCard as CreditCardIcon,
+  Flame,
   Fuel,
   Plane,
+  Plus,
+  Scale,
+  Search,
   ShieldCheck,
   ShoppingBag,
   Smartphone,
   Sparkles,
+  TrendingUp,
   Wallet,
+  Zap,
 } from "lucide-react";
 import { CreditCardTile } from "@/components/CreditCardTile";
+import { CardArt } from "@/components/CardArt";
 import { Button } from "@/components/ui/button";
-import { computeEffectiveRate, listIssuers } from "@/data/cards";
-import type { Category } from "@/data/types";
+import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
+import { computeEffectiveRate, listIssuers, searchCards } from "@/data/cards";
+import type { Category, CreditCard } from "@/data/types";
 import { useCompareTray, useDataset, useFavourites } from "@/lib/card-store";
+import { formatFee, formatINR } from "@/lib/format";
+import { openCommandPalette } from "@/components/CommandPalette";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     links: canonical("/"),
     meta: [
-      { title: "FindYourCC — Find the right Indian credit card" },
+      { title: "FindYourCC — The Transparent Index of Indian Credit Cards" },
       {
         name: "description",
         content:
-          "An independent, affiliate-free guide to 120+ Indian credit cards: real earn rates, exclusions, lounge access, RuPay UPI support and honest watch-outs.",
+          "Independent, affiliate-free intelligence on 149+ Indian credit cards: real earn rates, exclusions, lounge access, RuPay UPI support and honest fine print.",
       },
-      { property: "og:title", content: "FindYourCC — Find the right Indian credit card" },
+      { property: "og:title", content: "FindYourCC — The Transparent Index of Indian Credit Cards" },
       {
         property: "og:description",
         content:
-          "Compare 120+ Indian credit cards on fees, rewards, lounge access and the fine print. No affiliate links.",
+          "Compare 149+ Indian credit cards on real reward rates, lounge rules, annual fee waivers, and the fine print. Zero affiliate bias.",
       },
     ],
   }),
   component: Home,
 });
 
-const QUICK_PICKS: { label: string; category: Category; Icon: typeof Plane }[] = [
-  { label: "Travel & lounges", category: "Travel", Icon: Plane },
-  { label: "Cashback", category: "Cashback", Icon: Wallet },
-  { label: "Online shopping", category: "Shopping", Icon: ShoppingBag },
-  { label: "Fuel savings", category: "Fuel", Icon: Fuel },
-  { label: "First card", category: "Student", Icon: Sparkles },
-  { label: "FD-backed", category: "Secured (FD)", Icon: ShieldCheck },
+const SPOTLIGHT_CARDS = [
+  {
+    tag: "Super Premium",
+    id: "hdfc-infinia-metal",
+    label: "HDFC Infinia Metal",
+    desc: "Up to 33.3% return on SmartBuy flight & hotel bookings. 1:1 reward transfer to top airlines.",
+  },
+  {
+    tag: "Air Miles",
+    id: "axis-atlas",
+    label: "Axis Bank Atlas",
+    desc: "Direct tier points on flights & hotels with flexible transfer partners across major airlines.",
+  },
+  {
+    tag: "Direct Cashback",
+    id: "sbi-cashback",
+    label: "SBI Cashback",
+    desc: "Flat 5% direct cashback on nearly all online merchant spends with zero merchant restrictions.",
+  },
+  {
+    tag: "Lifestyle / Rewards",
+    id: "amex-mrcc",
+    label: "Amex MRCC",
+    desc: "1,000 bonus points on 4 transactions of ₹1,500/mo. Ideal redemption via 18k & 24k gold collection.",
+  },
+];
+
+const SEARCH_PROMPTS = [
+  "Infinia",
+  "Axis Atlas",
+  "SBI Cashback",
+  "Lifetime Free",
+  "RuPay UPI",
+  "Amex",
+  "DCB",
+  "Zero Forex",
 ];
 
 function Home() {
@@ -53,14 +96,14 @@ function Home() {
   const favourites = useFavourites();
   const compare = useCompareTray();
 
-  const featured = useMemo(
-    () =>
-      [...cards]
-        .filter((card) => card.status === "Active")
-        .sort((a, b) => computeEffectiveRate(b) - computeEffectiveRate(a))
-        .slice(0, 6),
-    [cards],
-  );
+  const [spotlightIdx, setSpotlightIdx] = useState(0);
+  const [monthlySpend, setMonthlySpend] = useState(50000);
+  const [activeTab, setActiveTab] = useState<"rates" | "popular" | "ltf" | "rupay">("rates");
+
+  const spotlightCard = useMemo(() => {
+    const config = SPOTLIGHT_CARDS[spotlightIdx];
+    return cards.find((c) => c.id === config.id) || cards[0];
+  }, [cards, spotlightIdx]);
 
   const stats = useMemo(() => {
     const issuers = listIssuers(cards).length;
@@ -69,105 +112,406 @@ function Home() {
     return { total: cards.length, issuers, rupay, ltf };
   }, [cards]);
 
+  // Spend Simulator Calculations
+  const topCalculatedCards = useMemo(() => {
+    const annualSpend = monthlySpend * 12;
+    return [...cards]
+      .filter((c) => c.status === "Active")
+      .map((c) => {
+        const rate = computeEffectiveRate(c) / 100;
+        const grossReturn = annualSpend * rate;
+        const fee = c.fees.lifetimeFree
+          ? 0
+          : c.fees.feeWaiverSpend && annualSpend >= c.fees.feeWaiverSpend
+            ? 0
+            : c.fees.annualFee;
+        const netValue = Math.max(0, grossReturn - fee);
+        return { card: c, netValue, grossReturn, feeWaved: fee === 0 };
+      })
+      .sort((a, b) => b.netValue - a.netValue)
+      .slice(0, 3);
+  }, [cards, monthlySpend]);
+
+  const displayCards = useMemo(() => {
+    const active = cards.filter((c) => c.status === "Active");
+    switch (activeTab) {
+      case "popular":
+        return [...active].sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0)).slice(0, 6);
+      case "ltf":
+        return active.filter((c) => c.fees.lifetimeFree).slice(0, 6);
+      case "rupay":
+        return active.filter((c) => c.upi.rupayUpiLinkable).slice(0, 6);
+      default:
+        return [...active]
+          .sort((a, b) => computeEffectiveRate(b) - computeEffectiveRate(a))
+          .slice(0, 6);
+    }
+  }, [cards, activeTab]);
+
   return (
-    <div>
-      <section className="relative overflow-hidden border-b border-border">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_20%_0%,hsl(var(--primary)/0.18),transparent_70%),radial-gradient(45%_45%_at_90%_10%,hsl(var(--gold)/0.16),transparent_70%)]"
-        />
-        <div className="container-page relative grid gap-10 py-14 lg:grid-cols-[1.1fr_0.9fr] lg:py-20">
+    <div className="relative">
+      {/* Subtle architectural grid pattern in hero */}
+      <div className="bg-grid-pattern pointer-events-none absolute inset-0 h-[640px] opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] dark:opacity-20" />
+
+      {/* --- HERO SECTION -------------------------------------------------- */}
+      <section className="relative overflow-hidden border-b border-border/80 dark:border-white/[0.08]">
+        <div className="container-page relative grid gap-12 py-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-20">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-              <BadgeCheck className="size-3.5 text-primary" aria-hidden="true" />
-              Independent · no affiliate links
-            </span>
-            <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-              Every Indian credit card,
-              <span className="text-primary"> honestly explained.</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Fees, real earn rates, reward exclusions, lounge rules and UPI support for{" "}
-              {stats.total} cards across {stats.issuers} issuers — structured so you can decide for
-              yourself.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <Link to="/explore">
-                  Explore cards <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/match">Find my match</Link>
-              </Button>
+            {/* Live Independence Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/80 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur-sm dark:border-white/10 dark:bg-white/[0.04]">
+              <span className="flex size-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-mono text-[11px] uppercase tracking-wider text-foreground">Independent Index</span>
+              <span className="text-border dark:text-white/20">|</span>
+              <span>Zero Affiliate Links</span>
             </div>
 
-            <dl className="mt-10 grid max-w-lg grid-cols-2 gap-4 sm:grid-cols-4">
+            <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem]">
+              The transparent index of{" "}
+              <span className="text-primary underline decoration-primary/30 decoration-wavy underline-offset-4">
+                Indian credit cards.
+              </span>
+            </h1>
+
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Structured reward earn rates, hidden caps, lounge access rules, and RuPay UPI support for{" "}
+              <span className="font-semibold text-foreground">{stats.total} cards</span> across{" "}
+              <span className="font-semibold text-foreground">{stats.issuers} issuers</span>. Built for precision.
+            </p>
+
+            {/* Quick Interactive Search Trigger */}
+            <div className="mt-7">
+              <button
+                type="button"
+                onClick={openCommandPalette}
+                className="btn-tactile flex w-full max-w-lg items-center justify-between rounded-2xl border border-border/80 bg-surface/70 px-4 py-3 text-left text-sm text-muted-foreground shadow-xs backdrop-blur-md hover:border-primary/40 hover:bg-surface focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
+              >
+                <span className="flex items-center gap-2.5">
+                  <Search className="size-4 text-primary" aria-hidden="true" />
+                  <span className="text-foreground font-medium">Search by card, bank, perk or acronym…</span>
+                </span>
+                <kbd className="rounded-lg border border-border bg-background px-2 py-0.5 font-mono text-[11px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.08]">
+                  ⌘K
+                </kbd>
+              </button>
+
+              {/* Quick Filter Prompt Chips */}
+              <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+                <span className="text-[11px] font-medium text-muted-foreground/70">Trending:</span>
+                {SEARCH_PROMPTS.map((prompt) => (
+                  <Link
+                    key={prompt}
+                    to="/explore"
+                    search={{ query: prompt }}
+                    className="rounded-lg border border-border/60 bg-background/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground dark:border-white/10 dark:bg-white/[0.03]"
+                  >
+                    {prompt}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Live Database Stat Counters */}
+            <dl className="mt-9 grid max-w-lg grid-cols-2 gap-3 sm:grid-cols-4">
               {[
-                { label: "Cards", value: stats.total },
-                { label: "Issuers", value: stats.issuers },
-                { label: "RuPay UPI", value: stats.rupay },
-                { label: "Lifetime free", value: stats.ltf },
+                { label: "Verified Cards", value: stats.total, icon: CreditCardIcon },
+                { label: "Bank Issuers", value: stats.issuers, icon: Compass },
+                { label: "RuPay UPI", value: stats.rupay, icon: Smartphone },
+                { label: "Lifetime Free", value: stats.ltf, icon: Zap },
               ].map((item) => (
-                <div key={item.label} className="rounded-xl border border-border bg-card p-3">
-                  <dt className="text-xs text-muted-foreground">{item.label}</dt>
-                  <dd className="font-display text-2xl font-bold">{item.value}</dd>
+                <div
+                  key={item.label}
+                  className="card-bevel rounded-xl border border-border/70 bg-card p-3 dark:border-white/[0.08]"
+                >
+                  <dt className="text-[11px] font-medium text-muted-foreground">{item.label}</dt>
+                  <dd className="font-mono text-2xl font-bold tabular-nums text-foreground">
+                    {item.value}
+                  </dd>
                 </div>
               ))}
             </dl>
           </div>
 
-          <div className="relative hidden items-center justify-center lg:flex">
-            <div className="grid w-full max-w-md gap-4">
-              {featured.slice(0, 2).map((card, index) => (
-                <div key={card.id} style={{ transform: `rotate(${index === 0 ? -3 : 2}deg)` }}>
-                  <CreditCardTile card={card} index={index} />
-                </div>
+          {/* --- HERO RIGHT: 3D CARD SPOTLIGHT SHOWCASE -------------------- */}
+          <div className="relative flex flex-col items-center justify-center">
+            {/* Card Spotlight Selector Tabs */}
+            <div className="mb-4 flex w-full max-w-sm flex-wrap items-center justify-center gap-1 rounded-xl border border-border/70 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
+              {SPOTLIGHT_CARDS.map((item, idx) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSpotlightIdx(idx)}
+                  className={`btn-tactile rounded-lg px-2.5 py-1 text-[11px] font-semibold transition-all ${
+                    spotlightIdx === idx
+                      ? "bg-background text-foreground shadow-xs dark:bg-white/15 dark:text-white"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {item.tag}
+                </button>
               ))}
+            </div>
+
+            {/* Interactive Physical 3D Card Display */}
+            {spotlightCard && (
+              <div className="w-full max-w-sm">
+                <div className="card-bevel rounded-2xl border border-border/80 bg-card p-4 transition-all dark:border-white/[0.08]">
+                  <CardArt
+                    art={spotlightCard.art}
+                    name={spotlightCard.name}
+                    issuer={spotlightCard.issuer}
+                    network={spotlightCard.networks[0]}
+                    size="lg"
+                  />
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        {spotlightCard.issuer}
+                      </span>
+                      <Badge variant="secondary" className="font-mono text-[10px] font-bold text-primary">
+                        {computeEffectiveRate(spotlightCard).toFixed(2)}% Base Earn
+                      </Badge>
+                    </div>
+                    <h3 className="font-display text-lg font-bold text-foreground">
+                      {spotlightCard.name}
+                    </h3>
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {SPOTLIGHT_CARDS[spotlightIdx].desc}
+                    </p>
+                    <div className="pt-2 flex items-center gap-2">
+                      <Button asChild size="sm" className="w-full">
+                        <Link to="/card/$id" params={{ id: spotlightCard.id }}>
+                          View Full Dossier <ArrowRight className="size-3.5" aria-hidden="true" />
+                        </Link>
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => compare.toggle(spotlightCard.id)}
+                        className="shrink-0"
+                      >
+                        <Scale className="size-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* --- LIVE 5-SECOND SPEND ROI SIMULATOR ------------------------------ */}
+      <section className="container-page py-12" aria-labelledby="simulator-title">
+        <div className="card-bevel relative overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-b from-card to-surface/80 p-6 sm:p-8 dark:border-white/[0.08] dark:from-card dark:to-surface/40">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div>
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                <Calculator className="size-3.5" aria-hidden="true" />
+                <span>Live Spend ROI Engine</span>
+              </div>
+              <h2 id="simulator-title" className="mt-3 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+                What is your spend actually worth?
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Adjust your estimated monthly credit card spend to instantly reveal the mathematically optimal cards for net rupee return.
+              </p>
+
+              {/* Monthly Spend Slider */}
+              <div className="mt-6 space-y-4 rounded-2xl border border-border/60 bg-background/80 p-4 dark:border-white/[0.06]">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    Monthly Spends
+                  </span>
+                  <span className="font-mono text-xl font-bold tabular-nums text-foreground">
+                    {formatINR(monthlySpend)} <span className="text-xs font-normal text-muted-foreground">/ month</span>
+                  </span>
+                </div>
+                <Slider
+                  value={[monthlySpend]}
+                  min={10000}
+                  max={250000}
+                  step={5000}
+                  onValueChange={(val) => setMonthlySpend(val[0])}
+                  className="py-2"
+                />
+                <div className="flex justify-between font-mono text-[10px] text-muted-foreground">
+                  <span>₹10,000/mo</span>
+                  <span>₹1,00,000/mo</span>
+                  <span>₹2,50,000/mo</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Output Top 3 Optimal Cards */}
+            <div className="space-y-3">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Top Calculated Recommendations (Annual Return)
+              </span>
+              <div className="space-y-2.5">
+                {topCalculatedCards.map(({ card, netValue }, rank) => (
+                  <Link
+                    key={card.id}
+                    to="/card/$id"
+                    params={{ id: card.id }}
+                    className="card-bevel-hover group flex items-center justify-between rounded-xl border border-border/70 bg-background/90 p-3 text-left transition-all dark:border-white/10 dark:bg-black/30"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-surface font-mono text-xs font-bold text-muted-foreground dark:bg-white/10">
+                        #{rank + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="block truncate text-sm font-semibold text-foreground group-hover:text-primary">
+                          {card.name}
+                        </span>
+                        <span className="block text-[11px] text-muted-foreground">
+                          {card.issuer} · {card.fees.lifetimeFree ? "Lifetime Free" : formatFee(card.fees.annualFee)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-mono text-sm font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+                        +{formatINR(netValue)}
+                      </span>
+                      <span className="block text-[10px] text-muted-foreground">net / year</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="pt-2 text-right">
+                <Button asChild variant="ghost" size="sm">
+                  <Link to="/calculator">
+                    Open Full Multi-Category Calculator <ArrowRight className="ml-1 size-3.5" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="container-page py-12" aria-labelledby="quick-picks">
-        <h2 id="quick-picks" className="font-display text-2xl font-bold tracking-tight">
-          What are you optimising for?
-        </h2>
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {QUICK_PICKS.map(({ label, category, Icon }) => (
+      {/* --- CURATED ARCHETYPES BENTO MATRIX ------------------------------- */}
+      <section className="container-page py-6" aria-labelledby="archetypes-title">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 id="archetypes-title" className="font-display text-2xl font-bold tracking-tight">
+              Curated Card Archetypes
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Direct strategies built around how you actually spend.
+            </p>
+          </div>
+          <Link
+            to="/explore"
+            className="text-xs font-semibold text-primary hover:underline"
+          >
+            Explore all 149+ cards →
+          </Link>
+        </div>
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              title: "The Air Miles Maximiser",
+              icon: Plane,
+              desc: "1:1 partner transfer to airline programs like Singapore KrisFlyer, Qatar Avios, and Accor.",
+              badge: "Up to 33% Return",
+              category: "Travel" as Category,
+              color: "text-blue-500",
+            },
+            {
+              title: "5% Direct Cashback",
+              icon: Wallet,
+              desc: "Statement credit deposited directly into your bill. No loyalty catalogue markup.",
+              badge: "Pure Liquid Cash",
+              category: "Cashback" as Category,
+              color: "text-emerald-500",
+            },
+            {
+              title: "Lifetime Free Daily Drivers",
+              icon: ShieldCheck,
+              desc: "Zero annual fees, zero renewal conditions, with complimentary lounge & movie tickets.",
+              badge: "₹0 Annual Fee",
+              category: "Secured (FD)" as Category,
+              color: "text-amber-500",
+            },
+            {
+              title: "RuPay UPI Power Tier",
+              icon: Smartphone,
+              desc: "Link to Google Pay, PhonePe, and Paytm to earn accelerated rewards on local QR codes.",
+              badge: "Scan & Pay",
+              category: "Shopping" as Category,
+              color: "text-purple-500",
+            },
+          ].map((item) => (
             <Link
-              key={category}
+              key={item.title}
               to="/explore"
-              search={{ category }}
-              className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 transition-colors hover:border-primary/50 hover:bg-accent/50"
+              search={{ category: item.category }}
+              className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-5 text-left transition-all dark:border-white/[0.08]"
             >
-              <Icon className="size-5 text-primary" aria-hidden="true" />
-              <span className="text-sm font-medium leading-snug">{label}</span>
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className={`p-2 rounded-xl bg-surface dark:bg-white/[0.05] ${item.color}`}>
+                    <item.icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <Badge variant="secondary" className="text-[10px] font-semibold">
+                    {item.badge}
+                  </Badge>
+                </div>
+                <h3 className="mt-4 font-display text-base font-bold text-foreground group-hover:text-primary">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  {item.desc}
+                </p>
+              </div>
+              <span className="mt-5 inline-flex items-center text-xs font-semibold text-primary">
+                View stack <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
+              </span>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="container-page py-6" aria-labelledby="featured">
-        <div className="flex items-end justify-between gap-4">
+      {/* --- VERIFIED CARDS INDEX WITH FILTER TABS -------------------------- */}
+      <section className="container-page py-10" aria-labelledby="featured-title">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 dark:border-white/10">
           <div>
-            <h2 id="featured" className="font-display text-2xl font-bold tracking-tight">
-              Highest base earn rates
+            <h2 id="featured-title" className="font-display text-2xl font-bold tracking-tight">
+              Verified Cards Index
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Ranked purely on best-case value per ₹100 of ordinary spend.
+              Ranked with transparent data and honest fine-print breakdowns.
             </p>
           </div>
-          <Link
-            to="/explore"
-            search={{ sort: "rate-desc" }}
-            className="hidden shrink-0 text-sm font-medium text-primary hover:underline sm:inline"
-          >
-            See all
-          </Link>
+
+          {/* Category Tabs */}
+          <div className="flex flex-wrap gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
+            {[
+              { id: "rates", label: "Top Base Earn" },
+              { id: "popular", label: "Most Popular" },
+              { id: "ltf", label: "Lifetime Free" },
+              { id: "rupay", label: "RuPay UPI" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id as never)}
+                className={`btn-tactile rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                  activeTab === tab.id
+                    ? "bg-background text-foreground shadow-xs dark:bg-white/15 dark:text-white"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
+
         <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {featured.map((card, index) => (
+          {displayCards.map((card, index) => (
             <CreditCardTile
               key={card.id}
               card={card}
@@ -181,29 +525,32 @@ function Home() {
         </div>
       </section>
 
+      {/* --- TRANSPARENCY & TRUST FOOTER BANNER ----------------------------- */}
       <section className="container-page py-12">
-        <div className="grid gap-4 rounded-3xl border border-border bg-surface p-6 sm:grid-cols-3 sm:p-8">
+        <div className="card-bevel grid gap-6 rounded-3xl border border-border/80 bg-surface p-6 sm:grid-cols-3 sm:p-8 dark:border-white/[0.08] dark:bg-white/[0.02]">
           {[
             {
               Icon: ShieldCheck,
-              title: "No affiliate links",
-              body: "We never earn on an application, so nothing is ranked to pay us.",
+              title: "Strict Zero-Affiliate Policy",
+              body: "We earn zero commissions on card applications. No issuer can pay for higher ranking.",
             },
             {
               Icon: Smartphone,
-              title: "India-specific fields",
-              body: "Rent, wallet, fuel and education exclusions are first-class data, not footnotes.",
+              title: "India-Specific Nuances",
+              body: "Reward exclusions on rent, utilities, fuel, education, and wallet loads are transparently audited.",
             },
             {
               Icon: BadgeCheck,
-              title: "Confidence labels",
-              body: "Every card shows when it was last verified and how confident that data is.",
+              title: "Community Audited",
+              body: "Every card features timestamped verification and verified issuer fee schedule mappings.",
             },
           ].map((item) => (
             <div key={item.title} className="space-y-2">
-              <item.Icon className="size-5 text-primary" aria-hidden="true" />
-              <h3 className="font-semibold">{item.title}</h3>
-              <p className="text-sm text-muted-foreground">{item.body}</p>
+              <span className="inline-flex rounded-xl bg-primary/10 p-2.5 text-primary">
+                <item.Icon className="size-5" aria-hidden="true" />
+              </span>
+              <h3 className="font-display text-sm font-bold text-foreground">{item.title}</h3>
+              <p className="text-xs leading-relaxed text-muted-foreground">{item.body}</p>
             </div>
           ))}
         </div>

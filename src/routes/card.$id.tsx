@@ -109,8 +109,11 @@ function Section({
   id: string;
 }) {
   return (
-    <section aria-labelledby={id} className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-      <h2 id={id} className="font-display text-lg font-semibold tracking-tight">
+    <section
+      aria-labelledby={id}
+      className="card-bevel rounded-2xl border border-border/80 bg-card p-5 transition-colors sm:p-6 dark:border-white/[0.08]"
+    >
+      <h2 id={id} className="font-display text-lg font-bold tracking-tight text-foreground">
         {title}
       </h2>
       <div className="mt-4">{children}</div>
@@ -120,9 +123,18 @@ function Section({
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-border py-2.5 last:border-0">
-      <dt className="text-sm text-muted-foreground">{label}</dt>
-      <dd className="text-right text-sm font-medium">{value}</dd>
+    <div className="flex items-start justify-between gap-4 border-b border-border/60 py-2.5 last:border-0 dark:border-white/[0.06]">
+      <dt className="text-xs font-medium text-muted-foreground">{label}</dt>
+      <dd className="text-right text-xs font-semibold text-foreground">{value}</dd>
+    </div>
+  );
+}
+
+function ValueStat({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-border/70 bg-background/80 p-3 backdrop-blur-xs dark:border-white/10 dark:bg-white/[0.03]">
+      <p className="text-[11px] font-medium text-muted-foreground">{label}</p>
+      <p className="mt-1 font-mono text-base font-bold tabular-nums text-foreground">{value}</p>
     </div>
   );
 }
@@ -247,51 +259,52 @@ function CardDetail() {
               { label: "Base earn", value: `${computeEffectiveRate(card).toFixed(2)}%` },
               { label: "Forex markup", value: `${card.fees.forexMarkupPct}%` },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-border bg-surface p-3">
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
-                <p className="mt-1 font-display text-lg font-bold">{stat.value}</p>
+              <div
+                key={stat.label}
+                className="card-bevel rounded-xl border border-border/70 bg-surface/60 p-3 dark:border-white/[0.08] dark:bg-white/[0.02]"
+              >
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{stat.label}</p>
+                <p className="mt-1 font-mono text-lg font-bold tabular-nums text-foreground">{stat.value}</p>
               </div>
             ))}
           </div>
 
           <section
             aria-labelledby="your-value"
-            className="rounded-2xl border border-primary/30 bg-primary/5 p-5 sm:p-6"
+            className="card-bevel rounded-2xl border border-primary/30 bg-primary/[0.04] p-5 sm:p-6 dark:border-primary/20 dark:bg-primary/[0.02]"
           >
             <h2
               id="your-value"
-              className="flex items-center gap-2 font-display text-lg font-semibold"
+              className="flex items-center gap-2 font-display text-lg font-bold text-foreground"
             >
               <Sparkles className="size-4 text-primary" aria-hidden="true" /> What it&rsquo;s worth
               to you
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Based on your saved spend profile of {formatINR(monthlyTotal(spend))}/month.{" "}
-              <Link to="/calculator" className="font-medium text-primary hover:underline">
-                Tune it
+            <p className="mt-1 text-xs text-muted-foreground">
+              Calculated on your monthly spend profile of <span className="font-mono font-semibold text-foreground">{formatINR(monthlyTotal(spend))}</span>.{" "}
+              <Link to="/calculator" className="font-semibold text-primary hover:underline">
+                Tune your spends →
               </Link>
-              .
             </p>
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <ValueStat label="Net value / year" value={formatINR(valuation.netAnnualValue)} />
-              <ValueStat label="Rewards / year" value={formatINR(valuation.annualRewardValue)} />
+              <ValueStat label="Net value / year" value={<span className="text-emerald-600 dark:text-emerald-400">+{formatINR(valuation.netAnnualValue)}</span>} />
+              <ValueStat label="Gross rewards / year" value={formatINR(valuation.annualRewardValue)} />
               <ValueStat label="Effective return" value={formatPct(valuation.effectiveReturnPct)} />
               <ValueStat
                 label="Effective fee"
                 value={valuation.feeWaived ? "Waived" : formatFee(valuation.effectiveAnnualFee)}
               />
             </div>
-            <p className="mt-3 text-sm text-muted-foreground">
+            <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
               {valuation.effectiveAnnualFee <= 0
-                ? "No fee to earn back — every rupee of reward is profit."
+                ? "No fee to earn back — every rupee of reward is net profit."
                 : valuation.breakEvenMonthlySpend === null
-                  ? "On this profile the fee never quite pays for itself — the earn rate is too thin on where you spend."
-                  : `You need about ${formatINR(valuation.breakEvenMonthlySpend)}/month on this card to break even on the fee.`}
+                  ? "On this profile the annual fee never quite breaks even — the earn rate is too thin on your spend categories."
+                  : `You need approximately ${formatINR(valuation.breakEvenMonthlySpend)}/month on this card to break even on the annual fee.`}
             </p>
             {valuation.excludedMonthlySpend > 0 && (
-              <p className="mt-2 text-sm text-warning">
-                {formatINR(valuation.excludedMonthlySpend)} of your monthly spend earns nothing on
-                this card.
+              <p className="mt-2 text-xs font-medium text-warning">
+                ⚠️ {formatINR(valuation.excludedMonthlySpend)} of your monthly spend earns zero rewards on this card.
               </p>
             )}
           </section>
@@ -566,15 +579,6 @@ function ConfidenceNote({ card }: { card: CreditCard }) {
           Most Important Terms & Conditions <ExternalLink className="size-3" aria-hidden="true" />
         </a>
       )}
-    </div>
-  );
-}
-
-function ValueStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-border bg-card p-3">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="mt-1 font-display text-lg font-bold tabular-nums">{value}</p>
     </div>
   );
 }
