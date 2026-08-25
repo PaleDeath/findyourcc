@@ -242,7 +242,7 @@ function haystackFor(card: CreditCard): string {
     .toLowerCase();
 }
 
-import { searchCreditCards, computeCardScore } from "@/lib/searchEngine";
+import { searchCreditCards, computeCardScore } from "./search";
 
 export function matchesQuery(card: CreditCard, query: string): boolean {
   if (!query.trim()) return true;
