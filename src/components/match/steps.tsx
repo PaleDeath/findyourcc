@@ -26,54 +26,103 @@ export interface StepProps {
   patch: (next: Partial<MatchAnswers>) => void;
 }
 
-const INCOME_STEPS = [
-  10000, 15000, 20000, 25000, 30000, 40000, 50000, 60000, 75000, 100000, 125000, 150000, 200000,
-  250000, 300000, 400000, 500000, 750000, 1000000,
+const INCOME_PRESETS = [
+  { label: "₹25k", value: 25000 },
+  { label: "₹50k", value: 50000 },
+  { label: "₹75k", value: 75000 },
+  { label: "₹1L", value: 100000 },
+  { label: "₹1.5L", value: 150000 },
+  { label: "₹2.5L", value: 250000 },
+  { label: "₹5L+", value: 500000 },
 ];
-
-function nearestIndex(list: number[], value: number): number {
-  let bestIdx = 0;
-  let bestDiff = Infinity;
-  list.forEach((v, i) => {
-    const diff = Math.abs(v - value);
-    if (diff < bestDiff) {
-      bestDiff = diff;
-      bestIdx = i;
-    }
-  });
-  return bestIdx;
-}
 
 const EMPLOYMENT_TYPES: EmploymentType[] = ["Salaried", "Self-employed", "Student", "NRI"];
 
 export function StepIncome({ answers, patch }: StepProps) {
-  const idx = nearestIndex(INCOME_STEPS, answers.monthlyIncome);
+  const currentIncome = answers.monthlyIncome || 0;
+  const annual = currentIncome * 12;
+  const maxRange = Math.max(500000, Math.ceil((currentIncome || 75000) / 100000) * 100000);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/[^0-9]/g, "");
+    const val = raw ? Math.max(0, parseInt(raw, 10)) : 0;
+    patch({ monthlyIncome: val });
+  };
+
   return (
     <div className="space-y-8">
       <div className="space-y-4">
-        <div className="flex items-baseline justify-between">
-          <label htmlFor="income-slider" className="text-sm font-medium">
-            Monthly income
-          </label>
-          <span className="text-2xl font-bold text-primary">
-            {formatCompactINR(answers.monthlyIncome)}
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <label htmlFor="exact-income-input" className="text-sm font-semibold text-foreground">
+              Monthly in-hand / gross income
+            </label>
+            <p className="text-xs text-muted-foreground">
+              Used to filter eligibility and calculate realistic card values
+            </p>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 shadow-2xs focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+            <span className="font-semibold text-muted-foreground">₹</span>
+            <input
+              id="exact-income-input"
+              type="text"
+              inputMode="numeric"
+              value={currentIncome ? currentIncome.toLocaleString("en-IN") : ""}
+              placeholder="0"
+              onChange={handleInputChange}
+              className="w-32 bg-transparent text-right font-display text-lg font-bold text-foreground focus:outline-none"
+              aria-label="Enter exact monthly income in rupees"
+            />
+            <span className="text-xs text-muted-foreground font-medium">/ mo</span>
+          </div>
         </div>
-        <Slider
-          id="income-slider"
-          min={0}
-          max={INCOME_STEPS.length - 1}
-          step={1}
-          value={[idx]}
-          onValueChange={([v]) => {
-            const next = INCOME_STEPS[v ?? 0] ?? INCOME_STEPS[0];
-            if (next !== undefined) patch({ monthlyIncome: next });
-          }}
-          aria-label="Monthly income"
-        />
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>₹10K</span>
-          <span>₹10L+</span>
+
+        <div className="space-y-2 pt-2">
+          <Slider
+            id="income-slider"
+            min={10000}
+            max={maxRange}
+            step={2500}
+            value={[Math.min(maxRange, Math.max(10000, currentIncome))]}
+            onValueChange={([v]) => {
+              if (v !== undefined) patch({ monthlyIncome: v });
+            }}
+            aria-label="Monthly income slider"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground font-mono">
+            <span>₹10,000</span>
+            <span className="text-primary font-medium">
+              {annual >= 100000
+                ? `≈ ₹${(annual / 100000).toFixed(annual % 100000 === 0 ? 0 : 1)} Lakhs / year`
+                : `≈ ₹${annual.toLocaleString("en-IN")} / year`}
+            </span>
+            <span>₹{(maxRange / 100000).toFixed(0)}L+</span>
+          </div>
+        </div>
+
+        <div className="pt-1">
+          <p className="mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Quick Presets</p>
+          <div className="flex flex-wrap gap-2">
+            {INCOME_PRESETS.map((preset) => {
+              const active = currentIncome === preset.value;
+              return (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => patch({ monthlyIncome: preset.value })}
+                  aria-pressed={active}
+                  className={cn(
+                    "rounded-full border px-3 py-1 text-xs font-medium transition-all duration-150",
+                    active
+                      ? "border-primary bg-primary text-primary-foreground shadow-xs scale-105"
+                      : "border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground",
+                  )}
+                >
+                  {preset.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -103,7 +152,7 @@ export function StepIncome({ answers, patch }: StepProps) {
 export function StepScore({ answers, patch }: StepProps) {
   return (
     <div className="space-y-3">
-      <p className="text-sm font-medium">What's your credit score band?</p>
+      <p className="text-sm font-medium">What is your approximate CIBIL / credit score?</p>
       <div className="grid gap-2 sm:grid-cols-2">
         {SCORE_BANDS.map((band) => (
           <button
@@ -112,11 +161,24 @@ export function StepScore({ answers, patch }: StepProps) {
             onClick={() => patch({ scoreBand: band.value })}
             aria-pressed={answers.scoreBand === band.value}
             className={cn(
-              "rounded-xl border border-border bg-card px-4 py-4 text-left text-sm font-medium transition-colors hover:border-primary/50",
-              answers.scoreBand === band.value && "border-primary bg-primary/10 text-primary",
+              "flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3.5 text-left transition-colors hover:border-primary/50",
+              answers.scoreBand === band.value && "border-primary bg-primary/10",
             )}
           >
-            {band.label}
+            <div>
+              <p
+                className={cn(
+                  "text-sm font-semibold",
+                  answers.scoreBand === band.value && "text-primary",
+                )}
+              >
+                {band.label}
+              </p>
+              <p className="text-xs text-muted-foreground">{band.hint}</p>
+            </div>
+            <Badge variant={answers.scoreBand === band.value ? "default" : "secondary"}>
+              {band.approx === 0 ? "No score" : `${band.approx}+`}
+            </Badge>
           </button>
         ))}
       </div>
@@ -176,22 +238,36 @@ export function StepSpend({ answers, patch, onSpendChange }: StepSpendProps) {
         {SPEND_CATEGORIES.map((cat) => {
           const value = answers.spend[cat.key] ?? 0;
           return (
-            <div key={cat.key} className="space-y-1.5">
-              <div className="flex items-baseline justify-between gap-2">
+            <div key={cat.key} className="space-y-2">
+              <div className="flex items-center justify-between gap-2">
                 <div>
                   <label htmlFor={`spend-${cat.key}`} className="text-sm font-medium">
                     {cat.label}
                   </label>
                   <p className="text-xs text-muted-foreground">{cat.hint}</p>
                 </div>
-                <span className="shrink-0 text-sm font-semibold">{formatINR(value)}</span>
+                <div className="flex items-center gap-1 rounded-lg border border-border bg-card px-2 py-1 shadow-2xs focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
+                  <span className="text-xs font-semibold text-muted-foreground">₹</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={value ? value.toLocaleString("en-IN") : "0"}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9]/g, "");
+                      const val = raw ? parseInt(raw, 10) : 0;
+                      setCategory(cat.key, Math.min(cat.max * 2, val));
+                    }}
+                    className="w-20 bg-transparent text-right font-mono text-xs font-semibold text-foreground focus:outline-none"
+                    aria-label={`${cat.label} spend amount in rupees`}
+                  />
+                </div>
               </div>
               <Slider
                 id={`spend-${cat.key}`}
                 min={0}
                 max={cat.max}
                 step={500}
-                value={[value]}
+                value={[Math.min(cat.max, value)]}
                 onValueChange={([v]) => setCategory(cat.key, v ?? 0)}
                 aria-label={cat.label}
               />

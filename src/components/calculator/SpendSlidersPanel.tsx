@@ -50,14 +50,29 @@ export function SpendSlidersPanel({ spend, onChange, onReset }: SpendSlidersPane
           const value = spend[cat.key] || 0;
           const sliderId = `spend-${cat.key}`;
           return (
-            <div key={cat.key} className="space-y-1.5">
-              <div className="flex items-baseline justify-between gap-2">
-                <label htmlFor={sliderId} className="text-sm font-medium">
-                  {cat.label}
-                </label>
-                <span className="whitespace-nowrap text-sm font-semibold text-primary">
-                  {formatCompactINR(value)}
-                </span>
+            <div key={cat.key} className="space-y-2 rounded-xl border border-border/60 bg-surface/40 p-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <label htmlFor={sliderId} className="text-sm font-semibold text-foreground">
+                    {cat.label}
+                  </label>
+                  <p className="truncate text-xs text-muted-foreground">{cat.hint}</p>
+                </div>
+                <div className="flex items-center gap-1 rounded-lg border border-border bg-card px-2 py-1 shadow-2xs focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
+                  <span className="text-xs font-semibold text-muted-foreground">₹</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={value ? value.toLocaleString("en-IN") : "0"}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9]/g, "");
+                      const val = raw ? parseInt(raw, 10) : 0;
+                      onChange(cat.key, Math.min(cat.max * 2, val));
+                    }}
+                    className="w-20 bg-transparent text-right font-mono text-xs font-semibold text-foreground focus:outline-none"
+                    aria-label={`${cat.label} monthly amount in rupees`}
+                  />
+                </div>
               </div>
               <Slider
                 id={sliderId}
@@ -65,10 +80,9 @@ export function SpendSlidersPanel({ spend, onChange, onReset }: SpendSlidersPane
                 min={0}
                 max={cat.max}
                 step={500}
-                value={[value]}
+                value={[Math.min(cat.max, value)]}
                 onValueChange={([v]) => onChange(cat.key, v ?? 0)}
               />
-              <p className="text-xs text-muted-foreground">{cat.hint}</p>
             </div>
           );
         })}

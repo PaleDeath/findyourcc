@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import {
   CATEGORIES,
   MAX_FEE_SLIDER,
@@ -26,11 +26,12 @@ const SCORE_BANDS: { label: string; value: number | null }[] = [
 
 const INCOME_BANDS: { label: string; value: number | null }[] = [
   { label: "Any", value: null },
-  { label: "₹15k/mo", value: 15000 },
-  { label: "₹25k/mo", value: 25000 },
-  { label: "₹50k/mo", value: 50000 },
-  { label: "₹1L/mo", value: 100000 },
-  { label: "₹2L+/mo", value: 200000 },
+  { label: "₹25k", value: 25000 },
+  { label: "₹50k", value: 50000 },
+  { label: "₹75k", value: 75000 },
+  { label: "₹1L", value: 100000 },
+  { label: "₹1.5L", value: 150000 },
+  { label: "₹2.5L+", value: 250000 },
 ];
 
 interface FilterPanelProps {
@@ -190,8 +191,37 @@ export function FilterPanel({ cards, filters, onChange, onReset }: FilterPanelPr
             />
           ))}
         </div>
-        <p className="pt-1 text-xs text-muted-foreground">
-          Keeps only cards whose published income bar you clear.
+        <div className="mt-2 flex items-center gap-1.5">
+          <div className="flex flex-1 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1 text-xs shadow-2xs focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
+            <span className="font-semibold text-muted-foreground">₹</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="Exact amount"
+              value={filters.monthlyIncome ? filters.monthlyIncome.toLocaleString("en-IN") : ""}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/[^0-9]/g, "");
+                onChange({ monthlyIncome: raw ? parseInt(raw, 10) : null });
+              }}
+              className="w-full bg-transparent font-medium text-foreground focus:outline-none"
+              aria-label="Enter exact monthly income in rupees"
+            />
+            <span className="text-muted-foreground">/mo</span>
+          </div>
+          {filters.monthlyIncome !== null && (
+            <button
+              type="button"
+              onClick={() => onChange({ monthlyIncome: null })}
+              className="rounded-lg border border-border bg-card p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              title="Clear income filter"
+              aria-label="Clear income filter"
+            >
+              <X className="size-3.5" aria-hidden="true" />
+            </button>
+          )}
+        </div>
+        <p className="pt-0.5 text-[11px] text-muted-foreground">
+          Shows only cards whose published income threshold you clear.
         </p>
       </Section>
 
