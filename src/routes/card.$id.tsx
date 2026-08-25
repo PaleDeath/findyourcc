@@ -437,12 +437,15 @@ function CardDetail() {
                 <Row
                   label="Domestic lounge"
                   value={[
-                    card.benefits.loungeDomestic.visitsPerQuarter
-                      ? `${card.benefits.loungeDomestic.visitsPerQuarter}/quarter`
-                      : null,
-                    card.benefits.loungeDomestic.visitsPerYear
-                      ? `${card.benefits.loungeDomestic.visitsPerYear}/year`
-                      : null,
+                    card.benefits.loungeDomestic.unlimited ||
+                    (card.benefits.loungeDomestic.visitsPerYear &&
+                      card.benefits.loungeDomestic.visitsPerYear >= 999)
+                      ? "Unlimited"
+                      : card.benefits.loungeDomestic.visitsPerQuarter
+                        ? `${card.benefits.loungeDomestic.visitsPerQuarter}/quarter`
+                        : card.benefits.loungeDomestic.visitsPerYear
+                          ? `${card.benefits.loungeDomestic.visitsPerYear}/year`
+                          : null,
                     card.benefits.loungeDomestic.program,
                     card.benefits.loungeDomestic.spendCondition,
                   ]
@@ -454,12 +457,16 @@ function CardDetail() {
                 <Row
                   label="International lounge"
                   value={[
-                    card.benefits.loungeInternational.visitsPerYear
-                      ? `${card.benefits.loungeInternational.visitsPerYear}/year`
-                      : null,
+                    card.benefits.loungeInternational.unlimited ||
+                    (card.benefits.loungeInternational.visitsPerYear &&
+                      card.benefits.loungeInternational.visitsPerYear >= 999)
+                      ? "Unlimited"
+                      : card.benefits.loungeInternational.visitsPerYear
+                        ? `${card.benefits.loungeInternational.visitsPerYear}/year`
+                        : null,
                     card.benefits.loungeInternational.program,
                     card.benefits.loungeInternational.guestVisits
-                      ? `${card.benefits.loungeInternational.guestVisits} guest visits`
+                      ? `+${card.benefits.loungeInternational.guestVisits} guest visits`
                       : null,
                   ]
                     .filter(Boolean)

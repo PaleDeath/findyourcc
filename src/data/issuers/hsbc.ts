@@ -179,6 +179,7 @@ export const hsbcCards: CreditCard[] = [
       pointsExpiry: "No expiry (cashback credited)",
     },
     benefits: {
+      loungeDomestic: { visitsPerQuarter: 1, visitsPerYear: 4, program: "Domestic Lounges" },
       fuelSurchargeWaiver: { pct: 1, minTxn: 400, maxTxn: 4000, monthlyCap: 250 },
     },
     eligibility: {
@@ -191,10 +192,11 @@ export const hsbcCards: CreditCard[] = [
       documents: ["PAN", "Aadhaar", "Income proof"],
     },
     upi: { rupayUpiLinkable: false },
-    bestFor: ["Dining and food delivery heavy spenders"],
-    watchOuts: ["Cashback capped monthly on bonus categories"],
-    lastVerified: "2026-08-23",
-    dataConfidence: "Needs review",
+    bestFor: ["Dining and food delivery heavy spenders wanting 10% cashback + 4 domestic lounge visits/yr"],
+    watchOuts: ["₹1,000 monthly cap on accelerated dining/grocery cashback category"],
+    applyUrl: "https://www.hsbc.co.in/credit-cards/products/live-plus/",
+    lastVerified: "2026-08-25",
+    dataConfidence: "High",
   },
   {
     id: "hsbc-platinum",

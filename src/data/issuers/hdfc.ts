@@ -47,8 +47,8 @@ export const hdfcCards: CreditCard[] = [
       pointsExpiry: "No expiry",
     },
     benefits: {
-      loungeDomestic: { visitsPerYear: 999, program: "Priority Pass" },
-      loungeInternational: { visitsPerYear: 6, program: "Priority Pass", guestVisits: 2 },
+      loungeDomestic: { unlimited: true, program: "Priority Pass" },
+      loungeInternational: { unlimited: true, program: "Priority Pass", guestVisits: 2 },
       golf: "Unlimited domestic and international golf games",
       fuelSurchargeWaiver: { pct: 1, minTxn: 400, maxTxn: 100000, monthlyCap: 1000 },
       insurance: [{ type: "Air accident cover", cover: 30000000 }],
@@ -125,8 +125,8 @@ export const hdfcCards: CreditCard[] = [
       pointsExpiry: "No expiry",
     },
     benefits: {
-      loungeDomestic: { visitsPerYear: 999, program: "Priority Pass" },
-      loungeInternational: { visitsPerYear: 6, program: "Priority Pass", guestVisits: 2 },
+      loungeDomestic: { unlimited: true, program: "Diners Club / Priority Pass" },
+      loungeInternational: { unlimited: true, program: "Diners Club / Priority Pass", guestVisits: 2 },
       golf: "6 complimentary games per quarter",
       fuelSurchargeWaiver: { pct: 1, minTxn: 400, maxTxn: 100000, monthlyCap: 1000 },
       insurance: [{ type: "Air accident cover", cover: 20000000 }],

@@ -1084,8 +1084,8 @@ export const sbiCards: CreditCard[] = [
       pointsExpiry: "No expiry",
     },
     benefits: {
-      loungeDomestic: { visitsPerYear: 999, program: "Priority Pass" },
-      loungeInternational: { visitsPerYear: 8, program: "Priority Pass", guestVisits: 2 },
+      loungeDomestic: { unlimited: true, program: "DreamFolks" },
+      loungeInternational: { unlimited: true, program: "DreamFolks", guestVisits: 4 },
       golf: "Unlimited complimentary golf games",
       concierge: true,
       insurance: [{ type: "Air accident cover", cover: 10000000 }],

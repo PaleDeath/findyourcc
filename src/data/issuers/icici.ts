@@ -124,8 +124,8 @@ export const iciciCards: CreditCard[] = [
       ],
     },
     benefits: {
-      loungeDomestic: { visitsPerYear: 999, program: "Unlimited via DreamFolks" },
-      loungeInternational: { visitsPerYear: 999, program: "Priority Pass", guestVisits: 999 },
+      loungeDomestic: { unlimited: true, program: "DreamFolks" },
+      loungeInternational: { unlimited: true, program: "Priority Pass", guestVisits: 999 },
       golf: "Complimentary rounds and lessons monthly",
       concierge: true,
       memberships: ["Taj Epicure", "EazyDiner Prime"],
@@ -366,8 +366,8 @@ export const iciciCards: CreditCard[] = [
       earningExclusions: exclusions,
     },
     benefits: {
-      loungeDomestic: { visitsPerYear: 999, program: "Unlimited domestic lounges" },
-      loungeInternational: { visitsPerYear: 999, program: "Priority Pass" },
+      loungeDomestic: { unlimited: true, program: "Domestic lounges" },
+      loungeInternational: { unlimited: true, program: "Priority Pass" },
       concierge: true,
     },
     eligibility: {

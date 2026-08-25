@@ -124,8 +124,16 @@ export function listIssuers(cards: CreditCard[]): { id: string; name: string; co
 export function totalLoungeVisits(card: CreditCard): number {
   const d = card.benefits.loungeDomestic;
   const i = card.benefits.loungeInternational;
-  const domestic = d ? (d.visitsPerYear ?? (d.visitsPerQuarter ?? 0) * 4) : 0;
-  const intl = i?.visitsPerYear ?? 0;
+  const domestic = d
+    ? d.unlimited || (d.visitsPerYear && d.visitsPerYear >= 999)
+      ? 50
+      : (d.visitsPerYear ?? (d.visitsPerQuarter ?? 0) * 4)
+    : 0;
+  const intl = i
+    ? i.unlimited || (i.visitsPerYear && i.visitsPerYear >= 999)
+      ? 50
+      : (i.visitsPerYear ?? 0)
+    : 0;
   return domestic + intl;
 }
 

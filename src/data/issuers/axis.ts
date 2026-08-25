@@ -140,10 +140,11 @@ export const axisCards: CreditCard[] = [
       issuerMark: "AXB",
     },
     fees: {
-      joiningFee: 0,
-      annualFee: 0,
-      lifetimeFree: true,
+      joiningFee: 30000,
+      annualFee: 30000,
+      lifetimeFree: false,
       firstYearFree: false,
+      feeWaiverSpend: 2500000,
       forexMarkupPct: 2.0,
       cashAdvancePct: 2.5,
       apr: {
@@ -178,13 +179,13 @@ export const axisCards: CreditCard[] = [
     },
     benefits: {
       loungeDomestic: {
-        visitsPerYear: 12,
+        unlimited: true,
         program: "Priority Pass",
       },
       loungeInternational: {
-        visitsPerYear: 12,
+        unlimited: true,
         program: "Priority Pass",
-        guestVisits: 4,
+        guestVisits: 8,
       },
       golf: "Unlimited domestic golf games",
       concierge: true,
@@ -427,11 +428,11 @@ export const axisCards: CreditCard[] = [
       issuerMark: "OLY",
     },
     fees: {
-      joiningFee: 0,
-      annualFee: 0,
-      lifetimeFree: true,
+      joiningFee: 20000,
+      annualFee: 20000,
+      lifetimeFree: false,
       firstYearFree: false,
-      forexMarkupPct: 2.0,
+      forexMarkupPct: 1.8,
       cashAdvancePct: 2.5,
       apr: {
         minMonthlyPct: 3.4,
@@ -457,12 +458,13 @@ export const axisCards: CreditCard[] = [
     },
     benefits: {
       loungeDomestic: {
-        visitsPerYear: 12,
+        unlimited: true,
         program: "Priority Pass",
       },
       loungeInternational: {
-        visitsPerYear: 12,
+        unlimited: true,
         program: "Priority Pass",
+        guestVisits: 8,
       },
       concierge: true,
     },
@@ -1859,11 +1861,11 @@ export const axisCards: CreditCard[] = [
     },
     benefits: {
       loungeDomestic: {
-        visitsPerYear: 999,
+        unlimited: true,
         program: "Priority Pass",
       },
       loungeInternational: {
-        visitsPerYear: 999,
+        unlimited: true,
         program: "Priority Pass",
         guestVisits: 8,
       },

@@ -309,8 +309,8 @@ export const amexCards: CreditCard[] = [
       earningExclusions: commonExclusions,
     },
     benefits: {
-      loungeInternational: { visitsPerYear: 999, program: "Priority Pass", guestVisits: 999 },
-      loungeDomestic: { visitsPerYear: 999, program: "Centurion & domestic lounges" },
+      loungeDomestic: { unlimited: true, program: "Centurion & domestic lounges" },
+      loungeInternational: { unlimited: true, program: "Priority Pass & Centurion Lounge", guestVisits: 2 },
       golf: "Complimentary golf access at select courses",
       concierge: true,
       memberships: [
@@ -417,7 +417,8 @@ export const amexCards: CreditCard[] = [
       earningExclusions: commonExclusions,
     },
     benefits: {
-      loungeInternational: { visitsPerYear: 999, program: "Priority Pass", guestVisits: 999 },
+      loungeDomestic: { unlimited: true, program: "Centurion & domestic lounges" },
+      loungeInternational: { unlimited: true, program: "Priority Pass & Centurion Lounge" },
       concierge: true,
       memberships: ["Every Platinum membership plus dedicated relationship team"],
     },

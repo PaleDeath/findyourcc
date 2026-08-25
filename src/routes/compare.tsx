@@ -182,37 +182,48 @@ const SECTIONS: Section[] = [
         label: "Domestic visits / yr",
         render: (c) => {
           const d = c.benefits.loungeDomestic;
+          if (!d) return "—";
+          if (d.unlimited || (d.visitsPerYear && d.visitsPerYear >= 999)) return "Unlimited";
           const visits =
-            d?.visitsPerYear ?? (d?.visitsPerQuarter ? d.visitsPerQuarter * 4 : undefined);
-          if (visits === undefined) return "—";
-          return visits >= 999 ? "Unlimited" : String(visits);
+            d.visitsPerYear ?? (d.visitsPerQuarter ? d.visitsPerQuarter * 4 : undefined);
+          return visits === undefined ? "—" : String(visits);
         },
         value: (c) => {
           const d = c.benefits.loungeDomestic;
-          return d?.visitsPerYear ?? (d?.visitsPerQuarter ? d.visitsPerQuarter * 4 : undefined);
+          if (!d) return undefined;
+          if (d.unlimited || (d.visitsPerYear && d.visitsPerYear >= 999)) return 50;
+          return d.visitsPerYear ?? (d.visitsPerQuarter ? d.visitsPerQuarter * 4 : undefined);
         },
         direction: "higher-better",
         text: (c) => {
           const d = c.benefits.loungeDomestic;
+          if (!d) return "—";
+          if (d.unlimited || (d.visitsPerYear && d.visitsPerYear >= 999)) return "Unlimited";
           const visits =
-            d?.visitsPerYear ?? (d?.visitsPerQuarter ? d.visitsPerQuarter * 4 : undefined);
-          if (visits === undefined) return "—";
-          return visits >= 999 ? "Unlimited" : String(visits);
+            d.visitsPerYear ?? (d.visitsPerQuarter ? d.visitsPerQuarter * 4 : undefined);
+          return visits === undefined ? "—" : String(visits);
         },
       },
       {
         label: "International visits / yr",
         render: (c) => {
-          const v = c.benefits.loungeInternational?.visitsPerYear;
-          if (v === undefined) return "—";
-          return v >= 999 ? "Unlimited" : String(v);
+          const i = c.benefits.loungeInternational;
+          if (!i) return "—";
+          if (i.unlimited || (i.visitsPerYear && i.visitsPerYear >= 999)) return "Unlimited";
+          return i.visitsPerYear === undefined ? "—" : String(i.visitsPerYear);
         },
-        value: (c) => c.benefits.loungeInternational?.visitsPerYear,
+        value: (c) => {
+          const i = c.benefits.loungeInternational;
+          if (!i) return undefined;
+          if (i.unlimited || (i.visitsPerYear && i.visitsPerYear >= 999)) return 50;
+          return i.visitsPerYear;
+        },
         direction: "higher-better",
         text: (c) => {
-          const v = c.benefits.loungeInternational?.visitsPerYear;
-          if (v === undefined) return "—";
-          return v >= 999 ? "Unlimited" : String(v);
+          const i = c.benefits.loungeInternational;
+          if (!i) return "—";
+          if (i.unlimited || (i.visitsPerYear && i.visitsPerYear >= 999)) return "Unlimited";
+          return i.visitsPerYear === undefined ? "—" : String(i.visitsPerYear);
         },
       },
       {
