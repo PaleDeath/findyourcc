@@ -238,16 +238,22 @@ export function StepSpend({ answers, patch, onSpendChange }: StepSpendProps) {
         {SPEND_CATEGORIES.map((cat) => {
           const value = answers.spend[cat.key] ?? 0;
           return (
-            <div key={cat.key} className="space-y-2">
-              <div className="flex items-center justify-between gap-2">
-                <div>
-                  <label htmlFor={`spend-${cat.key}`} className="text-sm font-medium">
+            <div
+              key={cat.key}
+              className="group space-y-2.5 rounded-xl border border-border/80 bg-surface/50 p-3.5 transition-colors hover:border-border dark:bg-white/[0.02]"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <label
+                    htmlFor={`spend-${cat.key}`}
+                    className="block truncate text-sm font-semibold text-foreground tracking-tight"
+                  >
                     {cat.label}
                   </label>
-                  <p className="text-xs text-muted-foreground">{cat.hint}</p>
+                  <p className="truncate text-[11px] text-muted-foreground">{cat.hint}</p>
                 </div>
-                <div className="flex items-center gap-1 rounded-lg border border-border bg-card px-2 py-1 shadow-2xs focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
-                  <span className="text-xs font-semibold text-muted-foreground">₹</span>
+                <div className="flex shrink-0 items-center gap-1 rounded-lg border border-border/90 bg-card px-2.5 py-1 text-xs shadow-2xs focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 dark:bg-card">
+                  <span className="font-semibold text-muted-foreground text-xs">₹</span>
                   <input
                     type="text"
                     inputMode="numeric"
@@ -257,7 +263,7 @@ export function StepSpend({ answers, patch, onSpendChange }: StepSpendProps) {
                       const val = raw ? parseInt(raw, 10) : 0;
                       setCategory(cat.key, Math.min(cat.max * 2, val));
                     }}
-                    className="w-20 bg-transparent text-right font-mono text-xs font-semibold text-foreground focus:outline-none"
+                    className="w-20 bg-transparent text-right font-mono text-xs font-bold text-foreground focus:outline-none"
                     aria-label={`${cat.label} spend amount in rupees`}
                   />
                 </div>
@@ -270,6 +276,7 @@ export function StepSpend({ answers, patch, onSpendChange }: StepSpendProps) {
                 value={[Math.min(cat.max, value)]}
                 onValueChange={([v]) => setCategory(cat.key, v ?? 0)}
                 aria-label={cat.label}
+                className="py-1"
               />
             </div>
           );
