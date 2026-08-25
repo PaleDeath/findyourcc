@@ -55,7 +55,7 @@ export const Route = createFileRoute("/")({
 
 const SPOTLIGHT_CARDS = [
   {
-    tag: "Super Premium",
+    tag: "Premium",
     id: "hdfc-infinia-metal",
     label: "HDFC Infinia Metal",
     desc: "Up to 33.3% return on SmartBuy flight & hotel bookings. 1:1 reward transfer to top airlines.",
@@ -67,16 +67,16 @@ const SPOTLIGHT_CARDS = [
     desc: "Direct tier points on flights & hotels with flexible transfer partners across major airlines.",
   },
   {
-    tag: "Direct Cashback",
+    tag: "Cashback",
     id: "sbi-cashback",
     label: "SBI Cashback",
-    desc: "Flat 5% direct cashback on nearly all online merchant spends with zero merchant restrictions.",
+    desc: "Flat 5% direct cashback on online merchant spends with direct statement credit and zero hassle.",
   },
   {
-    tag: "Lifestyle / Rewards",
+    tag: "Rewards",
     id: "amex-mrcc",
     label: "Amex MRCC",
-    desc: "1,000 bonus points on 4 transactions of ₹1,500/mo. Ideal redemption via 18k & 24k gold collection.",
+    desc: "1,000 bonus points on 4 monthly spends of ₹1,500. Ideal 18k & 24k gold collection redemption.",
   },
 ];
 
@@ -232,13 +232,13 @@ function Home() {
           {/* --- HERO RIGHT: 3D CARD SPOTLIGHT SHOWCASE -------------------- */}
           <div className="relative flex flex-col items-center justify-center">
             {/* Card Spotlight Selector Tabs */}
-            <div className="mb-4 flex w-full max-w-sm flex-wrap items-center justify-center gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
+            <div className="mb-4 grid w-full max-w-sm grid-cols-4 gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
               {SPOTLIGHT_CARDS.map((item, idx) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setSpotlightIdx(idx)}
-                  className={`btn-tactile rounded-lg px-2.5 py-1 text-[11px] font-semibold transition-all ${
+                  className={`btn-tactile w-full truncate rounded-lg py-1.5 text-center text-[11px] font-semibold transition-all ${
                     spotlightIdx === idx
                       ? "bg-foreground text-background shadow-xs dark:bg-white dark:text-black"
                       : "text-muted-foreground hover:text-foreground"
@@ -261,18 +261,18 @@ function Home() {
                     size="lg"
                   />
                   <div className="mt-4 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="truncate text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         {spotlightCard.issuer}
                       </span>
-                      <Badge variant="outline" className="font-mono text-[10px] font-bold text-foreground">
+                      <Badge variant="outline" className="shrink-0 font-mono text-[10px] font-bold text-foreground">
                         {computeEffectiveRate(spotlightCard).toFixed(2)}% Base Earn
                       </Badge>
                     </div>
-                    <h3 className="font-display text-lg font-bold text-foreground">
+                    <h3 className="truncate font-display text-base font-bold text-foreground">
                       {spotlightCard.name}
                     </h3>
-                    <p className="text-xs leading-relaxed text-muted-foreground">
+                    <p className="h-10 text-xs leading-relaxed text-muted-foreground line-clamp-2">
                       {SPOTLIGHT_CARDS[spotlightIdx].desc}
                     </p>
                     <div className="pt-2 flex items-center gap-2">
@@ -481,7 +481,7 @@ function Home() {
           </div>
 
           {/* Category Tabs */}
-          <div className="flex flex-wrap gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
+          <div className="flex max-w-full overflow-x-auto no-scrollbar gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04] sm:flex-wrap">
             {[
               { id: "rates", label: "Top Base Earn" },
               { id: "popular", label: "Most Popular" },
@@ -492,7 +492,7 @@ function Home() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id as never)}
-                className={`btn-tactile rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`btn-tactile shrink-0 whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                   activeTab === tab.id
                     ? "bg-foreground text-background shadow-xs dark:bg-white dark:text-black"
                     : "text-muted-foreground hover:text-foreground"

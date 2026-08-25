@@ -101,20 +101,19 @@ export function CardArt({
   const textScale = size === "sm" ? "text-[0.55rem]" : size === "lg" ? "text-sm" : "text-[0.7rem]";
 
   if (art.officialImageUrl && !imageFailed) {
-    const ratio = imageRatio ?? (isVertical ? 1 / 1.586 : 1.586);
-    const framedRatio = Math.min(Math.max(ratio, 1 / 1.7), 1.8);
+    const isImageVertical = imageRatio !== null ? imageRatio < 0.9 : isVertical;
     return (
       <div
         ref={ref}
         onPointerMove={onPointerMove}
         onPointerLeave={reset}
         className={cn(
-          "group/card-art relative isolate overflow-hidden rounded-[0.875rem] border border-black/5 bg-surface/50 shadow-[0_6px_16px_-4px_rgba(0,0,0,0.18),0_16px_32px_-8px_rgba(0,0,0,0.12)] transition-transform duration-200 ease-out will-change-transform dark:border-white/10 dark:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]",
+          "group/card-art relative isolate flex items-center justify-center overflow-hidden rounded-[0.875rem] border border-black/5 bg-surface/50 shadow-[0_6px_16px_-4px_rgba(0,0,0,0.18),0_16px_32px_-8px_rgba(0,0,0,0.12)] transition-transform duration-200 ease-out will-change-transform dark:border-white/10 dark:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]",
           dimmed && "opacity-60 saturate-50",
           className,
         )}
         style={{
-          aspectRatio: `${framedRatio}`,
+          aspectRatio: "1.586 / 1",
           transformStyle: interactive ? "preserve-3d" : undefined,
         }}
       >
@@ -130,7 +129,12 @@ export function CardArt({
             }
           }}
           onError={() => setImageFailed(true)}
-          className="absolute inset-0 h-full w-full object-contain p-[2.5%]"
+          className={cn(
+            "transition-all duration-300",
+            isImageVertical
+              ? "h-full w-auto max-h-[96%] max-w-[62%] object-contain rounded-[0.5rem] shadow-md ring-1 ring-black/10 dark:ring-white/15"
+              : "absolute inset-0 h-full w-full object-cover"
+          )}
         />
         {/* Dynamic cursor light glare */}
         <div
@@ -155,13 +159,13 @@ export function CardArt({
       role="img"
       aria-labelledby={titleId}
       className={cn(
-        "group/art relative isolate w-full overflow-hidden rounded-[0.875rem] border border-black/10 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.35),0_18px_36px_-12px_rgba(0,0,0,0.25)] transition-transform duration-200 ease-out will-change-transform dark:border-white/10",
+        "group/art relative isolate flex items-center justify-center w-full overflow-hidden rounded-[0.875rem] border border-black/10 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.35),0_18px_36px_-12px_rgba(0,0,0,0.25)] transition-transform duration-200 ease-out will-change-transform dark:border-white/10",
         dimmed && "opacity-60 saturate-50",
         className,
       )}
       style={{
-        aspectRatio: isVertical ? "1 / 1.586" : "1.586 / 1",
-        background: baseGradient,
+        aspectRatio: "1.586 / 1",
+        background: isVertical ? "hsl(var(--surface))" : baseGradient,
         transformStyle: interactive ? "preserve-3d" : undefined,
       }}
     >
