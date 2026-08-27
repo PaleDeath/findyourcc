@@ -158,8 +158,8 @@ function Home() {
 
       {/* --- HERO SECTION -------------------------------------------------- */}
       <section className="relative overflow-hidden border-b border-border/80 dark:border-white/[0.08]">
-        <div className="container-page relative grid gap-12 py-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-20">
-          <div className="max-w-2xl">
+        <div className="container-page relative grid gap-8 py-8 sm:gap-12 sm:py-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-20 min-w-0">
+          <div className="w-full max-w-2xl min-w-0">
             {/* Live Independence Badge */}
             <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/80 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur-sm dark:border-white/10 dark:bg-white/[0.04]">
               <span className="flex size-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -180,7 +180,7 @@ function Home() {
             </p>
 
             {/* Quick Interactive Search Trigger */}
-            <div className="mt-7 max-w-lg">
+            <div className="mt-7 w-full max-w-lg min-w-0">
               <button
                 type="button"
                 onClick={openCommandPalette}
@@ -212,7 +212,7 @@ function Home() {
             </div>
 
             {/* Live Database Stat Counters */}
-            <dl className="mt-8 grid max-w-lg grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
+            <dl className="mt-8 grid w-full max-w-lg grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3 min-w-0">
               {[
                 { label: "Verified Cards", value: stats.total, icon: CreditCardIcon },
                 { label: "Bank Issuers", value: stats.issuers, icon: Compass },
@@ -221,7 +221,7 @@ function Home() {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="card-bevel rounded-xl border border-border/80 bg-card p-3 dark:border-white/[0.08]"
+                  className="card-bevel rounded-xl border border-border/80 bg-card p-3 dark:border-white/[0.08] min-w-0"
                 >
                   <dt className="text-[11px] font-medium text-muted-foreground truncate">{item.label}</dt>
                   <dd className="font-mono text-xl sm:text-2xl font-bold tabular-nums text-foreground mt-0.5">
@@ -233,15 +233,15 @@ function Home() {
           </div>
 
           {/* --- HERO RIGHT: 3D CARD SPOTLIGHT SHOWCASE -------------------- */}
-          <div className="relative flex flex-col items-center justify-center">
+          <div className="relative flex flex-col items-center justify-center w-full min-w-0">
             {/* Card Spotlight Selector Tabs */}
-            <div className="mb-4 grid w-full max-w-sm grid-cols-4 gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
+            <div className="mb-4 flex w-full max-w-sm items-center gap-1 overflow-x-auto no-scrollbar rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
               {SPOTLIGHT_CARDS.map((item, idx) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setSpotlightIdx(idx)}
-                  className={`btn-tactile w-full truncate rounded-lg py-1.5 text-center text-[11px] font-semibold transition-all ${
+                  className={`btn-tactile flex-1 min-w-0 shrink-0 truncate rounded-lg px-2.5 py-1.5 text-center text-[11px] font-semibold transition-all ${
                     spotlightIdx === idx
                       ? "bg-foreground text-background shadow-xs dark:bg-white dark:text-black"
                       : "text-muted-foreground hover:text-foreground"
@@ -254,7 +254,7 @@ function Home() {
 
             {/* Interactive Physical 3D Card Display */}
             {spotlightCard && (
-              <div className="w-full max-w-sm">
+              <div className="w-full max-w-sm min-w-0">
                 <div className="card-bevel rounded-2xl border border-border/80 bg-card p-4 transition-all dark:border-white/[0.08]">
                   <CardArt
                     art={spotlightCard.art}
