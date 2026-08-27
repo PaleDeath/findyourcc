@@ -149,9 +149,9 @@ function MCCGuidePage() {
 
       {/* Tab 1: Merchant Lookup */}
       {activeTab === "merchants" && (
-        <div className="mt-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="relative max-w-md flex-1">
+        <div className="mt-6 sm:mt-8 space-y-6 min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-w-0">
+            <div className="relative max-w-md flex-1 min-w-0">
               <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search merchant (e.g. Swiggy, Amazon, CRED, BPCL, NPS)..."
@@ -163,15 +163,15 @@ function MCCGuidePage() {
             <span className="text-xs text-muted-foreground">{filteredMerchants.length} merchants shown</span>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 min-w-0">
             {filteredMerchants.map((merchant) => (
               <div
                 key={merchant.id}
-                className="flex flex-col justify-between rounded-xl border border-border bg-card p-4 transition-all hover:border-foreground/20 hover:shadow-2xs"
+                className="flex flex-col justify-between rounded-xl border border-border bg-card p-4 transition-all hover:border-foreground/20 hover:shadow-2xs min-w-0"
               >
                 <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-display text-sm font-bold text-foreground line-clamp-1">{merchant.name}</h3>
+                  <div className="flex items-center justify-between gap-2 min-w-0">
+                    <h3 className="font-display text-sm font-bold text-foreground line-clamp-1 truncate">{merchant.name}</h3>
                     <Badge variant="outline" className="font-mono text-[10px] shrink-0">
                       MCC {merchant.mcc}
                     </Badge>
@@ -181,7 +181,7 @@ function MCCGuidePage() {
                 </div>
 
                 {merchant.typicalNotes && (
-                  <div className="mt-3 pt-2.5 border-t border-border/50 text-[11px] text-muted-foreground bg-surface/60 p-2 rounded-lg">
+                  <div className="mt-3 pt-2.5 border-t border-border/50 text-[11px] text-muted-foreground bg-surface/60 p-2 rounded-lg min-w-0">
                     <strong className="text-foreground font-medium">Reward Note: </strong>
                     {merchant.typicalNotes}
                   </div>
@@ -194,10 +194,10 @@ function MCCGuidePage() {
 
       {/* Tab 2: Card Exclusions & Rules */}
       {activeTab === "cards" && (
-        <div className="mt-8 grid gap-8 lg:grid-cols-12">
+        <div className="mt-6 sm:mt-8 grid gap-6 lg:gap-8 lg:grid-cols-12 min-w-0">
           {/* Card selector */}
-          <div className="space-y-4 lg:col-span-4">
-            <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="space-y-4 lg:col-span-4 min-w-0">
+            <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 min-w-0">
               <h2 className="font-display text-base font-semibold text-foreground">Select Card</h2>
               <p className="text-xs text-muted-foreground mt-1">Select a popular card to view its verified MCC earning rates and exclusions.</p>
               

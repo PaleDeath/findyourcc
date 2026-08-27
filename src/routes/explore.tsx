@@ -282,19 +282,19 @@ function ExplorePage() {
   const activeCount = activeChips.length;
 
   return (
-    <div className="container-page py-8">
-      <header className="mb-6 space-y-2">
-        <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+    <div className="container-page py-6 sm:py-8 min-w-0">
+      <header className="mb-6 space-y-2 min-w-0">
+        <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
           Explore cards
         </h1>
-        <p className="max-w-2xl text-sm text-muted-foreground">
+        <p className="max-w-2xl text-xs sm:text-sm text-muted-foreground leading-relaxed">
           {cards.length} Indian credit cards, structured field by field — fees, real earn rates,
           exclusions and the fine print issuers bury.
         </p>
       </header>
 
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center min-w-0">
+        <div className="relative flex-1 min-w-0">
           <Search
             className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden="true"
@@ -331,14 +331,14 @@ function ExplorePage() {
         </Button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-        <aside className="hidden lg:block">
+      <div className="grid gap-8 lg:grid-cols-[280px_1fr] min-w-0">
+        <aside className="hidden lg:block min-w-0">
           <div className="card-bevel sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-2xl border border-border/80 bg-card p-5 dark:border-white/[0.08]">
             <FilterPanel cards={cards} filters={filters} onChange={patch} onReset={reset} />
           </div>
         </aside>
 
-        <section aria-label="Card results">
+        <section aria-label="Card results" className="min-w-0">
           {activeChips.length > 0 && (
             <div className="mb-4 flex flex-wrap gap-1.5">
               {activeChips.map((chip) => (

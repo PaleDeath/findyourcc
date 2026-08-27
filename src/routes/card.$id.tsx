@@ -162,7 +162,7 @@ function CardDetail() {
   if (!card || !valuation) throw notFound();
 
   return (
-    <div className="container-page py-8">
+    <div className="container-page py-6 sm:py-8 min-w-0">
       <Link
         to="/explore"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
@@ -170,7 +170,7 @@ function CardDetail() {
         <ArrowLeft className="size-4" aria-hidden="true" /> Back to explore
       </Link>
 
-      <div className="mt-5 grid gap-8 lg:grid-cols-[380px_1fr]">
+      <div className="mt-5 grid gap-8 lg:grid-cols-[380px_1fr] min-w-0">
         <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
           <CardArt
             art={card.art}

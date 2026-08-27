@@ -53,15 +53,15 @@ function CalculatorPage() {
   };
 
   return (
-    <div className="container-page space-y-8 py-8">
-      <header className="max-w-3xl space-y-3">
+    <div className="container-page space-y-6 sm:space-y-8 py-6 sm:py-8 min-w-0">
+      <header className="max-w-3xl space-y-3 min-w-0">
         <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
           <CalculatorIcon className="size-3.5" aria-hidden="true" /> Reward calculator
         </span>
-        <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+        <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
           What is this card actually worth to you?
         </h1>
-        <p className="text-sm text-muted-foreground sm:text-base">
+        <p className="text-xs sm:text-sm text-muted-foreground sm:text-base leading-relaxed">
           Move the sliders to match your real spending. Every number below is computed on this
           device from the published earn rates, caps and exclusions — not marketing claims. Not sure
           where to start?{" "}
@@ -72,8 +72,8 @@ function CalculatorPage() {
         </p>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_1fr] lg:items-start">
-        <div className="space-y-4 lg:sticky lg:top-24">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_1fr] lg:items-start min-w-0">
+        <div className="space-y-4 lg:sticky lg:top-24 min-w-0">
           <SpendSlidersPanel spend={spend} onChange={handleSpendChange} onReset={reset} />
 
           <fieldset className="space-y-3 rounded-2xl border border-border bg-card p-4 sm:p-5">

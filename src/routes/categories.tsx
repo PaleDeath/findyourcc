@@ -207,12 +207,12 @@ function CategoriesHubPage() {
       </div>
 
       {/* Active Hub View */}
-      <div className="mt-8 space-y-6">
+      <div className="mt-6 sm:mt-8 space-y-6 min-w-0">
         {/* Hub Banner */}
-        <div className={`rounded-2xl border border-border bg-gradient-to-r ${currentHub.accent} p-6 sm:p-8 backdrop-blur-sm`}>
-          <div className="max-w-2xl space-y-2">
-            <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">{currentHub.title}</h2>
-            <p className="text-sm text-foreground/80 leading-relaxed">{currentHub.shortDesc}</p>
+        <div className={`rounded-2xl border border-border bg-gradient-to-r ${currentHub.accent} p-4 sm:p-6 lg:p-8 backdrop-blur-sm min-w-0`}>
+          <div className="max-w-2xl space-y-2 min-w-0">
+            <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">{currentHub.title}</h2>
+            <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed">{currentHub.shortDesc}</p>
             <div className="mt-4 pt-4 border-t border-foreground/10 text-xs text-foreground/90 flex items-start gap-2">
               <ShieldCheck className="size-4 shrink-0 text-primary mt-0.5" />
               <div>
@@ -224,13 +224,13 @@ function CategoriesHubPage() {
         </div>
 
         {/* Ranked Cards Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 min-w-0">
           {rankedCards.map((card, index) => {
             const effectiveRate = computeEffectiveRate(card);
             return (
               <div
                 key={card.id}
-                className="flex flex-col justify-between rounded-2xl border border-border bg-card p-5 shadow-2xs transition-all hover:border-foreground/30 hover:shadow-sm"
+                className="flex flex-col justify-between rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-2xs transition-all hover:border-foreground/30 hover:shadow-sm min-w-0"
               >
                 <div>
                   {/* Rank Header */}

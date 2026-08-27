@@ -180,11 +180,11 @@ function LoungeCheckerPage() {
       </div>
 
       {activeTab === "checker" && (
-        <div className="mt-8 grid gap-8 lg:grid-cols-12">
+        <div className="mt-6 sm:mt-8 grid gap-6 lg:gap-8 lg:grid-cols-12 min-w-0">
           {/* Left Column: Airport & Card Selectors */}
-          <div className="space-y-6 lg:col-span-5">
+          <div className="space-y-6 lg:col-span-5 min-w-0">
             {/* Step 1: Pick Airport */}
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-2xs">
+            <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-2xs min-w-0">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Step 1</span>
                 <Badge variant="outline" className="text-[11px] font-mono">{activeAirport.code}</Badge>
@@ -200,7 +200,7 @@ function LoungeCheckerPage() {
                 />
               </div>
 
-              <div className="mt-3 grid max-h-56 grid-cols-1 sm:grid-cols-2 gap-1.5 overflow-y-auto pr-1">
+              <div className="mt-3 grid max-h-56 grid-cols-1 sm:grid-cols-2 gap-1.5 overflow-y-auto pr-1 min-w-0">
                 {filteredAirports.map((airport) => (
                   <button
                     key={airport.code}
@@ -209,21 +209,21 @@ function LoungeCheckerPage() {
                       setSelectedAirportCode(airport.code);
                       setSelectedTerminal("all");
                     }}
-                    className={`flex min-h-[44px] items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-colors ${
+                    className={`flex min-h-[44px] items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-colors min-w-0 ${
                       selectedAirportCode === airport.code
                         ? "bg-primary text-primary-foreground font-semibold"
                         : "bg-surface/60 text-foreground hover:bg-surface border border-border/50"
                     }`}
                   >
-                    <span className="truncate">{airport.city}</span>
-                    <span className="font-mono text-[10px] opacity-80">{airport.code}</span>
+                    <span className="truncate pr-2">{airport.city}</span>
+                    <span className="font-mono text-[10px] opacity-80 shrink-0">{airport.code}</span>
                   </button>
                 ))}
               </div>
 
               {/* Terminal filter */}
               {terminals.length > 1 && (
-                <div className="mt-4 pt-3 border-t border-border">
+                <div className="mt-4 pt-3 border-t border-border min-w-0">
                   <label className="text-xs text-muted-foreground block mb-1.5 font-medium">Terminal</label>
                   <div className="flex flex-wrap gap-1.5">
                     <button
@@ -257,7 +257,7 @@ function LoungeCheckerPage() {
             </div>
 
             {/* Step 2: Pick Card */}
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-2xs">
+            <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-2xs min-w-0">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Step 2</span>
                 <span className="text-xs text-muted-foreground">{cards.length} cards indexed</span>
@@ -266,14 +266,14 @@ function LoungeCheckerPage() {
 
               <div className="mt-3">
                 <Input
-                  placeholder="Search card name or bank (e.g. Infinia, Atlas, Tiger, Sapphiro)..."
+                  placeholder="Search card name or bank (e.g. Infinia, Atlas, Tiger)..."
                   value={cardSearchQuery}
                   onChange={(e) => setCardSearchQuery(e.target.value)}
-                  className="h-9 text-xs"
+                  className="h-10 min-h-[44px] text-xs"
                 />
               </div>
 
-              <div className="mt-3 max-h-56 space-y-1.5 overflow-y-auto pr-1">
+              <div className="mt-3 max-h-56 space-y-1.5 overflow-y-auto pr-1 min-w-0">
                 {filteredCards.map((c) => {
                   const isSelected = selectedCardId === c.id;
                   const hasLounge = c.benefits.loungeDomestic || c.benefits.loungeInternational;
@@ -282,15 +282,15 @@ function LoungeCheckerPage() {
                       key={c.id}
                       type="button"
                       onClick={() => setSelectedCardId(c.id)}
-                      className={`w-full flex items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-colors ${
+                      className={`w-full flex items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-colors min-w-0 ${
                         isSelected
                           ? "bg-primary text-primary-foreground font-semibold shadow-2xs"
                           : "bg-surface/50 text-foreground hover:bg-surface border border-border/50"
                       }`}
                     >
-                      <div className="truncate pr-2">
+                      <div className="truncate pr-2 min-w-0 flex-1">
                         <div className="font-medium truncate">{c.name}</div>
-                        <div className="text-[10px] opacity-75">{c.issuer}</div>
+                        <div className="text-[10px] opacity-75 truncate">{c.issuer}</div>
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0">
                         {hasLounge ? (
@@ -309,25 +309,25 @@ function LoungeCheckerPage() {
           </div>
 
           {/* Right Column: Card Eligibility Verdict & Lounges at Airport */}
-          <div className="space-y-6 lg:col-span-7">
+          <div className="space-y-6 lg:col-span-7 min-w-0">
             {/* Verdict Banner */}
-            <div className={`rounded-2xl border p-6 transition-all ${
+            <div className={`rounded-2xl border p-4 sm:p-6 transition-all min-w-0 ${
               hasDomestic || hasIntl
                 ? "border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-950/20"
                 : "border-amber-500/30 bg-amber-500/5 dark:bg-amber-950/20"
             }`}>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-w-0">
+                <div className="flex items-center gap-3 min-w-0">
                   <div className={`grid size-11 shrink-0 place-items-center rounded-xl ${
                     hasDomestic || hasIntl ? "bg-emerald-500 text-white" : "bg-amber-500 text-white"
                   }`}>
                     {hasDomestic || hasIntl ? <CheckCircle2 className="size-6" /> : <AlertCircle className="size-6" />}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-xs font-semibold tracking-wide uppercase text-muted-foreground">
                       Access Verdict
                     </span>
-                    <h3 className="font-display text-xl font-bold tracking-tight text-foreground">
+                    <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight text-foreground">
                       {hasDomestic || hasIntl ? "Complimentary Lounge Access Available" : "No Complimentary Lounge Access"}
                     </h3>
                   </div>
@@ -336,7 +336,7 @@ function LoungeCheckerPage() {
                 <Link
                   to="/card/$id"
                   params={{ id: selectedCard.id }}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline shrink-0"
                 >
                   <span>Card Deep Dive</span>
                   <ChevronRight className="size-3.5" />
@@ -344,43 +344,43 @@ function LoungeCheckerPage() {
               </div>
 
               {/* Card Specs Summary */}
-              <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-border/60">
-                <div className="rounded-xl bg-background/60 p-3 border border-border/40">
-                  <div className="text-[11px] text-muted-foreground">Domestic Visits</div>
-                  <div className="font-display text-base font-bold text-foreground mt-0.5">
+              <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-4 border-t border-border/60 min-w-0">
+                <div className="rounded-xl bg-background/60 p-2.5 sm:p-3 border border-border/40 min-w-0">
+                  <div className="text-[10px] sm:text-[11px] text-muted-foreground truncate">Domestic Visits</div>
+                  <div className="font-display text-sm sm:text-base font-bold text-foreground mt-0.5 truncate">
                     {cardDomesticLounge?.unlimited
                       ? "Unlimited"
                       : cardDomesticLounge?.visitsPerQuarter
-                        ? `${cardDomesticLounge.visitsPerQuarter} / quarter`
+                        ? `${cardDomesticLounge.visitsPerQuarter} / qtr`
                         : cardDomesticLounge?.visitsPerYear
-                          ? `${cardDomesticLounge.visitsPerYear} / year`
+                          ? `${cardDomesticLounge.visitsPerYear} / yr`
                           : "None"}
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-background/60 p-3 border border-border/40">
-                  <div className="text-[11px] text-muted-foreground">International</div>
-                  <div className="font-display text-base font-bold text-foreground mt-0.5">
+                <div className="rounded-xl bg-background/60 p-2.5 sm:p-3 border border-border/40 min-w-0">
+                  <div className="text-[10px] sm:text-[11px] text-muted-foreground truncate">International</div>
+                  <div className="font-display text-sm sm:text-base font-bold text-foreground mt-0.5 truncate">
                     {cardIntlLounge?.unlimited
                       ? "Unlimited"
                       : cardIntlLounge?.visitsPerQuarter
-                        ? `${cardIntlLounge.visitsPerQuarter} / quarter`
+                        ? `${cardIntlLounge.visitsPerQuarter} / qtr`
                         : cardIntlLounge?.visitsPerYear
-                          ? `${cardIntlLounge.visitsPerYear} / year`
+                          ? `${cardIntlLounge.visitsPerYear} / yr`
                           : "None"}
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-background/60 p-3 border border-border/40">
-                  <div className="text-[11px] text-muted-foreground">Program Network</div>
-                  <div className="font-display text-base font-bold text-foreground mt-0.5 truncate">
+                <div className="rounded-xl bg-background/60 p-2.5 sm:p-3 border border-border/40 min-w-0">
+                  <div className="text-[10px] sm:text-[11px] text-muted-foreground truncate">Program</div>
+                  <div className="font-display text-sm sm:text-base font-bold text-foreground mt-0.5 truncate">
                     {cardIntlLounge?.program || cardDomesticLounge?.program || selectedCard.networks.join(", ")}
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-background/60 p-3 border border-border/40">
-                  <div className="text-[11px] text-muted-foreground">Annual Fee</div>
-                  <div className="font-display text-base font-bold text-foreground mt-0.5">
+                <div className="rounded-xl bg-background/60 p-2.5 sm:p-3 border border-border/40 min-w-0">
+                  <div className="text-[10px] sm:text-[11px] text-muted-foreground truncate">Annual Fee</div>
+                  <div className="font-display text-sm sm:text-base font-bold text-foreground mt-0.5 truncate">
                     {formatFee(selectedCard.fees.annualFee, selectedCard.fees.lifetimeFree)}
                   </div>
                 </div>
@@ -388,9 +388,9 @@ function LoungeCheckerPage() {
 
               {/* Spend Condition Warning / Info */}
               {(cardDomesticLounge?.spendCondition || bankPolicy?.spendCriteriaSummary) && (
-                <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-surface/80 p-3 text-xs text-muted-foreground border border-border/50">
+                <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-surface/80 p-3 text-xs text-muted-foreground border border-border/50 min-w-0">
                   <Info className="size-4 shrink-0 text-primary mt-0.5" />
-                  <div>
+                  <div className="min-w-0">
                     <strong className="text-foreground font-semibold">Spend Requirement: </strong>
                     {cardDomesticLounge?.spendCondition ?? bankPolicy?.spendCriteriaSummary}
                   </div>
@@ -399,19 +399,19 @@ function LoungeCheckerPage() {
             </div>
 
             {/* Lounges at Selected Airport */}
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-2xs space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-display text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
-                    <MapPin className="size-4 text-primary" />
-                    <span>Lounges at {activeAirport.city} ({activeAirport.code})</span>
+            <div className="rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-2xs space-y-4 min-w-0">
+              <div className="flex items-center justify-between min-w-0">
+                <div className="min-w-0 pr-2">
+                  <h3 className="font-display text-base sm:text-lg font-bold tracking-tight text-foreground flex items-center gap-2 truncate">
+                    <MapPin className="size-4 text-primary shrink-0" />
+                    <span className="truncate">Lounges at {activeAirport.city} ({activeAirport.code})</span>
                   </h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">{activeAirport.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 truncate">{activeAirport.name}</p>
                 </div>
-                <Badge variant="secondary" className="text-xs font-semibold">{displayedLounges.length} lounges</Badge>
+                <Badge variant="secondary" className="text-[11px] font-semibold shrink-0">{displayedLounges.length} lounges</Badge>
               </div>
 
-              <div className="grid gap-3 pt-2">
+              <div className="grid gap-3 pt-2 min-w-0">
                 {displayedLounges.map((lounge) => (
                   <div
                     key={lounge.id}

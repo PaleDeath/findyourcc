@@ -99,19 +99,19 @@ function TransfersPage() {
       </div>
 
       {/* Interactive Calculator Section */}
-      <div className="mt-8 grid gap-8 lg:grid-cols-12">
+      <div className="mt-6 sm:mt-8 grid gap-6 lg:gap-8 lg:grid-cols-12 min-w-0">
         {/* Left Control Panel */}
-        <div className="space-y-6 lg:col-span-4">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-2xs space-y-5">
+        <div className="space-y-6 lg:col-span-4 min-w-0">
+          <div className="rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-2xs space-y-5 min-w-0">
             <h2 className="font-display text-base font-bold text-foreground flex items-center gap-2">
               <Calculator className="size-4 text-primary" />
               <span>Transfer Calculator</span>
             </h2>
 
             {/* Select Card */}
-            <div>
+            <div className="min-w-0">
               <label className="text-xs font-semibold text-muted-foreground block mb-2">Select Your Card</label>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 min-w-0">
                 {CARD_TRANSFERS.map((card) => {
                   const isSelected = card.cardId === selectedCardId;
                   return (
@@ -119,17 +119,17 @@ function TransfersPage() {
                       key={card.cardId}
                       type="button"
                       onClick={() => setSelectedCardId(card.cardId)}
-                      className={`w-full flex items-center justify-between rounded-xl px-3.5 py-2.5 text-left text-xs transition-colors ${
+                      className={`w-full flex items-center justify-between rounded-xl px-3.5 py-2.5 text-left text-xs transition-colors min-w-0 ${
                         isSelected
                           ? "bg-primary text-primary-foreground font-semibold shadow-2xs"
                           : "bg-surface/50 text-foreground hover:bg-surface border border-border/50"
                       }`}
                     >
-                      <div>
-                        <div className="font-medium">{card.cardName}</div>
-                        <div className="text-[10px] opacity-75">{card.issuer} • {card.baseRewardName}</div>
+                      <div className="min-w-0 truncate pr-2">
+                        <div className="font-medium truncate">{card.cardName}</div>
+                        <div className="text-[10px] opacity-75 truncate">{card.issuer} • {card.baseRewardName}</div>
                       </div>
-                      <Badge variant="outline" className={`text-[10px] ${isSelected ? "border-white/30 text-white" : ""}`}>
+                      <Badge variant="outline" className={`text-[10px] shrink-0 ${isSelected ? "border-white/30 text-white" : ""}`}>
                         {card.transferPartners.length} partners
                       </Badge>
                     </button>

@@ -4,8 +4,8 @@ import { Disclaimer } from "@/components/Disclaimer";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-border/80 bg-surface/50 pb-24 pt-12 dark:border-white/[0.08] dark:bg-black/20 lg:pb-12">
-      <div className="container-page grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+    <footer className="mt-16 sm:mt-20 border-t border-border/80 bg-surface/50 pb-24 pt-10 sm:pt-12 dark:border-white/[0.08] dark:bg-black/20 lg:pb-12 min-w-0">
+      <div className="container-page grid gap-8 sm:gap-10 md:grid-cols-[1.5fr_1fr_1fr] min-w-0">
         <div className="space-y-3.5">
           <div className="flex items-center gap-2.5 font-display text-base font-bold text-foreground">
             <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
