@@ -242,7 +242,7 @@ function CategoriesHubPage() {
                   </div>
 
                   {/* Card Art */}
-                  <div className="h-36 mb-4">
+                  <div className="relative mb-3.5">
                     <CardArt card={card} />
                   </div>
 

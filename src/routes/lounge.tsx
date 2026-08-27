@@ -532,7 +532,7 @@ function LoungeCheckerPage() {
                 return (
                   <div key={card.id} className="flex flex-col justify-between rounded-xl border border-border bg-surface/50 p-4 transition-all hover:border-foreground/30 hover:bg-surface">
                     <div>
-                      <div className="h-32 mb-3">
+                      <div className="relative mb-3.5">
                         <CardArt card={card} />
                       </div>
                       <h3 className="font-display text-sm font-bold text-foreground line-clamp-1">{card.name}</h3>
