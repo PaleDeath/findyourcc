@@ -152,7 +152,7 @@ function Home() {
   }, [cards, activeTab]);
 
   return (
-    <div className="relative">
+    <div className="relative w-full max-w-full overflow-x-clip min-w-0">
       {/* Subtle architectural grid pattern in hero */}
       <div className="bg-grid-pattern pointer-events-none absolute inset-0 h-[640px] opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] dark:opacity-20" />
 
@@ -302,28 +302,28 @@ function Home() {
       </section>
 
       {/* --- LIVE 5-SECOND SPEND ROI SIMULATOR ------------------------------ */}
-      <section className="container-page py-12" aria-labelledby="simulator-title">
-        <div className="card-bevel relative overflow-hidden rounded-3xl border border-border/80 bg-card p-6 sm:p-8 dark:border-white/[0.08]">
-          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-            <div>
+      <section className="container-page py-8 sm:py-12 min-w-0" aria-labelledby="simulator-title">
+        <div className="card-bevel relative overflow-hidden rounded-2xl sm:rounded-3xl border border-border/80 bg-card p-4 sm:p-6 lg:p-8 dark:border-white/[0.08] min-w-0">
+          <div className="grid gap-6 lg:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center min-w-0">
+            <div className="min-w-0 w-full">
               <div className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-surface px-3 py-1 text-xs font-semibold text-foreground dark:border-white/10">
                 <Calculator className="size-3.5 text-foreground/70" aria-hidden="true" />
                 <span>Live Spend ROI Engine</span>
               </div>
-              <h2 id="simulator-title" className="mt-3 font-display text-2xl font-bold tracking-tight sm:text-3xl text-foreground">
+              <h2 id="simulator-title" className="mt-3 font-display text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
                 What is your spend actually worth?
               </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
                 Adjust your estimated monthly credit card spend to instantly reveal the mathematically optimal cards for net rupee return.
               </p>
 
               {/* Monthly Spend Slider */}
-              <div className="mt-6 space-y-4 rounded-2xl border border-border/60 bg-surface/50 p-4 dark:border-white/[0.06] dark:bg-white/[0.02]">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              <div className="mt-5 space-y-3.5 rounded-xl sm:rounded-2xl border border-border/60 bg-surface/50 p-3.5 sm:p-4 dark:border-white/[0.06] dark:bg-white/[0.02] min-w-0">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between min-w-0">
+                  <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     Monthly Spends
                   </span>
-                  <span className="font-mono text-xl font-bold tabular-nums text-foreground">
+                  <span className="font-mono text-base sm:text-xl font-bold tabular-nums text-foreground">
                     {formatINR(monthlySpend)} <span className="text-xs font-normal text-muted-foreground">/ month</span>
                   </span>
                 </div>
@@ -333,56 +333,56 @@ function Home() {
                   max={250000}
                   step={5000}
                   onValueChange={(val) => setMonthlySpend(val[0] ?? 50000)}
-                  className="py-2"
+                  className="py-1 sm:py-2"
                 />
-                <div className="flex justify-between font-mono text-[10px] text-muted-foreground">
-                  <span>₹10,000/mo</span>
-                  <span>₹1,00,000/mo</span>
-                  <span>₹2,50,000/mo</span>
+                <div className="flex justify-between font-mono text-[9px] sm:text-[10px] text-muted-foreground">
+                  <span>₹10k/mo</span>
+                  <span>₹1L/mo</span>
+                  <span>₹2.5L/mo</span>
                 </div>
               </div>
             </div>
 
             {/* Output Top 3 Optimal Cards */}
-            <div className="space-y-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <div className="space-y-3 min-w-0 w-full">
+              <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground block">
                 Top Calculated Recommendations (Annual Return)
               </span>
-              <div className="space-y-2.5">
+              <div className="space-y-2 min-w-0">
                 {topCalculatedCards.map(({ card, netValue }, rank) => (
                   <Link
                     key={card.id}
                     to="/card/$id"
                     params={{ id: card.id }}
-                    className="card-bevel-hover group flex items-center justify-between rounded-xl border border-border/80 bg-card p-3 text-left transition-all dark:border-white/10 dark:bg-white/[0.02]"
+                    className="card-bevel-hover group flex items-center justify-between rounded-xl border border-border/80 bg-card p-3 text-left transition-all dark:border-white/10 dark:bg-white/[0.02] min-w-0"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1 pr-2">
                       <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-surface font-mono text-xs font-bold text-foreground dark:bg-white/10">
                         #{rank + 1}
                       </span>
-                      <div className="min-w-0">
-                        <span className="block truncate text-sm font-semibold text-foreground group-hover:underline">
+                      <div className="min-w-0 flex-1">
+                        <span className="block truncate text-xs sm:text-sm font-semibold text-foreground group-hover:underline">
                           {card.name}
                         </span>
-                        <span className="block text-[11px] text-muted-foreground">
+                        <span className="block truncate text-[10px] sm:text-[11px] text-muted-foreground">
                           {card.issuer} · {card.fees.lifetimeFree ? "Lifetime Free" : formatFee(card.fees.annualFee)}
                         </span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <span className="font-mono text-sm font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+                    <div className="text-right shrink-0">
+                      <span className="font-mono text-xs sm:text-sm font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
                         +{formatINR(netValue)}
                       </span>
-                      <span className="block text-[10px] text-muted-foreground">net / year</span>
+                      <span className="block text-[9px] sm:text-[10px] text-muted-foreground">net / year</span>
                     </div>
                   </Link>
                 ))}
               </div>
 
-              <div className="pt-2 text-right">
-                <Button asChild variant="ghost" size="sm">
+              <div className="pt-1 text-right">
+                <Button asChild variant="ghost" size="sm" className="text-xs h-9">
                   <Link to="/calculator">
-                    Open Full Multi-Category Calculator <ArrowRight className="ml-1 size-3.5" />
+                    Open Full Calculator <ArrowRight className="ml-1 size-3.5" />
                   </Link>
                 </Button>
               </div>
@@ -574,13 +574,13 @@ function Home() {
       </section>
 
       {/* --- CURATED ARCHETYPES BENTO MATRIX ------------------------------- */}
-      <section className="container-page py-6" aria-labelledby="archetypes-title">
-        <div className="flex items-end justify-between gap-4">
+      <section className="container-page py-6 min-w-0" aria-labelledby="archetypes-title">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 min-w-0">
           <div>
-            <h2 id="archetypes-title" className="font-display text-2xl font-bold tracking-tight">
+            <h2 id="archetypes-title" className="font-display text-xl sm:text-2xl font-bold tracking-tight">
               Curated Card Archetypes
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
               Direct strategies built around how you actually spend.
             </p>
           </div>
@@ -592,7 +592,7 @@ function Home() {
           </Link>
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 min-w-0">
           {[
             {
               title: "The Air Miles Maximiser",
@@ -627,7 +627,7 @@ function Home() {
               key={item.title}
               to="/explore"
               search={{ category: item.category }}
-              className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-5 text-left transition-all dark:border-white/[0.08]"
+              className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-5 text-left transition-all dark:border-white/[0.08] min-w-0"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -654,19 +654,19 @@ function Home() {
       </section>
 
       {/* --- VERIFIED CARDS INDEX WITH FILTER TABS -------------------------- */}
-      <section className="container-page py-10" aria-labelledby="featured-title">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 dark:border-white/10">
+      <section className="container-page py-8 sm:py-10 min-w-0" aria-labelledby="featured-title">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4 dark:border-white/10 min-w-0">
           <div>
-            <h2 id="featured-title" className="font-display text-2xl font-bold tracking-tight">
+            <h2 id="featured-title" className="font-display text-xl sm:text-2xl font-bold tracking-tight">
               Verified Cards Index
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
               Ranked with transparent data and honest fine-print breakdowns.
             </p>
           </div>
 
           {/* Category Tabs */}
-          <div className="flex max-w-full overflow-x-auto no-scrollbar gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04] sm:flex-wrap">
+          <div className="flex w-full sm:w-auto max-w-full overflow-x-auto no-scrollbar gap-1 rounded-xl border border-border/80 bg-surface/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]">
             {[
               { id: "rates", label: "Top Base Earn" },
               { id: "popular", label: "Most Popular" },
@@ -689,7 +689,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 min-w-0">
           {displayCards.map((card, index) => (
             <CreditCardTile
               key={card.id}
@@ -705,8 +705,8 @@ function Home() {
       </section>
 
       {/* --- TRANSPARENCY & TRUST FOOTER BANNER ----------------------------- */}
-      <section className="container-page py-12">
-        <div className="card-bevel grid gap-6 rounded-3xl border border-border/80 bg-surface/50 p-6 sm:grid-cols-3 sm:p-8 dark:border-white/[0.08] dark:bg-white/[0.02]">
+      <section className="container-page py-8 sm:py-12 min-w-0">
+        <div className="card-bevel grid grid-cols-1 sm:grid-cols-3 gap-6 rounded-2xl sm:rounded-3xl border border-border/80 bg-surface/50 p-5 sm:p-8 dark:border-white/[0.08] dark:bg-white/[0.02] min-w-0">
           {[
             {
               Icon: ShieldCheck,
@@ -724,7 +724,7 @@ function Home() {
               body: "Every card features timestamped verification and verified issuer fee schedule mappings.",
             },
           ].map((item) => (
-            <div key={item.title} className="space-y-2.5">
+            <div key={item.title} className="space-y-2.5 min-w-0">
               <span className="inline-flex size-9 items-center justify-center rounded-xl border border-border/70 bg-surface text-foreground dark:border-white/10 dark:bg-white/[0.04]">
                 <item.Icon className="size-4.5" aria-hidden="true" />
               </span>
