@@ -388,6 +388,188 @@ function Home() {
         </div>
       </section>
 
+      {/* --- THE CREDIT CARD OPTIMIZATION TOOLKIT ------------------------ */}
+      <section className="container-page py-12" aria-labelledby="toolkit-title">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary">
+              <Sparkles className="size-3.5" />
+              <span>Everything You Need</span>
+            </div>
+            <h2 id="toolkit-title" className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl text-foreground">
+              The Credit Card Optimization Toolkit
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Instant utilities to check lounge access, decode MCC exclusions, convert miles, and optimize your wallet.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Tool 1: Lounge Access Checker */}
+          <Link
+            to="/lounge"
+            className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 text-left transition-all dark:border-white/[0.08]"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                  <Plane className="size-5" />
+                </span>
+                <Badge variant="outline" className="text-[10px] font-bold border-blue-500/30 text-blue-600 dark:text-blue-400">
+                  2026 Guide
+                </Badge>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:underline">
+                Airport Lounge Checker
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Instantly check if your card unlocks lounges across 49+ Indian airports. Verify quarterly spend gates & HDFC SMS voucher rules before flying.
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
+              <span>Check your card & airport</span>
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+
+          {/* Tool 2: MCC Code Guide */}
+          <Link
+            to="/mcc"
+            className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 text-left transition-all dark:border-white/[0.08]"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                  <Tag className="size-5" />
+                </span>
+                <Badge variant="outline" className="text-[10px] font-bold border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
+                  80+ Merchants
+                </Badge>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:underline">
+                MCC Code & Exclusion Guide
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Search Swiggy, Amazon, CRED, fuel, utility, and rent MCCs. See which cards pay 5% cashback vs 0% excluded before big transactions.
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
+              <span>Search merchant MCCs</span>
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+
+          {/* Tool 3: Points & Miles Transfer Matrix */}
+          <Link
+            to="/transfers"
+            className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 text-left transition-all dark:border-white/[0.08]"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                  <Send className="size-5" />
+                </span>
+                <Badge variant="outline" className="text-[10px] font-bold border-purple-500/30 text-purple-600 dark:text-purple-400">
+                  Live Calculator
+                </Badge>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:underline">
+                Points & Miles Transfers
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Convert Atlas, Infinia, and Amex points into Accor ALL, Singapore KrisFlyer, Marriott Bonvoy, and Air India miles with exact rupee valuations.
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
+              <span>Calculate transfer value</span>
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+
+          {/* Tool 4: Best by Category */}
+          <Link
+            to="/categories"
+            className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 text-left transition-all dark:border-white/[0.08]"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                  <Trophy className="size-5" />
+                </span>
+                <Badge variant="outline" className="text-[10px] font-bold border-amber-500/30 text-amber-600 dark:text-amber-400">
+                  Curated Ranks
+                </Badge>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:underline">
+                Best Cards by Category
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Hand-picked top 3 winners for Cashback, Airport Lounge, Lifetime Free, Zero Forex, RuPay UPI, Dining, and Fuel with transparent rationale.
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
+              <span>Explore category winners</span>
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+
+          {/* Tool 5: Head-to-Head Compare */}
+          <Link
+            to="/compare"
+            className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 text-left transition-all dark:border-white/[0.08]"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                  <Scale className="size-5" />
+                </span>
+                <Badge variant="outline" className="text-[10px] font-bold border-rose-500/30 text-rose-600 dark:text-rose-400">
+                  Side-by-Side
+                </Badge>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:underline">
+                Compare Cards Head-to-Head
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Put your top picks side-by-side. Compare real reward percentages, milestone slabs, fee waivers, forex charges, and the fine print.
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
+              <span>Launch comparison dock</span>
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+
+          {/* Tool 6: Spend Profile Matcher */}
+          <Link
+            to="/match"
+            className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 text-left transition-all dark:border-white/[0.08]"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                  <Sparkles className="size-5" />
+                </span>
+                <Badge variant="outline" className="text-[10px] font-bold border-indigo-500/30 text-indigo-600 dark:text-indigo-400">
+                  2-Min Quiz
+                </Badge>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:underline">
+                Find Your Perfect Card
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Answer a few quick questions about your monthly spends (grocery, travel, dining, bills) and get matched to the optimal card stack.
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
+              <span>Start matching quiz</span>
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* --- CURATED ARCHETYPES BENTO MATRIX ------------------------------- */}
       <section className="container-page py-6" aria-labelledby="archetypes-title">
         <div className="flex items-end justify-between gap-4">

@@ -12,13 +12,17 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as CalculatorsRouteImport } from './routes/calculators'
+import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as LoungeRouteImport } from './routes/lounge'
 import { Route as MatchRouteImport } from './routes/match'
+import { Route as MccRouteImport } from './routes/mcc'
 import { Route as OfflineRouteImport } from './routes/offline'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TransfersRouteImport } from './routes/transfers'
 import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as CardIdRouteImport } from './routes/card.$id'
 
@@ -37,6 +41,11 @@ const CalculatorsRoute = CalculatorsRouteImport.update({
   path: '/calculators',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoriesRoute = CategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompareRoute = CompareRouteImport.update({
   id: '/compare',
   path: '/compare',
@@ -52,9 +61,19 @@ const LearnRoute = LearnRouteImport.update({
   path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoungeRoute = LoungeRouteImport.update({
+  id: '/lounge',
+  path: '/lounge',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MatchRoute = MatchRouteImport.update({
   id: '/match',
   path: '/match',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MccRoute = MccRouteImport.update({
+  id: '/mcc',
+  path: '/mcc',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OfflineRoute = OfflineRouteImport.update({
@@ -72,6 +91,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TransfersRoute = TransfersRouteImport.update({
+  id: '/transfers',
+  path: '/transfers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WalletRoute = WalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
@@ -87,13 +111,17 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
   '/calculators': typeof CalculatorsRoute
+  '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
   '/explore': typeof ExploreRoute
   '/learn': typeof LearnRoute
+  '/lounge': typeof LoungeRoute
   '/match': typeof MatchRoute
+  '/mcc': typeof MccRoute
   '/offline': typeof OfflineRoute
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/transfers': typeof TransfersRoute
   '/wallet': typeof WalletRoute
   '/card/$id': typeof CardIdRoute
 }
@@ -101,13 +129,17 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
   '/calculators': typeof CalculatorsRoute
+  '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
   '/explore': typeof ExploreRoute
   '/learn': typeof LearnRoute
+  '/lounge': typeof LoungeRoute
   '/match': typeof MatchRoute
+  '/mcc': typeof MccRoute
   '/offline': typeof OfflineRoute
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/transfers': typeof TransfersRoute
   '/wallet': typeof WalletRoute
   '/card/$id': typeof CardIdRoute
 }
@@ -116,13 +148,17 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
   '/calculators': typeof CalculatorsRoute
+  '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
   '/explore': typeof ExploreRoute
   '/learn': typeof LearnRoute
+  '/lounge': typeof LoungeRoute
   '/match': typeof MatchRoute
+  '/mcc': typeof MccRoute
   '/offline': typeof OfflineRoute
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/transfers': typeof TransfersRoute
   '/wallet': typeof WalletRoute
   '/card/$id': typeof CardIdRoute
 }
@@ -132,13 +168,17 @@ export interface FileRouteTypes {
     | '/'
     | '/calculator'
     | '/calculators'
+    | '/categories'
     | '/compare'
     | '/explore'
     | '/learn'
+    | '/lounge'
     | '/match'
+    | '/mcc'
     | '/offline'
     | '/settings'
     | '/sitemap.xml'
+    | '/transfers'
     | '/wallet'
     | '/card/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -146,13 +186,17 @@ export interface FileRouteTypes {
     | '/'
     | '/calculator'
     | '/calculators'
+    | '/categories'
     | '/compare'
     | '/explore'
     | '/learn'
+    | '/lounge'
     | '/match'
+    | '/mcc'
     | '/offline'
     | '/settings'
     | '/sitemap.xml'
+    | '/transfers'
     | '/wallet'
     | '/card/$id'
   id:
@@ -160,13 +204,17 @@ export interface FileRouteTypes {
     | '/'
     | '/calculator'
     | '/calculators'
+    | '/categories'
     | '/compare'
     | '/explore'
     | '/learn'
+    | '/lounge'
     | '/match'
+    | '/mcc'
     | '/offline'
     | '/settings'
     | '/sitemap.xml'
+    | '/transfers'
     | '/wallet'
     | '/card/$id'
   fileRoutesById: FileRoutesById
@@ -175,13 +223,17 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalculatorRoute: typeof CalculatorRoute
   CalculatorsRoute: typeof CalculatorsRoute
+  CategoriesRoute: typeof CategoriesRoute
   CompareRoute: typeof CompareRoute
   ExploreRoute: typeof ExploreRoute
   LearnRoute: typeof LearnRoute
+  LoungeRoute: typeof LoungeRoute
   MatchRoute: typeof MatchRoute
+  MccRoute: typeof MccRoute
   OfflineRoute: typeof OfflineRoute
   SettingsRoute: typeof SettingsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TransfersRoute: typeof TransfersRoute
   WalletRoute: typeof WalletRoute
   CardIdRoute: typeof CardIdRoute
 }
@@ -209,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalculatorsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/categories': {
+      id: '/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compare': {
       id: '/compare'
       path: '/compare'
@@ -230,11 +289,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lounge': {
+      id: '/lounge'
+      path: '/lounge'
+      fullPath: '/lounge'
+      preLoaderRoute: typeof LoungeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/match': {
       id: '/match'
       path: '/match'
       fullPath: '/match'
       preLoaderRoute: typeof MatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcc': {
+      id: '/mcc'
+      path: '/mcc'
+      fullPath: '/mcc'
+      preLoaderRoute: typeof MccRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/offline': {
@@ -258,6 +331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/transfers': {
+      id: '/transfers'
+      path: '/transfers'
+      fullPath: '/transfers'
+      preLoaderRoute: typeof TransfersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wallet': {
       id: '/wallet'
       path: '/wallet'
@@ -279,13 +359,17 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalculatorRoute: CalculatorRoute,
   CalculatorsRoute: CalculatorsRoute,
+  CategoriesRoute: CategoriesRoute,
   CompareRoute: CompareRoute,
   ExploreRoute: ExploreRoute,
   LearnRoute: LearnRoute,
+  LoungeRoute: LoungeRoute,
   MatchRoute: MatchRoute,
+  MccRoute: MccRoute,
   OfflineRoute: OfflineRoute,
   SettingsRoute: SettingsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TransfersRoute: TransfersRoute,
   WalletRoute: WalletRoute,
   CardIdRoute: CardIdRoute,
 }

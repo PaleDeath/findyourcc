@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Building2, CreditCard as CreditCardIcon, LayoutGrid } from "lucide-react";
+import { Building2, CreditCard as CreditCardIcon, LayoutGrid, Plane, Tag, Send, Trophy } from "lucide-react";
 import { DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   CommandDialog,
@@ -14,19 +14,25 @@ import {
 import { listIssuers, searchCards } from "@/data/cards";
 import { useDataset } from "@/lib/card-store";
 import { formatFee } from "@/lib/format";
+import { AIRPORTS } from "@/data/lounges";
+import { POPULAR_MERCHANTS } from "@/data/mcc";
 
 const PAGES = [
   { to: "/", label: "Home" },
-  { to: "/explore", label: "Explore" },
-  { to: "/compare", label: "Compare" },
-  { to: "/match", label: "Match" },
-  { to: "/calculator", label: "Calculator" },
-  { to: "/wallet", label: "Wallet" },
-  { to: "/learn", label: "Learn" },
+  { to: "/explore", label: "Explore Cards" },
+  { to: "/compare", label: "Compare Cards" },
+  { to: "/lounge", label: "Airport Lounge Checker" },
+  { to: "/mcc", label: "MCC Code & Exclusions Guide" },
+  { to: "/transfers", label: "Points & Miles Transfers" },
+  { to: "/categories", label: "Best Cards by Category" },
+  { to: "/match", label: "Card Matcher Quiz" },
+  { to: "/calculator", label: "Reward Calculator" },
+  { to: "/wallet", label: "My Wallet" },
+  { to: "/learn", label: "Learn & Fine Print" },
   { to: "/settings", label: "Settings" },
 ] as const;
 
-const MAX_PAGES = 8;
+const MAX_PAGES = 12;
 const MAX_ISSUERS = 8;
 const MAX_CARDS = 30;
 
@@ -115,6 +121,22 @@ export function CommandPalette() {
     return searchCards(cards, q).slice(0, MAX_CARDS);
   }, [cards, q]);
 
+  // Merchants matched
+  const filteredMerchants = useMemo(() => {
+    if (!q) return [];
+    return POPULAR_MERCHANTS.filter(
+      (m) => normalize(m.name).includes(q) || normalize(m.mcc).includes(q),
+    ).slice(0, 5);
+  }, [q]);
+
+  // Airports matched
+  const filteredAirports = useMemo(() => {
+    if (!q) return [];
+    return AIRPORTS.filter(
+      (a) => normalize(a.city).includes(q) || normalize(a.code).includes(q) || normalize(a.name).includes(q),
+    ).slice(0, 4);
+  }, [q]);
+
   function go(to: string, search?: Record<string, string>) {
     closePalette(false);
     navigate({ to, search: search as never });
@@ -125,10 +147,10 @@ export function CommandPalette() {
     <CommandDialog open={open} onOpenChange={closePalette} shouldFilter={false}>
       <DialogTitle className="sr-only">Search FindYourCC</DialogTitle>
       <DialogDescription className="sr-only">
-        Jump to a page, issuer or credit card
+        Jump to a page, tool, merchant MCC, airport lounge, issuer or credit card
       </DialogDescription>
       <CommandInput
-        placeholder="Search pages, issuers or cards…"
+        placeholder="Search cards, lounges, MCCs, merchants, issuers…"
         value={query}
         onValueChange={setQuery}
         aria-label="Search FindYourCC"
@@ -137,7 +159,7 @@ export function CommandPalette() {
         <CommandEmpty>No results found.</CommandEmpty>
 
         {filteredPages.length > 0 && (
-          <CommandGroup heading="Pages">
+          <CommandGroup heading="Tools & Pages">
             {filteredPages.map((page) => (
               <CommandItem key={page.to} value={`page-${page.label}`} onSelect={() => go(page.to)}>
                 <LayoutGrid aria-hidden="true" />
@@ -145,6 +167,48 @@ export function CommandPalette() {
               </CommandItem>
             ))}
           </CommandGroup>
+        )}
+
+        {filteredAirports.length > 0 && (
+          <>
+            <CommandSeparator />
+            <CommandGroup heading="Airports & Lounges">
+              {filteredAirports.map((airport) => (
+                <CommandItem
+                  key={airport.code}
+                  value={`airport-${airport.code}`}
+                  onSelect={() => go("/lounge")}
+                >
+                  <Plane aria-hidden="true" />
+                  <span>{airport.city} ({airport.code}) — {airport.name}</span>
+                  <span className="ml-auto text-xs text-muted-foreground">
+                    {airport.lounges.length} lounges
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </>
+        )}
+
+        {filteredMerchants.length > 0 && (
+          <>
+            <CommandSeparator />
+            <CommandGroup heading="Merchants & MCC Codes">
+              {filteredMerchants.map((merchant) => (
+                <CommandItem
+                  key={merchant.id}
+                  value={`merchant-${merchant.name}`}
+                  onSelect={() => go("/mcc")}
+                >
+                  <Tag aria-hidden="true" />
+                  <span>{merchant.name}</span>
+                  <span className="ml-auto text-xs font-mono text-muted-foreground">
+                    MCC {merchant.mcc}
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </>
         )}
 
         {filteredIssuers.length > 0 && (

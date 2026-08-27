@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Compass, Menu, Search, X } from "lucide-react";
+import { Compass, Menu, Search, X, Plane, Tag, Send, Trophy } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { openCommandPalette } from "@/components/CommandPalette";
 import { cn } from "@/lib/utils";
@@ -9,11 +9,14 @@ const NAV = [
   { to: "/", label: "Home" },
   { to: "/explore", label: "Explore" },
   { to: "/compare", label: "Compare" },
+  { to: "/lounge", label: "Lounge Checker", badge: "2026" },
+  { to: "/mcc", label: "MCC Guide" },
+  { to: "/transfers", label: "Transfers" },
+  { to: "/categories", label: "Categories" },
   { to: "/match", label: "Match" },
   { to: "/calculator", label: "Calculator" },
   { to: "/wallet", label: "Wallet" },
   { to: "/learn", label: "Learn" },
-  { to: "/settings", label: "Settings" },
 ] as const;
 
 export function SiteHeader() {
@@ -24,7 +27,7 @@ export function SiteHeader() {
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <Link
           to="/"
-          className="group flex items-center gap-2.5 font-display text-base font-bold tracking-tight text-foreground transition-opacity hover:opacity-90"
+          className="group flex items-center gap-2.5 font-display text-base font-bold tracking-tight text-foreground transition-opacity hover:opacity-90 shrink-0"
           aria-label="FindYourCC home"
         >
           <span className="relative flex size-7.5 items-center justify-center rounded-lg bg-foreground text-background shadow-xs transition-transform duration-200 group-hover:scale-105">
@@ -35,7 +38,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-0.5 xl:flex">
           {NAV.map((item) => (
             <Link
               key={item.to}
@@ -44,14 +47,19 @@ export function SiteHeader() {
               activeProps={{
                 className: "bg-surface font-semibold text-foreground dark:bg-white/[0.08] shadow-2xs",
               }}
-              className="rounded-lg px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all duration-150 hover:bg-surface/80 hover:text-foreground"
+              className="relative rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-all duration-150 hover:bg-surface/80 hover:text-foreground"
             >
-              {item.label}
+              <span>{item.label}</span>
+              {"badge" in item && item.badge ? (
+                <span className="ml-1 rounded bg-primary/10 px-1 py-0.2 text-[9px] font-bold text-primary">
+                  {item.badge}
+                </span>
+              ) : null}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={openCommandPalette}
@@ -71,7 +79,7 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="grid size-9 place-items-center rounded-xl border border-border bg-surface/50 text-foreground transition-colors hover:bg-surface dark:border-white/10 lg:hidden"
+            className="grid size-9 place-items-center rounded-xl border border-border bg-surface/50 text-foreground transition-colors hover:bg-surface dark:border-white/10 xl:hidden"
           >
             {open ? <X className="size-4" /> : <Menu className="size-4" />}
           </button>
@@ -82,7 +90,7 @@ export function SiteHeader() {
         id="mobile-nav"
         aria-label="Mobile"
         className={cn(
-          "border-t border-border bg-background/95 backdrop-blur-xl lg:hidden dark:border-white/10",
+          "border-t border-border bg-background/95 backdrop-blur-xl xl:hidden dark:border-white/10",
           open ? "block" : "hidden",
         )}
       >
@@ -94,9 +102,14 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 activeOptions={{ exact: item.to === "/" }}
                 activeProps={{ className: "bg-foreground/10 text-foreground font-semibold" }}
-                className="flex items-center rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+                className="flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
               >
-                {item.label}
+                <span>{item.label}</span>
+                {"badge" in item && item.badge ? (
+                  <span className="rounded bg-primary/10 px-1 py-0.2 text-[9px] font-bold text-primary">
+                    {item.badge}
+                  </span>
+                ) : null}
               </Link>
             </li>
           ))}
