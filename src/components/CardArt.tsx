@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import type { CardArt as CardArtData, Network } from "@/data/types";
+import type { CardArt as CardArtData, CreditCard, Network } from "@/data/types";
 
 const NETWORK_WORDMARK: Record<Network, string> = {
   Visa: "VISA",
@@ -11,10 +11,19 @@ const NETWORK_WORDMARK: Record<Network, string> = {
   "Diners Club": "DINERS CLUB",
 };
 
-interface CardArtProps {
-  art: CardArtData;
-  name: string;
-  issuer: string;
+const DEFAULT_CARD_ART: CardArtData = {
+  gradient: ["#1e293b", "#0f172a"],
+  finish: "matte",
+  layout: "horizontal",
+  accent: "#94a3b8",
+  issuerMark: "CARD",
+};
+
+export interface CardArtProps {
+  card?: CreditCard | undefined;
+  art?: CardArtData | undefined;
+  name?: string | undefined;
+  issuer?: string | undefined;
   network?: Network | undefined;
   /** Rendering size. */
   size?: "sm" | "md" | "lg" | undefined;
@@ -62,45 +71,48 @@ function usePointerTilt(enabled: boolean) {
   return { ref, glareRef, interactive, onPointerMove, reset };
 }
 
-export function CardArt({
-  art,
-  name,
-  issuer,
-  network,
-  size = "md",
-  dimmed = false,
-  className,
-}: CardArtProps) {
+export function CardArt(props: CardArtProps) {
+  const card = props.card;
+  const art = props.art ?? card?.art ?? DEFAULT_CARD_ART;
+  const name = props.name ?? card?.name ?? "Credit Card";
+  const issuer = props.issuer ?? card?.issuer ?? "Bank";
+  const network = props.network ?? card?.networks?.[0];
+  const size = props.size ?? "md";
+  const dimmed = props.dimmed ?? false;
+  const className = props.className;
+
   const { ref, glareRef, interactive, onPointerMove, reset } = usePointerTilt(true);
   const [imageFailed, setImageFailed] = useState(false);
   const [imageRatio, setImageRatio] = useState<number | null>(null);
   const titleId = useId();
   const grainId = `grain-${titleId.replace(/:/g, "")}`;
 
-  const [c1, c2, c3] = art.gradient;
-  const isVertical = art.layout === "vertical";
+  const gradient = art?.gradient ?? DEFAULT_CARD_ART.gradient;
+  const [c1, c2, c3] = gradient;
+  const isVertical = art?.layout === "vertical";
+  const finish = art?.finish ?? "matte";
   const finishLabel =
-    art.finish === "metal"
+    finish === "metal"
       ? "metal-finish"
-      : art.finish === "carbon"
+      : finish === "carbon"
         ? "carbon-fibre-textured"
-        : art.finish === "holographic"
+        : finish === "holographic"
           ? "holographic"
-          : art.finish === "glossy"
+          : finish === "glossy"
             ? "glossy"
             : "matte";
   const artDescription = `Stylised artwork for ${issuer} ${name}, a ${finishLabel} ${network ? `${network} ` : ""}card`;
 
   const baseGradient =
-    art.finish === "metal"
+    finish === "metal"
       ? `linear-gradient(115deg, ${c1} 0%, ${c2} 22%, ${c3 ?? c1} 38%, ${c2} 52%, ${c1} 70%, ${c3 ?? c2} 88%, ${c2} 100%)`
-      : art.finish === "carbon"
+      : finish === "carbon"
         ? `linear-gradient(140deg, ${c1}, ${c2} 70%, ${c3 ?? c1})`
         : `linear-gradient(135deg, ${c1} 0%, ${c2} 60%${c3 ? `, ${c3} 100%` : ""})`;
 
   const textScale = size === "sm" ? "text-[0.55rem]" : size === "lg" ? "text-sm" : "text-[0.7rem]";
 
-  if (art.officialImageUrl && !imageFailed) {
+  if (art?.officialImageUrl && !imageFailed) {
     const isImageVertical = imageRatio !== null ? imageRatio < 0.9 : isVertical;
     return (
       <div
@@ -108,44 +120,29 @@ export function CardArt({
         onPointerMove={onPointerMove}
         onPointerLeave={reset}
         className={cn(
-          "group/card-art relative isolate flex items-center justify-center overflow-hidden rounded-[0.875rem] border border-black/5 bg-surface/50 shadow-[0_6px_16px_-4px_rgba(0,0,0,0.18),0_16px_32px_-8px_rgba(0,0,0,0.12)] transition-transform duration-200 ease-out will-change-transform dark:border-white/10 dark:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]",
-          dimmed && "opacity-60 saturate-50",
+          "relative isolate w-full select-none overflow-hidden rounded-xl transition-all duration-200",
+          isImageVertical ? "aspect-[0.63/1] max-h-56" : "aspect-[1.586/1]",
+          dimmed && "opacity-40 grayscale",
           className,
         )}
-        style={{
-          aspectRatio: "1.586 / 1",
-          transformStyle: interactive ? "preserve-3d" : undefined,
-        }}
       >
         <img
           src={art.officialImageUrl}
-          alt={`${issuer} ${name} credit card`}
+          alt={artDescription}
           loading="lazy"
           decoding="async"
-          onLoad={(event) => {
-            const img = event.currentTarget;
+          onLoad={(e) => {
+            const img = e.currentTarget;
             if (img.naturalWidth && img.naturalHeight) {
               setImageRatio(img.naturalWidth / img.naturalHeight);
             }
           }}
           onError={() => setImageFailed(true)}
-          className={cn(
-            "transition-all duration-300",
-            isImageVertical
-              ? "h-full w-auto max-h-[96%] max-w-[62%] object-contain rounded-[0.5rem] shadow-md ring-1 ring-black/10 dark:ring-white/15"
-              : "absolute inset-0 h-full w-full object-cover"
-          )}
+          className="size-full object-contain"
         />
-        {/* Dynamic cursor light glare */}
         <div
           ref={glareRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 ease-out"
-        />
-        {/* Subtle physical card edge highlight */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[0.875rem] ring-1 ring-inset ring-white/20 dark:ring-white/10"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-150"
         />
       </div>
     );
@@ -156,153 +153,59 @@ export function CardArt({
       ref={ref}
       onPointerMove={onPointerMove}
       onPointerLeave={reset}
-      role="img"
-      aria-labelledby={titleId}
       className={cn(
-        "group/art relative isolate flex items-center justify-center w-full overflow-hidden rounded-[0.875rem] border border-black/10 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.35),0_18px_36px_-12px_rgba(0,0,0,0.25)] transition-transform duration-200 ease-out will-change-transform dark:border-white/10",
-        dimmed && "opacity-60 saturate-50",
+        "relative isolate w-full select-none overflow-hidden rounded-xl p-3.5 transition-all duration-200 sm:p-4",
+        isVertical ? "aspect-[0.63/1]" : "aspect-[1.586/1]",
+        dimmed && "opacity-40 grayscale",
         className,
       )}
       style={{
-        aspectRatio: "1.586 / 1",
-        background: isVertical ? "hsl(var(--surface))" : baseGradient,
-        transformStyle: interactive ? "preserve-3d" : undefined,
+        background: baseGradient,
+        boxShadow:
+          finish === "metal"
+            ? "inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.5), 0 8px 24px -6px rgba(0,0,0,0.3)"
+            : "inset 0 1px 0 rgba(255,255,255,0.2), 0 6px 18px -4px rgba(0,0,0,0.25)",
       }}
+      role="img"
+      aria-label={artDescription}
     >
-      {/* Dynamic cursor light glare */}
-      <div
-        ref={glareRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 ease-out"
-      />
-      <span id={titleId} className="sr-only">
-        {artDescription}
-      </span>
-      {/* grain */}
-      <svg
-        className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.16] mix-blend-overlay"
-        aria-hidden="true"
-      >
-        <filter id={`${grainId}`}>
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.85"
-            numOctaves="3"
-            stitchTiles="stitch"
-          />
-          <feColorMatrix type="saturate" values="0" />
+      {/* Background SVG filters/grain */}
+      <svg className="pointer-events-none absolute inset-0 size-full opacity-35 mix-blend-overlay">
+        <filter id={grainId}>
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+          <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.4 0" />
         </filter>
         <rect width="100%" height="100%" filter={`url(#${grainId})`} />
       </svg>
 
-      {/* finish overlays */}
-      {art.finish === "glossy" && (
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_10%_0%,rgba(255,255,255,0.42),transparent_55%)]" />
-      )}
-      {art.finish === "carbon" && (
-        <div
-          className="pointer-events-none absolute inset-0 opacity-40"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(45deg, rgba(255,255,255,0.07) 0 2px, transparent 2px 4px), repeating-linear-gradient(-45deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 4px)",
-          }}
-        />
-      )}
-      {art.finish === "metal" && (
-        <div
-          className="pointer-events-none absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(100deg, rgba(255,255,255,0.16) 0 1px, transparent 1px 3px)",
-          }}
-        />
-      )}
-      {art.finish === "holographic" && (
-        <div
-          className="cc-holo pointer-events-none absolute inset-0 opacity-55 mix-blend-color-dodge"
-          style={{
-            backgroundImage:
-              "linear-gradient(115deg, rgba(255,0,128,0.5), rgba(0,255,214,0.45) 35%, rgba(255,214,0,0.5) 70%, rgba(120,0,255,0.5))",
-          }}
-        />
-      )}
-
-      {/* hover sheen */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute inset-y-0 -left-1/3 w-1/3 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)] opacity-0 group-hover/art:opacity-100 group-hover/art:[animation:cc-sheen_900ms_ease-out]" />
-      </div>
-
-      {/* content */}
-      <div
-        className={cn(
-          "relative flex h-full w-full flex-col justify-between p-[6%] text-white",
-          textScale,
-        )}
-        style={{ color: "#ffffff" }}
-      >
-        <div className="flex items-start justify-between gap-2">
-          <span
-            className="font-semibold uppercase tracking-[0.18em] drop-shadow-sm"
-            style={{ color: art.accent }}
-          >
-            {art.issuerMark}
-          </span>
-          <ContactlessGlyph />
-        </div>
-
-        <div className="flex items-center gap-[4%]">
-          <ChipGlyph />
-          {size !== "sm" && (
-            <span
-              className="font-mono tracking-[0.12em] opacity-90"
-              style={{ textShadow: "0 1px 0 rgba(255,255,255,0.35), 0 -1px 1px rgba(0,0,0,0.45)" }}
-            >
-              •••• •••• •••• 1234
-            </span>
-          )}
-        </div>
-
-        <div className="flex items-end justify-between gap-2">
-          <span className="max-w-[62%] truncate font-semibold uppercase tracking-wider opacity-95">
-            {name}
+      {/* Dynamic Card Content */}
+      <div className="relative z-10 flex size-full flex-col justify-between text-white drop-shadow-sm">
+        <div className="flex items-start justify-between">
+          <span className="font-mono text-[10px] font-bold tracking-wider opacity-90">
+            {art?.issuerMark || issuer.slice(0, 4).toUpperCase()}
           </span>
           {network && (
-            <span className="shrink-0 font-bold uppercase italic tracking-tight opacity-95">
-              {NETWORK_WORDMARK[network]}
+            <span className="font-mono text-[10px] font-extrabold tracking-tight opacity-90">
+              {NETWORK_WORDMARK[network] ?? network}
             </span>
           )}
         </div>
+
+        <div className="space-y-1">
+          <div className="flex items-center gap-1.5 opacity-80">
+            <span className="inline-block size-4 rounded bg-amber-400/80 shadow-xs" />
+            <span className="font-mono text-[9px] tracking-widest">•••• •••• •••• 8888</span>
+          </div>
+          <div className={cn("font-display font-bold tracking-tight line-clamp-1", textScale)}>
+            {name}
+          </div>
+        </div>
       </div>
-    </div>
-  );
-}
 
-function ChipGlyph() {
-  return (
-    <svg viewBox="0 0 40 30" className="h-[13%] w-auto min-h-4 shrink-0" aria-hidden="true">
-      <rect x="0.5" y="0.5" width="39" height="29" rx="5" fill="#e6c878" stroke="#b8963f" />
-      <path
-        d="M13 0v8H0M13 30v-8H0M27 0v8h13M27 30v-8h13M13 8h14v14H13z"
-        fill="none"
-        stroke="#b8963f"
-        strokeWidth="1.2"
+      <div
+        ref={glareRef}
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-150"
       />
-    </svg>
-  );
-}
-
-function ContactlessGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-[14%] w-auto min-h-4 shrink-0 opacity-90"
-      aria-hidden="true"
-    >
-      <g fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-        <path d="M7 8a7 7 0 0 1 0 8" />
-        <path d="M11 5.5a11 11 0 0 1 0 13" />
-        <path d="M15 3a15 15 0 0 1 0 18" />
-      </g>
-    </svg>
+    </div>
   );
 }
