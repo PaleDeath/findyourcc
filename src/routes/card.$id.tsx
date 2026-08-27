@@ -123,9 +123,9 @@ function Section({
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-border/60 py-2.5 last:border-0 dark:border-white/[0.06]">
-      <dt className="text-xs font-medium text-muted-foreground">{label}</dt>
-      <dd className="text-right text-xs font-semibold text-foreground">{value}</dd>
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 border-b border-border/60 py-2.5 last:border-0 dark:border-white/[0.06]">
+      <dt className="text-xs font-medium text-muted-foreground shrink-0">{label}</dt>
+      <dd className="text-left sm:text-right text-xs font-semibold text-foreground break-words">{value}</dd>
     </div>
   );
 }

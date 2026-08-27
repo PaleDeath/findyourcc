@@ -26,7 +26,7 @@ export function SiteFooter() {
 
         <nav aria-label="Footer Navigation">
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-foreground">Product & Tools</h2>
-          <ul className="space-y-2 text-xs font-medium text-muted-foreground">
+          <ul className="space-y-2.5 text-xs font-medium text-muted-foreground">
             <li>
               <Link to="/explore" className="transition-colors hover:text-foreground">
                 Card Directory
@@ -35,6 +35,26 @@ export function SiteFooter() {
             <li>
               <Link to="/compare" className="transition-colors hover:text-foreground">
                 Side-by-Side Compare
+              </Link>
+            </li>
+            <li>
+              <Link to="/lounge" className="transition-colors hover:text-foreground">
+                Airport Lounge Access (2026)
+              </Link>
+            </li>
+            <li>
+              <Link to="/mcc" className="transition-colors hover:text-foreground">
+                MCC Code & Exclusion Guide
+              </Link>
+            </li>
+            <li>
+              <Link to="/transfers" className="transition-colors hover:text-foreground">
+                Points & Miles Transfer Matrix
+              </Link>
+            </li>
+            <li>
+              <Link to="/categories" className="transition-colors hover:text-foreground">
+                Best Cards by Category
               </Link>
             </li>
             <li>

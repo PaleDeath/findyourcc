@@ -184,7 +184,7 @@ function CategoriesHubPage() {
       </div>
 
       {/* Category Pills Navigation */}
-      <div className="mt-8 flex flex-wrap gap-2 border-b border-border pb-4">
+      <div className="mt-6 flex items-center gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap border-b border-border pb-3">
         {CATEGORY_HUBS.map((hub) => {
           const Icon = hub.icon;
           const isSelected = hub.id === selectedHubId;
@@ -193,7 +193,7 @@ function CategoriesHubPage() {
               key={hub.id}
               type="button"
               onClick={() => setSelectedHubId(hub.id)}
-              className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
+              className={`flex min-h-[44px] shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all ${
                 isSelected
                   ? "bg-foreground text-background shadow-xs"
                   : "border border-border bg-surface text-muted-foreground hover:text-foreground"

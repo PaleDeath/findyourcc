@@ -494,39 +494,45 @@ function ComparePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Compare cards</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">Compare cards</h1>
+          <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
             {cards.length} of {MAX_COMPARE} cards selected.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 print:hidden">
-          <div className="flex items-center gap-2 rounded-lg border border-border px-3 py-1.5">
+          <div className="flex min-h-[40px] items-center gap-2 rounded-xl border border-border bg-surface/50 px-3 py-1.5">
             <Switch id="diff-only" checked={differencesOnly} onCheckedChange={setDifferencesOnly} />
-            <Label htmlFor="diff-only" className="text-xs font-medium">
+            <Label htmlFor="diff-only" className="text-xs font-medium cursor-pointer">
               Differences only
             </Label>
           </div>
-          <Button variant="outline" size="sm" onClick={handleExportImage}>
-            <Download className="size-4" aria-hidden="true" /> Export PNG
+          <Button variant="outline" size="sm" onClick={handleExportImage} className="min-h-[40px] rounded-xl text-xs">
+            <Download className="size-3.5 mr-1" aria-hidden="true" /> Export PNG
           </Button>
-          <Button variant="outline" size="sm" onClick={() => window.print()}>
-            <Printer className="size-4" aria-hidden="true" /> Print / PDF
+          <Button variant="outline" size="sm" onClick={() => window.print()} className="hidden sm:inline-flex min-h-[40px] rounded-xl text-xs">
+            <Printer className="size-3.5 mr-1" aria-hidden="true" /> Print / PDF
           </Button>
           {cards.length < MAX_COMPARE && (
-            <Button asChild size="sm">
+            <Button asChild size="sm" className="min-h-[40px] rounded-xl text-xs">
               <Link to="/explore">
-                <Plus className="size-4" aria-hidden="true" /> Add card
+                <Plus className="size-3.5 mr-1" aria-hidden="true" /> Add card
               </Link>
             </Button>
           )}
         </div>
       </div>
 
+      <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground sm:hidden">
+        <span className="inline-flex items-center gap-1 font-medium text-primary">
+          Swipe table sideways to compare →
+        </span>
+      </div>
+
       <div
         ref={tableWrapRef}
-        className="mt-6 overflow-x-auto rounded-2xl border border-border bg-card"
+        className="mt-4 overflow-x-auto rounded-2xl border border-border bg-card shadow-xs"
       >
         <table className="w-full min-w-[640px] border-collapse text-sm">
           <thead>

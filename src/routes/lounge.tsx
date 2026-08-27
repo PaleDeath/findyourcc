@@ -140,11 +140,11 @@ function LoungeCheckerPage() {
       </div>
 
       {/* Tabs */}
-      <div className="mt-8 flex flex-wrap gap-2 border-b border-border pb-4">
+      <div className="mt-6 flex items-center gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap border-b border-border pb-3">
         <button
           type="button"
           onClick={() => setActiveTab("checker")}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
+          className={`flex min-h-[44px] shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all ${
             activeTab === "checker"
               ? "bg-foreground text-background shadow-xs"
               : "border border-border bg-surface text-muted-foreground hover:text-foreground"
@@ -156,7 +156,7 @@ function LoungeCheckerPage() {
         <button
           type="button"
           onClick={() => setActiveTab("bank-rules")}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
+          className={`flex min-h-[44px] shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all ${
             activeTab === "bank-rules"
               ? "bg-foreground text-background shadow-xs"
               : "border border-border bg-surface text-muted-foreground hover:text-foreground"
@@ -168,7 +168,7 @@ function LoungeCheckerPage() {
         <button
           type="button"
           onClick={() => setActiveTab("top-cards")}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
+          className={`flex min-h-[44px] shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all ${
             activeTab === "top-cards"
               ? "bg-foreground text-background shadow-xs"
               : "border border-border bg-surface text-muted-foreground hover:text-foreground"
@@ -196,11 +196,11 @@ function LoungeCheckerPage() {
                   placeholder="Search city or airport code (e.g. DEL, Mumbai, BLR)..."
                   value={airportQuery}
                   onChange={(e) => setAirportQuery(e.target.value)}
-                  className="h-9 text-xs"
+                  className="h-10 min-h-[44px] text-xs"
                 />
               </div>
 
-              <div className="mt-3 grid max-h-48 grid-cols-2 gap-1.5 overflow-y-auto pr-1">
+              <div className="mt-3 grid max-h-56 grid-cols-1 sm:grid-cols-2 gap-1.5 overflow-y-auto pr-1">
                 {filteredAirports.map((airport) => (
                   <button
                     key={airport.code}
@@ -209,7 +209,7 @@ function LoungeCheckerPage() {
                       setSelectedAirportCode(airport.code);
                       setSelectedTerminal("all");
                     }}
-                    className={`flex items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-colors ${
+                    className={`flex min-h-[44px] items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-colors ${
                       selectedAirportCode === airport.code
                         ? "bg-primary text-primary-foreground font-semibold"
                         : "bg-surface/60 text-foreground hover:bg-surface border border-border/50"

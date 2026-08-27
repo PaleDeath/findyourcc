@@ -217,17 +217,17 @@ function MatchPage() {
           {stepComponent}
         </div>
 
-        <div className="flex items-center justify-between gap-2 pt-2">
-          <Button variant="outline" onClick={goBack} disabled={step === 0}>
-            <ChevronLeft className="size-4" /> Back
+        <div className="flex items-center justify-between gap-2 pt-4 border-t border-border/40">
+          <Button variant="outline" onClick={goBack} disabled={step === 0} className="min-h-[44px] rounded-xl px-4 text-xs font-semibold">
+            <ChevronLeft className="size-4 mr-1" /> Back
           </Button>
-          <div className="flex gap-2">
-            <Button variant="ghost" onClick={skip}>
-              <SkipForward className="size-4" /> Skip
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" onClick={skip} className="min-h-[44px] rounded-xl px-3 text-xs font-semibold text-muted-foreground">
+              <SkipForward className="size-3.5 mr-1" /> Skip
             </Button>
-            <Button onClick={goNext}>
+            <Button onClick={goNext} className="min-h-[44px] rounded-xl px-5 text-xs font-bold shadow-xs">
               {step === TOTAL_STEPS - 1 ? "See my matches" : "Next"}{" "}
-              <ChevronRight className="size-4" />
+              <ChevronRight className="size-4 ml-1" />
             </Button>
           </div>
         </div>

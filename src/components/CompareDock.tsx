@@ -22,12 +22,9 @@ export function CompareDock() {
   return (
     <div
       className={cn(
-        "fixed inset-x-0 bottom-16 z-30 flex justify-center px-3 transition-all duration-300 ease-out lg:bottom-4",
+        "fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 flex justify-center px-3 transition-all duration-300 ease-out lg:bottom-4",
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0",
       )}
-      style={{
-        paddingBottom: "env(safe-area-inset-bottom)",
-      }}
       aria-hidden={!visible}
     >
       <div

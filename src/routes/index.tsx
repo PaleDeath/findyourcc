@@ -168,12 +168,12 @@ function Home() {
               <span>Zero Affiliate Links</span>
             </div>
 
-            <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem]">
+            <h1 className="mt-5 font-display text-3xl font-extrabold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem]">
               The transparent index of{" "}
               <span className="text-foreground">Indian credit cards.</span>
             </h1>
 
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-lg">
               Structured reward earn rates, hidden caps, lounge access rules, and RuPay UPI support for{" "}
               <span className="font-semibold text-foreground">{stats.total} cards</span> across{" "}
               <span className="font-semibold text-foreground">{stats.issuers} issuers</span>. Built for precision.
@@ -184,26 +184,26 @@ function Home() {
               <button
                 type="button"
                 onClick={openCommandPalette}
-                className="btn-tactile flex w-full max-w-lg items-center justify-between rounded-2xl border border-border/80 bg-surface/60 px-4 py-3 text-left text-sm text-muted-foreground shadow-xs backdrop-blur-md transition-colors hover:border-foreground/40 hover:bg-surface focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
+                className="btn-tactile flex w-full max-w-lg min-h-[48px] items-center justify-between rounded-2xl border border-border/80 bg-surface/60 px-4 py-3 text-left text-sm text-muted-foreground shadow-xs backdrop-blur-md transition-colors hover:border-foreground/40 hover:bg-surface focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
               >
-                <span className="flex items-center gap-2.5">
-                  <Search className="size-4 text-foreground/70" aria-hidden="true" />
-                  <span className="text-foreground font-medium">Search by card, bank, perk or acronym…</span>
+                <span className="flex items-center gap-2.5 truncate">
+                  <Search className="size-4 text-foreground/70 shrink-0" aria-hidden="true" />
+                  <span className="text-foreground font-medium truncate">Search cards, banks, perks, acronyms…</span>
                 </span>
-                <kbd className="rounded-lg border border-border bg-background px-2 py-0.5 font-mono text-[11px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.08]">
+                <kbd className="hidden sm:inline shrink-0 rounded-lg border border-border bg-background px-2 py-0.5 font-mono text-[11px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.08]">
                   ⌘K
                 </kbd>
               </button>
 
               {/* Quick Filter Prompt Chips */}
-              <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
-                <span className="text-[11px] font-medium text-muted-foreground/70">Trending:</span>
+              <div className="mt-3 flex items-center gap-1.5 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap text-xs text-muted-foreground">
+                <span className="text-[11px] font-medium text-muted-foreground/70 shrink-0">Trending:</span>
                 {SEARCH_PROMPTS.map((prompt) => (
                   <Link
                     key={prompt}
                     to="/explore"
                     search={{ q: prompt }}
-                    className="rounded-lg border border-border/70 bg-surface/40 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground dark:border-white/10 dark:bg-white/[0.03]"
+                    className="shrink-0 rounded-lg border border-border/70 bg-surface/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground dark:border-white/10 dark:bg-white/[0.03]"
                   >
                     {prompt}
                   </Link>
