@@ -24,6 +24,7 @@ import {
   type CardTransferOption,
 } from "@/data/transfers";
 import { formatINR } from "@/lib/format";
+import { Disclaimer } from "@/components/Disclaimer";
 
 export const Route = createFileRoute("/transfers")({
   head: () => ({
@@ -273,6 +274,8 @@ function TransfersPage() {
           </div>
         </div>
       </div>
+
+      <Disclaimer className="mt-12" />
     </div>
   );
 }

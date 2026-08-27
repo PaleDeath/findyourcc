@@ -245,22 +245,22 @@ export const axisCards: CreditCard[] = [
       latePaymentSlabs: "₹100-₹1300 based on statement balance",
     },
     rewards: {
-      baseRatePer100: 15,
-      pointValueInRupees: 0.8,
-      effectiveBaseRatePct: 12.0,
-      redemptionModes: ["Travel Edge portal", "Airmiles transfer", "Statement credit"],
+      baseRatePer100: 7.5,
+      pointValueInRupees: 0.2,
+      effectiveBaseRatePct: 1.5,
+      redemptionModes: ["Travel Edge portal", "Airmiles transfer (5:4 ratio)", "Statement credit"],
       acceleratedEarn: [
         {
-          label: "Travel Edge bookings",
+          label: "Travel Edge bookings (5X)",
           multiplier: "5x",
-          ratePct: 60,
+          ratePct: 7.5,
         },
       ],
       milestones: [
         {
           spend: 2000000,
           period: "Annual",
-          benefit: "Complimentary flight voucher",
+          benefit: "Accor Plus membership / flight voucher",
           valueInRupees: 30000,
         },
       ],
@@ -1843,21 +1843,21 @@ export const axisCards: CreditCard[] = [
       latePaymentSlabs: "₹100-₹1300 based on statement balance",
     },
     rewards: {
-      baseRatePer100: 15,
-      pointValueInRupees: 0.8,
-      effectiveBaseRatePct: 12.0,
-      redemptionModes: ["Travel Edge portal", "Airmiles transfer"],
+      baseRatePer100: 7.5,
+      pointValueInRupees: 0.2,
+      effectiveBaseRatePct: 1.5,
+      redemptionModes: ["Travel Edge portal", "Airmiles transfer (5:4 ratio)", "Statement credit"],
       acceleratedEarn: [
         {
-          label: "Travel Edge bookings",
+          label: "Travel Edge bookings (5X)",
           multiplier: "5x",
-          ratePct: 60,
+          ratePct: 7.5,
         },
       ],
       milestones: [],
       earningExclusions: ["Rent", "Wallet loads"],
-      pointsExpiry: "2 years from date of credit",
-      transferPartners: ["Singapore Airlines KrisFlyer", "Marriott Bonvoy"],
+      pointsExpiry: "No expiry for Burgundy Private",
+      transferPartners: ["Singapore Airlines KrisFlyer", "Marriott Bonvoy", "Accor ALL"],
     },
     benefits: {
       loungeDomestic: {

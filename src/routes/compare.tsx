@@ -8,6 +8,7 @@ import { CardArt } from "@/components/CardArt";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Disclaimer } from "@/components/Disclaimer";
 import {
   ALL_CARDS,
   bestAcceleratedRate,
@@ -618,6 +619,8 @@ function ComparePage() {
           </tbody>
         </table>
       </div>
+
+      <Disclaimer className="mt-8" />
     </div>
   );
 }

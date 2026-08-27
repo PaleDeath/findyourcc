@@ -2,7 +2,7 @@ import { Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const DISCLAIMER_TEXT =
-  "FindYourCC is independent — not affiliated with, endorsed by, or paid by any bank or card issuer. Card images, names and logos are the property of their respective issuers and are shown for identification only. Card features, fees and eligibility change frequently, so always verify on the issuer's official website before applying. Nothing here is financial advice.";
+  "FindYourCC is an independent financial education and comparison index. We are not a bank, NBFC, financial advisor, or RBI-regulated intermediary, and we earn zero commissions on card applications. Product names, logos, and card visuals belong to their respective issuers and are displayed strictly for user identification. Fees, reward rates, interest rates (APR), milestone criteria, and airport lounge rules are updated regularly but remain subject to change by issuing banks. Reward projections and valuation figures are estimates based on stated spend breakdowns. Always consult the official Most Important Terms and Conditions (MITC) and Key Fact Statement (KFS) on the issuer's website before applying.";
 
 export function Disclaimer({
   variant = "block",
@@ -21,9 +21,9 @@ export function Disclaimer({
 
   return (
     <aside
-      aria-label="Disclaimer"
+      aria-label="Compliance & Legal Disclaimer"
       className={cn(
-        "flex gap-3 rounded-xl border border-border bg-surface p-4 text-xs leading-relaxed text-muted-foreground",
+        "flex gap-3 rounded-xl border border-border/80 bg-surface/60 p-4 text-xs leading-relaxed text-muted-foreground backdrop-blur-xs",
         className,
       )}
     >

@@ -22,6 +22,7 @@ import { useDataset } from "@/lib/card-store";
 import { CardArt } from "@/components/CardArt";
 import { computeEffectiveRate } from "@/data/cards";
 import { formatFee } from "@/lib/format";
+import { Disclaimer } from "@/components/Disclaimer";
 
 export const Route = createFileRoute("/categories")({
   head: () => ({
@@ -287,6 +288,8 @@ function CategoriesHubPage() {
           })}
         </div>
       </div>
+
+      <Disclaimer className="mt-12" />
     </div>
   );
 }

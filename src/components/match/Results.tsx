@@ -4,6 +4,7 @@ import { CardArt } from "@/components/CardArt";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Disclaimer } from "@/components/Disclaimer";
 import type { MatchOutcome, MatchResult } from "@/lib/matchEngine";
 import { formatFee, formatINR } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -273,6 +274,8 @@ export function Results({
           </p>
         </CollapsibleContent>
       </Collapsible>
+
+      <Disclaimer className="mt-4" />
     </div>
   );
 }

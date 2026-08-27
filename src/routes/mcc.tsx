@@ -27,6 +27,7 @@ import {
   type CardRewardRule,
 } from "@/data/mcc";
 import { useDataset } from "@/lib/card-store";
+import { Disclaimer } from "@/components/Disclaimer";
 
 export const Route = createFileRoute("/mcc")({
   head: () => ({
@@ -345,6 +346,8 @@ function MCCGuidePage() {
           </div>
         </div>
       )}
+
+      <Disclaimer className="mt-12" />
     </div>
   );
 }

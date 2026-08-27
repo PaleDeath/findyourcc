@@ -23,6 +23,7 @@ import { AIRPORTS, BANK_LOUNGE_POLICIES, type Airport, type AirportLounge } from
 import { useDataset } from "@/lib/card-store";
 import { CardArt } from "@/components/CardArt";
 import { formatFee } from "@/lib/format";
+import { Disclaimer } from "@/components/Disclaimer";
 
 export const Route = createFileRoute("/lounge")({
   head: () => ({
@@ -573,6 +574,8 @@ function LoungeCheckerPage() {
           </div>
         </div>
       )}
+
+      <Disclaimer className="mt-12" />
     </div>
   );
 }
