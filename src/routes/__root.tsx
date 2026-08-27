@@ -180,9 +180,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col" key={numberFormat}>
+      <div className="flex min-h-screen flex-col overflow-x-clip max-w-full" key={numberFormat}>
         <SiteHeader />
-        <main className="flex-1">
+        <main className="flex-1 overflow-x-clip max-w-full">
           {/* Required: nested routes render here. */}
           <Outlet />
         </main>

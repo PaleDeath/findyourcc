@@ -184,7 +184,7 @@ function CategoriesHubPage() {
       </div>
 
       {/* Category Pills Navigation */}
-      <div className="mt-6 flex items-center gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap border-b border-border pb-3">
+      <div className="mt-6 flex w-full max-w-full items-center gap-2 overflow-x-auto no-scrollbar border-b border-border pb-3">
         {CATEGORY_HUBS.map((hub) => {
           const Icon = hub.icon;
           const isSelected = hub.id === selectedHubId;

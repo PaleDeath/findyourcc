@@ -81,13 +81,12 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={openCommandPalette}
-            aria-label="Search (Command K)"
-            className="btn-tactile flex h-10 min-h-[44px] items-center gap-2 rounded-xl border border-border/80 bg-surface/60 px-3 text-xs font-medium text-muted-foreground shadow-2xs backdrop-blur-sm transition-colors hover:border-foreground/40 hover:text-foreground dark:border-white/10 dark:bg-white/[0.04]"
+            aria-label="Search cards and perks (Command K)"
+            className="btn-tactile flex h-10 min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-xl border border-border/80 bg-surface/60 px-2.5 sm:px-3.5 text-xs font-medium text-muted-foreground shadow-2xs backdrop-blur-sm transition-colors hover:border-foreground/40 hover:text-foreground dark:border-white/10 dark:bg-white/[0.04]"
           >
-            <Search className="size-4" aria-hidden="true" />
-            <span className="hidden sm:inline">Search database</span>
-            <span className="sm:hidden text-xs">Search</span>
-            <kbd className="hidden rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.06] sm:inline">
+            <Search className="size-4 shrink-0" aria-hidden="true" />
+            <span className="hidden md:inline">Search database</span>
+            <kbd className="hidden rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.06] md:inline">
               ⌘K
             </kbd>
           </button>

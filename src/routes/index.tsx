@@ -180,15 +180,15 @@ function Home() {
             </p>
 
             {/* Quick Interactive Search Trigger */}
-            <div className="mt-7">
+            <div className="mt-7 max-w-lg">
               <button
                 type="button"
                 onClick={openCommandPalette}
-                className="btn-tactile flex w-full max-w-lg min-h-[48px] items-center justify-between rounded-2xl border border-border/80 bg-surface/60 px-4 py-3 text-left text-sm text-muted-foreground shadow-xs backdrop-blur-md transition-colors hover:border-foreground/40 hover:bg-surface focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
+                className="btn-tactile flex w-full min-h-[48px] items-center justify-between rounded-2xl border border-border/80 bg-surface/60 px-4 py-3 text-left text-sm text-muted-foreground shadow-xs backdrop-blur-md transition-colors hover:border-foreground/40 hover:bg-surface focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
               >
-                <span className="flex items-center gap-2.5 truncate">
+                <span className="flex items-center gap-2.5 min-w-0 pr-2">
                   <Search className="size-4 text-foreground/70 shrink-0" aria-hidden="true" />
-                  <span className="text-foreground font-medium truncate">Search cards, banks, perks, acronyms…</span>
+                  <span className="text-foreground font-medium truncate">Search cards, banks, perks…</span>
                 </span>
                 <kbd className="hidden sm:inline shrink-0 rounded-lg border border-border bg-background px-2 py-0.5 font-mono text-[11px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.08]">
                   ⌘K
@@ -196,7 +196,7 @@ function Home() {
               </button>
 
               {/* Quick Filter Prompt Chips */}
-              <div className="mt-3 flex items-center gap-1.5 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap text-xs text-muted-foreground">
+              <div className="mt-3 flex w-full max-w-full items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs text-muted-foreground">
                 <span className="text-[11px] font-medium text-muted-foreground/70 shrink-0">Trending:</span>
                 {SEARCH_PROMPTS.map((prompt) => (
                   <Link
@@ -212,7 +212,7 @@ function Home() {
             </div>
 
             {/* Live Database Stat Counters */}
-            <dl className="mt-9 grid max-w-lg grid-cols-2 gap-3 sm:grid-cols-4">
+            <dl className="mt-8 grid max-w-lg grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
               {[
                 { label: "Verified Cards", value: stats.total, icon: CreditCardIcon },
                 { label: "Bank Issuers", value: stats.issuers, icon: Compass },
@@ -223,8 +223,8 @@ function Home() {
                   key={item.label}
                   className="card-bevel rounded-xl border border-border/80 bg-card p-3 dark:border-white/[0.08]"
                 >
-                  <dt className="text-[11px] font-medium text-muted-foreground">{item.label}</dt>
-                  <dd className="font-mono text-2xl font-bold tabular-nums text-foreground">
+                  <dt className="text-[11px] font-medium text-muted-foreground truncate">{item.label}</dt>
+                  <dd className="font-mono text-xl sm:text-2xl font-bold tabular-nums text-foreground mt-0.5">
                     {item.value}
                   </dd>
                 </div>
