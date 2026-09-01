@@ -28,15 +28,15 @@ export const sbiCards: CreditCard[] = [
     },
     rewards: {
       baseRatePer100: 2,
-      pointValueInRupees: 1,
-      effectiveBaseRatePct: 2,
-      redemptionModes: ["Statement credit", "Vouchers"],
+      pointValueInRupees: 0.25,
+      effectiveBaseRatePct: 0.5,
+      redemptionModes: ["Statement credit (4 RP = ₹1)", "Catalogue & brand vouchers"],
       acceleratedEarn: [
-        { label: "Dining, grocery, departmental stores", multiplier: "5X", ratePct: 10 },
+        { label: "Dining, grocery, departmental stores (5X)", multiplier: "5X (10 RP/₹100)", ratePct: 2.5 },
         {
           label: "Movies and other online spends",
-          multiplier: "5X",
-          ratePct: 10,
+          multiplier: "5X (10 RP/₹100)",
+          ratePct: 2.5,
           monthlyCapPoints: 10000,
         },
       ],
@@ -71,7 +71,7 @@ export const sbiCards: CreditCard[] = [
     bestFor: ["Premium lifestyle spenders", "Movie and dining enthusiasts"],
     watchOuts: ["High annual fee", "Milestone benefit needs large annual spend"],
     applyUrl: "https://www.sbicard.com/en/personal/credit-cards/premium/elite.page",
-    lastVerified: "2026-08-23",
+    lastVerified: "2026-09-01",
     dataConfidence: "High",
   },
   {
@@ -101,11 +101,11 @@ export const sbiCards: CreditCard[] = [
     },
     rewards: {
       baseRatePer100: 2,
-      pointValueInRupees: 1,
-      effectiveBaseRatePct: 2,
-      redemptionModes: ["Statement credit", "Vouchers"],
+      pointValueInRupees: 0.25,
+      effectiveBaseRatePct: 0.5,
+      redemptionModes: ["Statement credit (4 RP = ₹1)", "Catalogue & brand vouchers"],
       acceleratedEarn: [
-        { label: "Dining, grocery, department stores", multiplier: "5X", ratePct: 10 },
+        { label: "Dining, grocery, department stores", multiplier: "5X (10 RP/₹100)", ratePct: 2.5 },
       ],
       milestones: [
         {

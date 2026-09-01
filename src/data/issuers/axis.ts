@@ -666,30 +666,27 @@ export const axisCards: CreditCard[] = [
       feeWaiverSpend: 200000,
     },
     rewards: {
-      baseRatePer100: 2,
-      pointValueInRupees: 0.5,
-      effectiveBaseRatePct: 1.0,
-      redemptionModes: ["Statement credit (auto cashback)"],
+      baseRatePer100: 1.5,
+      pointValueInRupees: 1.0,
+      effectiveBaseRatePct: 1.5,
+      redemptionModes: ["Automatic statement credit (monthly cashback)"],
       acceleratedEarn: [
         {
-          label: "Bill payments/recharges via Google Pay",
-          multiplier: "5%",
+          label: "Bill payments, DTH & mobile recharges via Google Pay",
+          multiplier: "5% cashback",
           ratePct: 5,
+          monthlyCapPoints: 500,
         },
         {
-          label: "Utility bill payments",
-          multiplier: "4%",
+          label: "Swiggy, Zomato & Ola",
+          multiplier: "4% cashback",
           ratePct: 4,
-        },
-        {
-          label: "Other spends",
-          multiplier: "2%",
-          ratePct: 2,
+          monthlyCapPoints: 500,
         },
       ],
       milestones: [],
-      earningExclusions: ["Rent", "Fuel surcharge", "Wallet loads", "Insurance"],
-      pointsExpiry: "2 years from date of credit",
+      earningExclusions: ["Rent", "Fuel surcharge", "Wallet loads", "Insurance", "EMI transactions", "Gold/Jewellery"],
+      pointsExpiry: "Direct statement cashback (does not expire)",
     },
     benefits: {
       fuelSurchargeWaiver: {
