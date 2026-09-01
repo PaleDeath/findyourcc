@@ -4,6 +4,9 @@ import { AIRPORTS, BANK_LOUNGE_POLICIES } from "@/data/lounges";
 import { POPULAR_MERCHANTS, MCC_CATEGORIES, CARD_MCC_RULES } from "@/data/mcc";
 import { TRANSFER_PARTNERS, CARD_TRANSFERS } from "@/data/transfers";
 import { LEARN_TOPICS } from "@/data/learn";
+import { DEVALUATION_EVENTS } from "@/data/devaluations";
+import { CURATED_STACK_COMBOS } from "@/data/combos";
+import { BRAND_PORTAL_RATES } from "@/data/portals";
 
 describe("Site-Wide Information & Compliance Audit", () => {
   it("verifies dataset size and unique IDs across all credit cards", () => {
@@ -172,6 +175,51 @@ describe("Site-Wide Information & Compliance Audit", () => {
       expect(topic.title).toBeTruthy();
       expect(topic.summary).toBeTruthy();
       expect(topic.blocks.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("audits devaluation tracker events and pivot alternatives", () => {
+    expect(DEVALUATION_EVENTS.length).toBeGreaterThanOrEqual(5);
+    for (const event of DEVALUATION_EVENTS) {
+      expect(event.id).toBeTruthy();
+      expect(event.cardId).toBeTruthy();
+      expect(event.cardName).toBeTruthy();
+      expect(event.effectiveDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(["Critical", "Moderate", "Minor", "Positive"]).toContain(event.severity);
+      expect(event.changes.length).toBeGreaterThan(0);
+      for (const change of event.changes) {
+        expect(change.aspect).toBeTruthy();
+        expect(change.before).toBeTruthy();
+        expect(change.after).toBeTruthy();
+      }
+    }
+  });
+
+  it("audits curated stack combos and synergy structures", () => {
+    expect(CURATED_STACK_COMBOS.length).toBeGreaterThanOrEqual(4);
+    for (const combo of CURATED_STACK_COMBOS) {
+      expect(combo.id).toBeTruthy();
+      expect(combo.title).toBeTruthy();
+      expect(combo.cards.length).toBeGreaterThanOrEqual(2);
+      expect(combo.blendedEffectiveReturnPct).toBeGreaterThan(0);
+      expect(combo.annualValueEstimate.netProfitRupees).toBeGreaterThan(0);
+      expect(combo.whyItWorks.length).toBeGreaterThan(0);
+      expect(combo.watchOuts.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("audits brand voucher portal rates and channels", () => {
+    expect(BRAND_PORTAL_RATES.length).toBeGreaterThanOrEqual(5);
+    for (const brand of BRAND_PORTAL_RATES) {
+      expect(brand.brandId).toBeTruthy();
+      expect(brand.brandName).toBeTruthy();
+      expect(brand.bestRatePct).toBeGreaterThan(0);
+      expect(brand.rates.length).toBeGreaterThanOrEqual(3);
+      for (const rate of brand.rates) {
+        expect(rate.cardId).toBeTruthy();
+        expect(rate.effectiveEarnPct).toBeGreaterThan(0);
+        expect(rate.portalName).toBeTruthy();
+      }
     }
   });
 });

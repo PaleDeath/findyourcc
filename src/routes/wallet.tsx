@@ -20,6 +20,7 @@ import { Disclaimer } from "@/components/Disclaimer";
 import { Button } from "@/components/ui/button";
 import { getCardById } from "@/data/cards";
 import { useDataset, useSpendProfile, useWallet } from "@/lib/card-store";
+import { StackSynergy } from "@/components/wallet/StackSynergy";
 
 export const Route = createFileRoute("/wallet")({
   head: () => ({
@@ -44,7 +45,7 @@ export const Route = createFileRoute("/wallet")({
 
 function WalletPage() {
   const { cards } = useDataset();
-  const { ids, toggle } = useWallet();
+  const { ids, toggle, setIds } = useWallet();
   const { spend } = useSpendProfile();
 
   const ownedCards = useMemo(
@@ -130,13 +131,13 @@ function WalletPage() {
         </>
       )}
 
-      {ownedCards.length === 0 && (
-        <div className="flex flex-wrap gap-3">
-          <Button asChild variant="outline">
-            <Link to="/explore">Browse all cards</Link>
-          </Button>
-        </div>
-      )}
+      <section className="space-y-3">
+        <StackSynergy
+          onLoadStack={(comboCardIds) => {
+            setIds(Array.from(new Set([...ids, ...comboCardIds])));
+          }}
+        />
+      </section>
 
       <Disclaimer />
     </div>

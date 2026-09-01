@@ -5,6 +5,7 @@ import { CardSelector } from "@/components/calculator/CardSelector";
 import { CardValuationCard } from "@/components/calculator/CardValuationCard";
 import { ComparisonCharts } from "@/components/calculator/ComparisonCharts";
 import { SpendSlidersPanel } from "@/components/calculator/SpendSlidersPanel";
+import { PortalVoucherFinder } from "@/components/calculator/PortalVoucherFinder";
 import { Disclaimer } from "@/components/Disclaimer";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -147,6 +148,10 @@ function CalculatorPage() {
           )}
         </div>
       </div>
+
+      <section aria-labelledby="voucher-portals" className="space-y-4">
+        <PortalVoucherFinder />
+      </section>
 
       <Disclaimer />
     </div>

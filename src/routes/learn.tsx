@@ -4,6 +4,7 @@ import { GraduationCap } from "lucide-react";
 import { Disclaimer } from "@/components/Disclaimer";
 import { Glossary } from "@/components/learn/Glossary";
 import { InterestCostCalculator, UtilisationChecker } from "@/components/learn/MiniTools";
+import { SurchargeCalculator } from "@/components/learn/SurchargeCalculator";
 import { TopicIndex } from "@/components/learn/TopicIndex";
 
 const DESCRIPTION =
@@ -48,6 +49,8 @@ function LearnPage() {
         <InterestCostCalculator />
         <UtilisationChecker />
       </div>
+
+      <SurchargeCalculator />
 
       <TopicIndex />
 

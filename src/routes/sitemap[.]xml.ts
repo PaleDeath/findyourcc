@@ -4,6 +4,8 @@ import { ALL_CARDS } from "@/data/cards";
 const STATIC_PATHS = [
   { path: "/", priority: "1.0" },
   { path: "/explore", priority: "0.9" },
+  { path: "/battle", priority: "0.9" },
+  { path: "/devaluations", priority: "0.9" },
   { path: "/lounge", priority: "0.9" },
   { path: "/mcc", priority: "0.9" },
   { path: "/transfers", priority: "0.8" },

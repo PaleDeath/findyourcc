@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BattleRouteImport } from './routes/battle'
 import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as CalculatorsRouteImport } from './routes/calculators'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as DevaluationsRouteImport } from './routes/devaluations'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as LoungeRouteImport } from './routes/lounge'
@@ -29,6 +31,11 @@ import { Route as CardIdRouteImport } from './routes/card.$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BattleRoute = BattleRouteImport.update({
+  id: '/battle',
+  path: '/battle',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalculatorRoute = CalculatorRouteImport.update({
@@ -49,6 +56,11 @@ const CategoriesRoute = CategoriesRouteImport.update({
 const CompareRoute = CompareRouteImport.update({
   id: '/compare',
   path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevaluationsRoute = DevaluationsRouteImport.update({
+  id: '/devaluations',
+  path: '/devaluations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -109,10 +121,12 @@ const CardIdRoute = CardIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/battle': typeof BattleRoute
   '/calculator': typeof CalculatorRoute
   '/calculators': typeof CalculatorsRoute
   '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
+  '/devaluations': typeof DevaluationsRoute
   '/explore': typeof ExploreRoute
   '/learn': typeof LearnRoute
   '/lounge': typeof LoungeRoute
@@ -127,10 +141,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/battle': typeof BattleRoute
   '/calculator': typeof CalculatorRoute
   '/calculators': typeof CalculatorsRoute
   '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
+  '/devaluations': typeof DevaluationsRoute
   '/explore': typeof ExploreRoute
   '/learn': typeof LearnRoute
   '/lounge': typeof LoungeRoute
@@ -146,10 +162,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/battle': typeof BattleRoute
   '/calculator': typeof CalculatorRoute
   '/calculators': typeof CalculatorsRoute
   '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
+  '/devaluations': typeof DevaluationsRoute
   '/explore': typeof ExploreRoute
   '/learn': typeof LearnRoute
   '/lounge': typeof LoungeRoute
@@ -166,10 +184,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/battle'
     | '/calculator'
     | '/calculators'
     | '/categories'
     | '/compare'
+    | '/devaluations'
     | '/explore'
     | '/learn'
     | '/lounge'
@@ -184,10 +204,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/battle'
     | '/calculator'
     | '/calculators'
     | '/categories'
     | '/compare'
+    | '/devaluations'
     | '/explore'
     | '/learn'
     | '/lounge'
@@ -202,10 +224,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/battle'
     | '/calculator'
     | '/calculators'
     | '/categories'
     | '/compare'
+    | '/devaluations'
     | '/explore'
     | '/learn'
     | '/lounge'
@@ -221,10 +245,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BattleRoute: typeof BattleRoute
   CalculatorRoute: typeof CalculatorRoute
   CalculatorsRoute: typeof CalculatorsRoute
   CategoriesRoute: typeof CategoriesRoute
   CompareRoute: typeof CompareRoute
+  DevaluationsRoute: typeof DevaluationsRoute
   ExploreRoute: typeof ExploreRoute
   LearnRoute: typeof LearnRoute
   LoungeRoute: typeof LoungeRoute
@@ -245,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/battle': {
+      id: '/battle'
+      path: '/battle'
+      fullPath: '/battle'
+      preLoaderRoute: typeof BattleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calculator': {
@@ -273,6 +306,13 @@ declare module '@tanstack/react-router' {
       path: '/compare'
       fullPath: '/compare'
       preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devaluations': {
+      id: '/devaluations'
+      path: '/devaluations'
+      fullPath: '/devaluations'
+      preLoaderRoute: typeof DevaluationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -357,10 +397,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BattleRoute: BattleRoute,
   CalculatorRoute: CalculatorRoute,
   CalculatorsRoute: CalculatorsRoute,
   CategoriesRoute: CategoriesRoute,
   CompareRoute: CompareRoute,
+  DevaluationsRoute: DevaluationsRoute,
   ExploreRoute: ExploreRoute,
   LearnRoute: LearnRoute,
   LoungeRoute: LoungeRoute,

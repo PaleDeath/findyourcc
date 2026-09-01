@@ -33,6 +33,16 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
+              <Link to="/battle" className="transition-colors hover:text-foreground">
+                1v1 Battle Arena
+              </Link>
+            </li>
+            <li>
+              <Link to="/devaluations" className="transition-colors hover:text-foreground">
+                Devaluations Tracker
+              </Link>
+            </li>
+            <li>
               <Link to="/compare" className="transition-colors hover:text-foreground">
                 Side-by-Side Compare
               </Link>

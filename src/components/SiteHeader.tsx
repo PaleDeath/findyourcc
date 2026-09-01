@@ -16,6 +16,8 @@ import {
   Wallet,
   BookOpen,
   Settings,
+  ShieldAlert,
+  Swords,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { openCommandPalette } from "@/components/CommandPalette";
@@ -24,8 +26,9 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { to: "/", label: "Home", icon: Compass },
   { to: "/explore", label: "Explore", icon: SlidersHorizontal },
-  { to: "/compare", label: "Compare", icon: Scale },
-  { to: "/lounge", label: "Lounge Checker", icon: Plane, badge: "2026" },
+  { to: "/battle", label: "1v1 Battle", icon: Swords, badge: "New" },
+  { to: "/devaluations", label: "Devaluations", icon: ShieldAlert, badge: "Live" },
+  { to: "/lounge", label: "Lounge", icon: Plane, badge: "2026" },
   { to: "/mcc", label: "MCC Guide", icon: Tag },
   { to: "/transfers", label: "Transfers", icon: Send },
   { to: "/categories", label: "Categories", icon: Trophy },

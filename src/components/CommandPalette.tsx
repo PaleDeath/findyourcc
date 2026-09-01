@@ -20,6 +20,8 @@ import { POPULAR_MERCHANTS } from "@/data/mcc";
 const PAGES = [
   { to: "/", label: "Home" },
   { to: "/explore", label: "Explore Cards" },
+  { to: "/battle", label: "1v1 Card Battle Arena" },
+  { to: "/devaluations", label: "Devaluation Tracker & Changelog" },
   { to: "/compare", label: "Compare Cards" },
   { to: "/lounge", label: "Airport Lounge Checker" },
   { to: "/mcc", label: "MCC Code & Exclusions Guide" },

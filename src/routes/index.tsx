@@ -14,10 +14,12 @@ import {
   Scale,
   Search,
   Send,
+  ShieldAlert,
   ShieldCheck,
   ShoppingBag,
   Smartphone,
   Sparkles,
+  Swords,
   Tag,
   TrendingUp,
   Trophy,
@@ -567,6 +569,60 @@ function Home() {
             </div>
             <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
               <span>Start matching quiz</span>
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+
+          {/* Tool 7: 1v1 Battle Arena */}
+          <Link
+            to="/battle"
+            className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 text-left transition-all dark:border-white/[0.08]"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-red-500/10 text-red-600 dark:text-red-400">
+                  <Swords className="size-5" />
+                </span>
+                <Badge variant="outline" className="text-[10px] font-bold border-red-500/30 text-red-600 dark:text-red-400">
+                  1v1 Arena
+                </Badge>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:underline">
+                1v1 Card Battle Arena
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Head-to-head match-up between top rivals (Infinia vs Atlas, SBI Cashback vs Millennia). Compare 6 dimensions with winner badges.
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
+              <span>Enter battle arena</span>
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+
+          {/* Tool 8: Devaluations Tracker */}
+          <Link
+            to="/devaluations"
+            className="card-bevel card-bevel-hover group flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 text-left transition-all dark:border-white/[0.08]"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                  <ShieldAlert className="size-5" />
+                </span>
+                <Badge variant="outline" className="text-[10px] font-bold border-orange-500/30 text-orange-600 dark:text-orange-400">
+                  Live Tracker
+                </Badge>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold text-foreground group-hover:underline">
+                Devaluations & Policy Shifts
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Track bank policy shifts across Axis, HDFC, ICICI, SBI. See timeline changes, impact severity, and recommended pivot cards.
+              </p>
+            </div>
+            <div className="mt-6 flex items-center justify-between pt-3 border-t border-border/50 text-xs font-semibold text-primary">
+              <span>View devaluation changelog</span>
               <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
             </div>
           </Link>
