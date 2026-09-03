@@ -267,6 +267,52 @@ function invertToLight(src) {
   return { width: src.width, height: src.height, data: dst };
 }
 
+// Add subtle contrast halo to white mark so it pops on dark tabs AND remains readable on light tabs
+function addContrastHalo(src, radius = 2, opacity = 0.35) {
+  const w = src.width;
+  const h = src.height;
+  const dst = Buffer.alloc(w * h * 4);
+  const alpha = new Float32Array(w * h);
+  for (let i = 0; i < w * h; i++) {
+    alpha[i] = src.data[i * 4 + 3] / 255;
+  }
+
+  const shadow = new Float32Array(w * h);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      let maxA = 0;
+      for (let dy = -radius; dy <= radius; dy++) {
+        const ny = y + dy;
+        if (ny < 0 || ny >= h) continue;
+        for (let dx = -radius; dx <= radius; dx++) {
+          const nx = x + dx;
+          if (nx < 0 || nx >= w) continue;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist <= radius) {
+            const a = alpha[ny * w + nx] * (1 - dist / (radius + 1));
+            if (a > maxA) maxA = a;
+          }
+        }
+      }
+      shadow[y * w + x] = maxA * opacity;
+    }
+  }
+
+  for (let i = 0; i < w * h; i++) {
+    const sA = shadow[i];
+    const mA = alpha[i];
+    const outA = mA + sA * (1 - mA);
+    if (outA > 0.001) {
+      const outR = (255 * mA + 0 * sA * (1 - mA)) / outA;
+      dst[i * 4] = Math.round(outR);
+      dst[i * 4 + 1] = Math.round(outR);
+      dst[i * 4 + 2] = Math.round(outR);
+      dst[i * 4 + 3] = Math.round(outA * 255);
+    }
+  }
+  return { width: w, height: h, data: dst };
+}
+
 // Execution
 const originalBuffer = fs.readFileSync(path.join(__dirname, '../public/findyourcclogo2-original.png'));
 const original = decodePng(originalBuffer);
@@ -295,15 +341,20 @@ console.log('Mark square:', markSquare.width, 'x', markSquare.height);
 const markPng = encodePng(markSquare.width, markSquare.height, markSquare.data);
 fs.writeFileSync(path.join(__dirname, '../public/findyourcclogo2-mark.png'), markPng);
 
-// 3. Mark in white for dark surfaces
+// 3. Mark in pure white for dark surfaces and favicons
 const whiteMark = invertToLight(markSquare);
 const whiteMarkPng = encodePng(whiteMark.width, whiteMark.height, whiteMark.data);
 fs.writeFileSync(path.join(__dirname, '../public/findyourcclogo2-mark-white.png'), whiteMarkPng);
 
-// 4. Favicon ICO (16x16, 32x32, 48x48)
-const ico16 = resize(markSquare, 16, 16);
-const ico32 = resize(markSquare, 32, 32);
-const ico48 = resize(markSquare, 48, 48);
+// White mark with subtle contrast halo for favicons
+const whiteFaviconSource = addContrastHalo(whiteMark, 4, 0.4);
+const whiteFaviconPng = encodePng(whiteFaviconSource.width, whiteFaviconSource.height, whiteFaviconSource.data);
+fs.writeFileSync(path.join(__dirname, '../public/favicon-white.png'), whiteFaviconPng);
+
+// 4. Favicon ICO (16x16, 32x32, 48x48) - now in WHITE
+const ico16 = resize(whiteFaviconSource, 16, 16);
+const ico32 = resize(whiteFaviconSource, 32, 32);
+const ico48 = resize(whiteFaviconSource, 48, 48);
 
 const icoBuffer = createIco([
   { width: 16, height: 16, buffer: encodePng(16, 16, ico16.data) },
@@ -311,10 +362,9 @@ const icoBuffer = createIco([
   { width: 48, height: 48, buffer: encodePng(48, 48, ico48.data) },
 ]);
 fs.writeFileSync(path.join(__dirname, '../public/favicon.ico'), icoBuffer);
-console.log('Wrote public/favicon.ico');
+console.log('Wrote public/favicon.ico (white edition)');
 
 // 5. Apple touch icon: 180x180 (iOS requires solid background)
-// Dark navy brand background #0f172a with white mark
 const appleIcon = placeOnCanvas(whiteMark, 180, 24, [15, 23, 42, 255]);
 fs.writeFileSync(path.join(__dirname, '../public/apple-touch-icon.png'), encodePng(180, 180, appleIcon.data));
 console.log('Wrote public/apple-touch-icon.png');
@@ -330,17 +380,14 @@ const maskable512 = placeOnCanvas(whiteMark, 512, 110, [15, 23, 42, 255]);
 fs.writeFileSync(path.join(__dirname, '../public/icon-maskable-512.png'), encodePng(512, 512, maskable512.data));
 console.log('Wrote PWA icons');
 
-// 7. SVG Favicon: adaptive for light and dark browser tab bars
-const base64Mark = markPng.toString('base64');
+// 7. SVG Favicon: pure white mark with subtle drop-shadow filter
+const base64WhiteMark = whiteMarkPng.toString('base64');
 const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <style>
-    .mark { filter: none; }
-    @media (prefers-color-scheme: dark) {
-      .mark { filter: invert(1) brightness(1.2); }
-    }
-  </style>
-  <image class="mark" href="data:image/png;base64,${base64Mark}" x="0" y="0" width="512" height="512" />
+  <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+    <feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>
+  </filter>
+  <image href="data:image/png;base64,${base64WhiteMark}" x="0" y="0" width="512" height="512" filter="url(#shadow)" />
 </svg>
 `;
 fs.writeFileSync(path.join(__dirname, '../public/favicon.svg'), svgContent);
-console.log('Wrote public/favicon.svg');
+console.log('Wrote public/favicon.svg (white edition)');

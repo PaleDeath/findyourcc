@@ -2,11 +2,11 @@
 // Small, dependency-free. Network-first for navigations (with offline
 // fallback), cache-first for hashed static assets. No API/mutation caching.
 
-const CACHE_VERSION = "cc-v4";
+const CACHE_VERSION = "cc-v5";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const MAX_STATIC_ENTRIES = 80;
 const OFFLINE_URL = "/offline";
-const PRECACHE_URLS = [OFFLINE_URL, "/findyourcclogo2.png", "/icon-192.png", "/icon-512.png", "/manifest.webmanifest"];
+const PRECACHE_URLS = [OFFLINE_URL, "/favicon-white.png", "/findyourcclogo2.png", "/icon-192.png", "/icon-512.png", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
