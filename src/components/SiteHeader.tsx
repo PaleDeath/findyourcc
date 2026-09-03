@@ -46,15 +46,14 @@ export function SiteHeader() {
       <div className="container-page flex h-16 items-center justify-between gap-3">
         <Link
           to="/"
-          className="group flex items-center gap-2.5 font-display text-base font-bold tracking-tight text-foreground transition-opacity hover:opacity-90 shrink-0"
+          className="group flex items-center transition-opacity hover:opacity-90 shrink-0"
           aria-label="FindYourCC home"
         >
-          <span className="relative flex size-8 items-center justify-center rounded-xl bg-foreground text-background shadow-xs transition-transform duration-200 group-hover:scale-105">
-            <Compass className="size-4.5" aria-hidden="true" />
-          </span>
-          <span className="flex items-center text-[1.1rem] font-extrabold tracking-tight text-foreground">
-            FindYour<span className="text-primary">CC</span>
-          </span>
+          <img
+            src="/findyourcclogo2.png"
+            alt="FindYourCC"
+            className="h-10 sm:h-11 w-auto object-contain transition-transform duration-200 group-hover:scale-105 dark:brightness-0 dark:invert"
+          />
         </Link>
 
         {/* Desktop Navigation */}

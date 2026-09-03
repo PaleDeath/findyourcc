@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { Compass } from "lucide-react";
 import { Disclaimer } from "@/components/Disclaimer";
 
 export function SiteFooter() {
@@ -7,14 +6,13 @@ export function SiteFooter() {
     <footer className="mt-16 sm:mt-20 border-t border-border/80 bg-surface/50 pb-24 pt-10 sm:pt-12 dark:border-white/[0.08] dark:bg-black/20 lg:pb-12 min-w-0">
       <div className="container-page grid gap-8 sm:gap-10 md:grid-cols-[1.5fr_1fr_1fr] min-w-0">
         <div className="space-y-3.5">
-          <div className="flex items-center gap-2.5 font-display text-base font-bold text-foreground">
-            <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Compass className="size-4" aria-hidden="true" />
-            </span>
-            <span>
-              FindYour<span className="text-primary">CC</span>
-            </span>
-          </div>
+          <Link to="/" className="inline-block transition-opacity hover:opacity-90" aria-label="FindYourCC home">
+            <img
+              src="/findyourcclogo2.png"
+              alt="FindYourCC"
+              className="h-11 sm:h-12 w-auto object-contain dark:brightness-0 dark:invert"
+            />
+          </Link>
           <p className="max-w-sm text-xs leading-relaxed text-muted-foreground">
             The independent, affiliate-free intelligence index of Indian credit cards. Transparent earn rates, milestone schedules, and fine-print watch-outs.
           </p>
