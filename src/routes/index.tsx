@@ -198,7 +198,7 @@ function Home() {
               </button>
 
               {/* Quick Filter Prompt Chips */}
-              <div className="mt-3 flex w-full max-w-full items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs text-muted-foreground">
+              <div className="mt-3 flex w-full max-w-full flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
                 <span className="text-[11px] font-medium text-muted-foreground/70 shrink-0">Trending:</span>
                 {SEARCH_PROMPTS.map((prompt) => (
                   <Link
